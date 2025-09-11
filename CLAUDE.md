@@ -61,6 +61,16 @@ npm run format             # Format code with Prettier
 npm run prepublishOnly     # Runs clean -> test -> build (automatic on publish)
 ```
 
+### CI/CD Pipeline
+The repository uses GitHub Actions for automated testing and deployment:
+
+- **Triggers**: Push to main branch or merged PRs
+- **Test Matrix**: Node.js 20.x and 22.x
+- **Quality Gates**: TypeScript checking, linting, full test suite with coverage
+- **Deployment**: Automatic npm publishing and GitHub releases
+- **Coverage**: Codecov integration for coverage reporting
+- **Skip Releases**: Add `[skip ci]` or `[skip-ci]` to commit messages to skip deployment
+
 ## Testing Architecture
 
 The test suite is comprehensive with 60+ tests across 5 categories:
