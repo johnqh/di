@@ -68,7 +68,6 @@ The repository uses GitHub Actions for automated testing and deployment:
 - **Test Matrix**: Node.js 20.x and 22.x
 - **Quality Gates**: TypeScript checking, linting, full test suite with coverage
 - **Deployment**: Automatic npm publishing and GitHub releases
-- **Coverage**: Codecov integration for coverage reporting
 - **Skip Releases**: Add `[skip ci]` or `[skip-ci]` to commit messages to skip deployment
 
 ## Testing Architecture

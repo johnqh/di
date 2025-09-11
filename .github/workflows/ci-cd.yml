@@ -46,15 +46,6 @@ jobs:
       - name: "Build project"
         run: npm run build
 
-      - name: "Upload coverage to Codecov"
-        if: matrix.node == '20.x'
-        uses: codecov/codecov-action@v4
-        with:
-          file: ./coverage/lcov.info
-          flags: unittests
-          name: codecov-umbrella
-          fail_ci_if_error: true
-
   check_for_release:
     runs-on: ubuntu-latest
     outputs:
