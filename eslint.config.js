@@ -1,0 +1,43 @@
+import js from '@eslint/js';
+import typescript from '@typescript-eslint/eslint-plugin';
+import typescriptParser from '@typescript-eslint/parser';
+import prettier from 'eslint-plugin-prettier';
+
+export default [
+  js.configs.recommended,
+  {
+    files: ['src/**/*.ts', 'src/**/*.tsx'],
+    languageOptions: {
+      parser: typescriptParser,
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: 'module',
+      },
+      globals: {
+        FormData: 'readonly',
+        Blob: 'readonly',
+        AbortSignal: 'readonly',
+      },
+    },
+    plugins: {
+      '@typescript-eslint': typescript,
+      prettier: prettier,
+    },
+    rules: {
+      'prettier/prettier': 'error',
+      'no-unused-vars': 'off', // Turn off base rule to avoid conflicts
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          args: 'none', // Don't check unused arguments in function signatures
+        },
+      ],
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-require-imports': 'off',
+    },
+  },
+];
