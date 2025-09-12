@@ -1,7 +1,7 @@
 /**
  * Core type definitions for dependency injection interfaces
  * Platform-agnostic types that work across web and React Native
- * 
+ *
  * @ai-context Core types and enums for cross-platform dependency injection
  * @ai-platform Universal compatibility (Web, React Native, Node.js)
  * @ai-pattern Type definitions with runtime enum support
@@ -9,7 +9,7 @@
 
 /**
  * Environment variables interface with typed NODE_ENV and flexible additional properties.
- * 
+ *
  * @ai-interface-type Configuration Data Type
  * @ai-pattern Flexible configuration with typed common properties
  * @ai-security Environment variables may contain sensitive data
@@ -23,14 +23,14 @@ export interface EnvironmentVariables {
 
 /**
  * Environment provider interface for accessing and validating environment configuration.
- * 
+ *
  * Provides type-safe access to environment variables with runtime environment detection.
  * Essential for configuration management across different deployment environments.
- * 
+ *
  * @ai-interface-type Service Provider
  * @ai-pattern Environment abstraction with type safety
  * @ai-use-case Configuration management, environment detection
- * 
+ *
  * @example
  * ```typescript
  * class NodeEnvProvider implements EnvProvider {
@@ -44,11 +44,11 @@ export interface EnvironmentVariables {
 export interface EnvProvider {
   /**
    * Get environment variable with type-safe key access.
-   * 
+   *
    * @param key Environment variable key (typed when using EnvironmentVariables keys)
    * @param defaultValue Default value if environment variable is not set
    * @returns Environment variable value or default
-   * 
+   *
    * @ai-pattern Type-safe configuration access
    * @ai-generics Uses generic constraints for type safety
    */
@@ -59,7 +59,7 @@ export interface EnvProvider {
 
   /**
    * Check if currently running in development environment.
-   * 
+   *
    * @returns true if NODE_ENV is 'development'
    * @ai-pattern Environment detection
    */
@@ -67,7 +67,7 @@ export interface EnvProvider {
 
   /**
    * Check if currently running in production environment.
-   * 
+   *
    * @returns true if NODE_ENV is 'production'
    * @ai-pattern Environment detection
    */
@@ -75,7 +75,7 @@ export interface EnvProvider {
 
   /**
    * Check if currently running in test environment.
-   * 
+   *
    * @returns true if NODE_ENV is 'test'
    * @ai-pattern Environment detection
    */
@@ -83,7 +83,7 @@ export interface EnvProvider {
 
   /**
    * Get all environment variables as a typed object.
-   * 
+   *
    * @returns Complete environment variables object
    * @ai-pattern Bulk configuration access
    * @ai-security Be cautious when exposing all environment variables
@@ -93,10 +93,10 @@ export interface EnvProvider {
 
 /**
  * Firebase service configuration interface.
- * 
+ *
  * Contains all necessary configuration for Firebase services including
  * authentication, analytics, messaging, and web push notifications.
- * 
+ *
  * @ai-interface-type Configuration Data Type
  * @ai-service Firebase configuration
  * @ai-security Contains sensitive API keys and configuration data
@@ -123,16 +123,16 @@ export interface FirebaseConfig {
 
 /**
  * Main application configuration interface.
- * 
+ *
  * Centralizes all application configuration including API endpoints,
  * service keys, and feature flags. Designed for email/communication
  * applications with blockchain wallet integration.
- * 
+ *
  * @ai-interface-type Configuration Data Type
  * @ai-pattern Centralized application configuration
  * @ai-security Contains multiple sensitive API keys and tokens
  * @ai-domain Email applications with blockchain/crypto integration
- * 
+ *
  * @example
  * ```typescript
  * const config: AppConfig = {
@@ -171,20 +171,20 @@ export interface AppConfig {
 
 /**
  * Storage type enumeration for cross-platform storage abstraction.
- * 
+ *
  * Provides runtime-accessible values for different storage mechanisms
  * across web browsers, React Native, and Node.js environments.
- * 
+ *
  * @ai-enum-type Storage mechanism selector
  * @ai-pattern Cross-platform storage abstraction
  * @ai-runtime-value Enum values available at runtime for dynamic selection
  * @ai-cross-platform Web (localStorage/sessionStorage), React Native (AsyncStorage), Universal (memory)
- * 
+ *
  * @example
  * ```typescript
  * // Use enum values for storage factory
  * const storage = storageFactory.create(StorageType.LOCAL_STORAGE);
- * 
+ *
  * // Runtime value access
  * Object.values(StorageType) // ['localStorage', 'sessionStorage', 'asyncStorage', 'memory']
  * ```
@@ -202,10 +202,10 @@ export enum StorageType {
 
 /**
  * Flexible analytics event properties interface.
- * 
+ *
  * Supports arbitrary key-value pairs for analytics event metadata
  * with common data types used in analytics tracking.
- * 
+ *
  * @ai-interface-type Data Container
  * @ai-pattern Flexible properties with common analytics data types
  * @ai-analytics Event metadata and context information
@@ -217,15 +217,15 @@ export interface AnalyticsEventProperties {
 
 /**
  * Standardized analytics events enumeration.
- * 
+ *
  * Provides consistent event naming for common application analytics scenarios.
  * Organized by functional categories for better code organization and analytics reporting.
- * 
+ *
  * @ai-enum-type Analytics event identifiers
  * @ai-pattern Standardized event naming convention
  * @ai-analytics Pre-defined events for consistent tracking
  * @ai-categories User auth, email actions, navigation, errors, custom events
- * 
+ *
  * @example
  * ```typescript
  * // Use predefined events for consistency
@@ -264,14 +264,14 @@ export enum AnalyticsEvent {
 
 /**
  * Blockchain network type enumeration.
- * 
+ *
  * Identifies different blockchain ecosystems for wallet and transaction processing.
  * Essential for multi-chain applications and crypto wallet integrations.
- * 
+ *
  * @ai-enum-type Blockchain network identifier
  * @ai-domain Cryptocurrency and blockchain applications
  * @ai-pattern Multi-chain support with network abstraction
- * 
+ *
  * @example
  * ```typescript
  * // Chain-specific wallet operations
@@ -291,15 +291,15 @@ export enum ChainType {
 
 /**
  * Cryptocurrency wallet type enumeration.
- * 
+ *
  * Identifies different wallet providers and connection methods for blockchain interactions.
  * Supports both browser extension wallets and protocol-based connections.
- * 
- * @ai-enum-type Wallet provider identifier  
+ *
+ * @ai-enum-type Wallet provider identifier
  * @ai-domain Cryptocurrency wallet integration
  * @ai-pattern Multi-wallet support with provider abstraction
  * @ai-web3 Browser extension wallets and connection protocols
- * 
+ *
  * @example
  * ```typescript
  * // Wallet-specific connection logic
