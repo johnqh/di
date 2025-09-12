@@ -170,13 +170,3 @@ export enum WalletType {
   WALLETCONNECT = 'walletconnect',
   INJECTED = 'injected',
 }
-
-// Email Address Interface
-export interface EmailAddress {
-  id: string;
-  address: string;
-  verified: boolean;
-  primary?: boolean;
-  createdAt: Date;
-  updatedAt?: Date;
-}

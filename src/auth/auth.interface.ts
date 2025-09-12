@@ -114,33 +114,6 @@ interface AuthStorageService {
 }
 
 /**
- * Platform-agnostic email address service for authentication
- */
-interface AuthEmailAddressService {
-  /**
-   * Generate email addresses for a wallet address
-   * @param walletAddress Wallet address
-   * @param chainType Chain type
-   * @returns Promise<EmailAddress[]> with generated email addresses
-   */
-  generateEmailAddresses(
-    walletAddress: string,
-    chainType: ChainType
-  ): Promise<EmailAddress[]>;
-
-  /**
-   * Refresh email addresses for a wallet address
-   * @param walletAddress Wallet address
-   * @param chainType Chain type
-   * @returns Promise<EmailAddress[]> with refreshed email addresses
-   */
-  refreshEmailAddresses(
-    walletAddress: string,
-    chainType: ChainType
-  ): Promise<EmailAddress[]>;
-}
-
-/**
  * Combined authentication manager interface
  */
 interface AuthManager {
@@ -209,6 +182,5 @@ export {
   type WalletUserData,
   type AuthService,
   type AuthStorageService,
-  type AuthEmailAddressService,
   type AuthManager,
 };
