@@ -1,0 +1,35 @@
+# CODEOWNERS for @johnqh/di
+# This file defines code ownership for automated review requests
+
+# Default owner for everything
+* @johnqh
+
+# Core interfaces
+/src/types.ts @johnqh
+/src/env.ts @johnqh
+/src/index.ts @johnqh
+
+# Domain-specific interfaces
+/src/analytics/ @johnqh
+/src/auth/ @johnqh
+/src/network/ @johnqh
+/src/storage/ @johnqh
+/src/navigation/ @johnqh
+/src/notification/ @johnqh
+
+# Tests
+/tests/ @johnqh
+
+# Configuration files
+/tsconfig.json @johnqh
+/jest.config.js @johnqh
+/.eslintrc.js @johnqh
+/package.json @johnqh
+
+# Documentation
+*.md @johnqh
+/CLAUDE.md @johnqh
+/.cursorrules @johnqh
+
+# CI/CD
+/.github/ @johnqh

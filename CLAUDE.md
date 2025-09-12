@@ -1,6 +1,6 @@
-# CLAUDE.md
+# CLAUDE.md - AI Assistant Context
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides comprehensive guidance for AI assistants (Claude Code, GitHub Copilot, Cursor, etc.) when working with this repository. It contains essential context, patterns, and instructions to enable effective AI-assisted development.
 
 ## Project Overview
 
@@ -128,3 +128,131 @@ npm test -- --coverage --silent       # Quiet coverage run
 - ES modules require careful Jest configuration for TypeScript
 - Cross-platform types need DOM lib for web APIs (FormData, Blob, etc.)
 - Unused parameters in interface methods are expected - configure ESLint accordingly
+
+## AI Assistant Instructions
+
+### Quick Start for AI Assistants
+1. **Read this file first** - Contains all project context and patterns
+2. **Check existing interfaces** - Always look at existing code before creating new interfaces
+3. **Follow conventions** - Match existing code style and patterns exactly
+4. **Test everything** - Run `npm test` after any changes
+5. **Type safety first** - This is a TypeScript-first library
+
+### Code Generation Guidelines
+
+#### When Creating New Interfaces
+```typescript
+// ✅ GOOD: Generic, flexible interface
+export interface DataProvider<T> {
+  get(id: string): Promise<T>;
+  set(id: string, value: T): Promise<void>;
+  delete(id: string): Promise<void>;
+}
+
+// ❌ BAD: Too specific, not flexible
+export interface UserDataProvider {
+  getUser(id: string): Promise<User>;
+  setUser(id: string, user: User): Promise<void>;
+}
+```
+
+#### When Adding Platform-Specific Types
+```typescript
+// ✅ GOOD: Platform-agnostic with detection
+export enum Platform {
+  Web = 'web',
+  iOS = 'ios',
+  Android = 'android',
+}
+
+export interface PlatformProvider {
+  platform: Platform;
+  isWeb(): boolean;
+  isMobile(): boolean;
+}
+
+// ❌ BAD: Platform-specific implementation
+import { Platform } from 'react-native';
+// Never import platform-specific libraries
+```
+
+### Common AI Tasks and Solutions
+
+#### Task: Add a new domain interface
+**Solution**: 
+1. Create new directory under `src/` (e.g., `src/cache/`)
+2. Create interface file (e.g., `cache.interface.ts`)
+3. Export from `src/index.ts`
+4. Add tests in `tests/cache/cache.test.ts`
+5. Update this CLAUDE.md file
+
+#### Task: Fix type errors
+**Solution**:
+1. Run `npm run typecheck` to see all errors
+2. Check if using `any` - replace with `unknown` or generic
+3. Ensure all interfaces use proper generics
+4. Verify imports are from correct paths
+
+#### Task: Improve test coverage
+**Solution**:
+1. Run `npm run test:coverage` to see gaps
+2. Focus on mock implementations, not interfaces
+3. Test edge cases and error scenarios
+4. Ensure 95% coverage threshold
+
+### AI Context Markers
+
+These markers help AI assistants understand code purpose:
+
+```typescript
+// @ai-context: Core interface for dependency injection
+// @ai-pattern: Generic provider pattern
+// @ai-platform: Cross-platform compatible
+// @ai-test: See tests/analytics/analytics.test.ts
+```
+
+### Project Invariants (Never Change These)
+
+1. **No implementations** - This library contains ONLY interfaces
+2. **No dependencies** - Zero runtime dependencies allowed
+3. **Platform agnostic** - Must work on web, iOS, and Android
+4. **95% test coverage** - Never reduce coverage threshold
+5. **Strict TypeScript** - Keep strict mode enabled
+6. **ESM only** - Module type is ESM, no CommonJS
+
+### Frequently Asked Questions for AI
+
+**Q: Can I add a new npm dependency?**
+A: No. This is an interface-only library with zero runtime dependencies.
+
+**Q: Should I add implementation code?**
+A: No. Only interfaces, types, and enums. Implementations belong in consuming projects.
+
+**Q: How do I handle platform-specific types?**
+A: Use enums and type unions. Never import platform-specific libraries.
+
+**Q: What about utility functions?**
+A: Only type utilities are allowed (e.g., type guards), no runtime utilities.
+
+**Q: How detailed should interfaces be?**
+A: Detailed enough for type safety, generic enough for multiple implementations.
+
+### Performance Considerations for AI
+
+- **Keep interfaces small** - Single responsibility principle
+- **Use generics liberally** - Flexibility without runtime cost
+- **Avoid deep nesting** - Flat interface hierarchies perform better
+- **Minimize re-exports** - Direct imports are more efficient
+
+### Security Considerations
+
+- **No secrets** - Never include API keys or credentials
+- **Type-safe APIs** - Interfaces should encourage secure patterns
+- **Validation hints** - Include JSDoc comments for validation requirements
+
+### Version Management
+
+- **Semantic versioning** - MAJOR.MINOR.PATCH
+- **Breaking changes** - Any interface change is breaking
+- **Deprecation** - Use `@deprecated` JSDoc tag
+- **Changelog** - Update CHANGELOG.md for all changes

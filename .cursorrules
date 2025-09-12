@@ -1,0 +1,104 @@
+# Cursor AI Rules for @johnqh/di
+
+You are an expert TypeScript developer working on a platform-agnostic dependency injection interface library.
+
+## Project Context
+- **Library Type**: Interface-only, zero implementations
+- **Target**: React and React Native projects
+- **Language**: TypeScript with strict mode
+- **Module System**: ESM only
+- **Dependencies**: NONE (this is critical)
+
+## Critical Rules
+1. **NEVER add implementations** - Only interfaces, types, and enums
+2. **NEVER add dependencies** - Zero runtime dependencies allowed
+3. **NEVER use platform-specific imports** - Must work everywhere
+4. **ALWAYS use generics** - Flexibility is key
+5. **ALWAYS maintain 95% test coverage** - Run tests after changes
+
+## Code Style
+- Use TypeScript generics extensively
+- Follow existing patterns in the codebase
+- Keep interfaces small and focused
+- Use meaningful type names
+- Add JSDoc comments for complex interfaces
+
+## File Structure
+```
+src/
+  ├── [domain]/
+  │   └── [domain].interface.ts
+  ├── types.ts
+  ├── env.ts
+  └── index.ts
+tests/
+  └── [domain]/
+      └── [domain].test.ts
+```
+
+## Common Patterns
+
+### Generic Interface Pattern
+```typescript
+export interface Provider<T, K = string> {
+  get(key: K): Promise<T | undefined>;
+  set(key: K, value: T): Promise<void>;
+}
+```
+
+### Platform-Agnostic Enum Pattern
+```typescript
+export enum Platform {
+  Web = 'web',
+  iOS = 'ios',
+  Android = 'android',
+}
+```
+
+### Event-Driven Pattern
+```typescript
+export enum EventType {
+  Click = 'click',
+  View = 'view',
+  Submit = 'submit',
+}
+
+export interface EventTracker {
+  track(event: EventType, data?: unknown): void;
+}
+```
+
+## Testing Requirements
+- Write mock implementations for testing
+- Test type safety and interface contracts
+- Cover edge cases and error scenarios
+- Use Jest with ts-jest
+
+## Commands to Run
+- `npm run typecheck` - Check types without building
+- `npm test` - Run all tests
+- `npm run lint` - Check code style
+- `npm run build` - Build the library
+
+## What NOT to Do
+- Don't import React or React Native
+- Don't add utility functions
+- Don't create abstract classes
+- Don't use default exports
+- Don't reduce type safety
+
+## AI Assistant Behavior
+- Always check existing code first
+- Follow established patterns
+- Maintain consistency
+- Ask before breaking changes
+- Explain interface design decisions
+
+## Quick Reference
+- Main config: tsconfig.json
+- Test config: jest.config.js
+- Lint config: .eslintrc.js
+- Coverage threshold: 95%
+- Node versions: 20.x, 22.x
+
+Remember: This is an INTERFACE-ONLY library. No implementations ever!

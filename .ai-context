@@ -1,0 +1,39 @@
+# AI Context File for @johnqh/di
+
+## Quick Context
+Type: TypeScript interface library (NO implementations)
+Purpose: Dependency injection for React/React Native
+Dependencies: ZERO runtime dependencies
+Coverage: 95% minimum required
+
+## Key Rules
+1. NEVER add implementations in src/
+2. NEVER add npm dependencies
+3. ALWAYS use TypeScript generics
+4. ALWAYS maintain 95% test coverage
+5. ALWAYS follow existing patterns
+
+## File to Read First
+1. CLAUDE.md - Complete AI guidance
+2. EXAMPLES.md - Code patterns and templates
+3. ARCHITECTURE.md - System design
+
+## Common Commands
+npm run typecheck  # Check types
+npm test          # Run tests
+npm run lint:fix  # Fix style
+npm run build     # Build library
+
+## Current State
+Version: 1.1.0
+License: MIT
+Author: @johnqh
+Target: ES2020
+Module: ESM only
+
+## AI Assistant Notes
+- This project is optimized for AI assistance
+- Use templates in EXAMPLES.md
+- Follow patterns in existing code
+- Ask before breaking changes
+- Test all changes
