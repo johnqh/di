@@ -200,15 +200,63 @@ import { Platform } from 'react-native';
 3. Test edge cases and error scenarios
 4. Ensure 95% coverage threshold
 
-### AI Context Markers
+### AI Context Markers and Documentation Standards
 
-These markers help AI assistants understand code purpose:
+The codebase uses standardized AI context markers to help AI assistants understand code purpose, patterns, and usage. These markers are embedded in JSDoc comments throughout the codebase.
+
+#### Standard AI Context Markers
 
 ```typescript
-// @ai-context: Core interface for dependency injection
-// @ai-pattern: Generic provider pattern
-// @ai-platform: Cross-platform compatible
-// @ai-test: See tests/analytics/analytics.test.ts
+/**
+ * Interface description
+ * 
+ * @ai-context Core interface for dependency injection
+ * @ai-pattern Generic provider pattern  
+ * @ai-platform Cross-platform compatible (Web, React Native, Node.js)
+ * @ai-usage Implement this interface to create services for Firebase, etc.
+ * @ai-test See tests/analytics/analytics.test.ts
+ * @ai-interface-type Service Provider | Data Container | Configuration
+ * @ai-domain Email applications | Blockchain integration | Analytics
+ * @ai-security Contains sensitive data - handle securely
+ * @ai-cross-platform Works across web and mobile platforms
+ * @ai-runtime-value Enum values available at runtime
+ * @ai-generics Uses generic constraints for type safety
+ * 
+ * @example
+ * ```typescript
+ * class MyImplementation implements MyInterface {
+ *   // Implementation details
+ * }
+ * ```
+ */
+```
+
+#### Test Documentation Standards
+
+```typescript
+/**
+ * @ai-test-suite Description of test suite purpose
+ * @ai-test-category Category of tests being run
+ * @ai-test-pattern Type of testing pattern used
+ * @ai-purpose Specific purpose of this test
+ * @ai-coverage What this test covers
+ * @ai-use-case Real-world usage scenario being tested
+ */
+```
+
+#### Enum Documentation Standards
+
+```typescript
+/**
+ * @ai-enum-type Purpose of the enumeration
+ * @ai-pattern How this enum should be used
+ * @ai-runtime-value Available as values at runtime
+ * @ai-categories Functional categories within the enum
+ */
+export enum ExampleEnum {
+  /** Detailed description of each enum value */
+  VALUE_ONE = 'value-one',
+}
 ```
 
 ### Project Invariants (Never Change These)
@@ -249,6 +297,109 @@ A: Detailed enough for type safety, generic enough for multiple implementations.
 - **No secrets** - Never include API keys or credentials
 - **Type-safe APIs** - Interfaces should encourage secure patterns
 - **Validation hints** - Include JSDoc comments for validation requirements
+
+## AI-Assisted Development Optimizations
+
+This project has been specifically optimized for AI-assisted development with the following enhancements:
+
+### 1. Comprehensive JSDoc Documentation
+
+Every interface, enum, and significant code element includes detailed JSDoc documentation with:
+- Purpose and usage descriptions
+- Parameter explanations with types and examples
+- Return value documentation
+- Cross-platform compatibility notes
+- Security considerations
+- Practical usage examples
+
+### 2. AI Context Markers
+
+Standardized `@ai-*` markers throughout the codebase provide context to AI assistants:
+- `@ai-context` - Overall purpose of the code
+- `@ai-pattern` - Design patterns being used
+- `@ai-platform` - Platform compatibility information
+- `@ai-usage` - How to implement or use the code
+- `@ai-example` - Practical examples
+- `@ai-security` - Security considerations
+- `@ai-test-*` - Testing-related context
+
+### 3. Enhanced Test Patterns
+
+Test files include AI-friendly patterns:
+- Descriptive test categorization with `@ai-test-category`
+- Clear purpose statements with `@ai-purpose`
+- Pattern identification with `@ai-test-pattern`
+- Real-world usage examples in test scenarios
+- Comprehensive edge case coverage
+
+### 4. Runtime-Accessible Enums
+
+All enums are designed for runtime access:
+- Converted from type unions to proper enums
+- String values for integration with external APIs
+- Comprehensive documentation for each enum value
+- Usage examples showing runtime iteration and switching
+
+### 5. Type Safety with Flexibility
+
+Interfaces balance strict typing with necessary flexibility:
+- Generic type parameters where appropriate
+- Optional properties clearly marked and documented
+- Union types for legitimate variants
+- Index signatures for extensible configurations
+
+### AI Assistant Best Practices
+
+When working with this codebase, AI assistants should:
+
+1. **Read Documentation First** - Always check existing JSDoc and AI context markers
+2. **Follow Established Patterns** - Use the same documentation and naming conventions
+3. **Maintain Type Safety** - Preserve strict TypeScript typing while adding flexibility
+4. **Include Examples** - Provide practical usage examples in all documentation
+5. **Cross-Platform Awareness** - Consider web, React Native, and Node.js compatibility
+6. **Test Coverage** - Maintain comprehensive test coverage with descriptive patterns
+
+### Code Generation Guidelines for AI
+
+When generating code:
+
+```typescript
+// ✅ GOOD: Comprehensive interface with AI markers
+/**
+ * Service for managing user notifications across platforms.
+ * 
+ * @ai-context Notification service interface for dependency injection
+ * @ai-pattern Service provider with async operations
+ * @ai-platform Works on web (Web Notifications API) and mobile (push notifications)
+ * @ai-usage Implement for Firebase, OneSignal, or custom notification services
+ * 
+ * @example
+ * ```typescript
+ * class FirebaseNotifications implements NotificationService {
+ *   async send(message: string, options?: NotificationOptions) {
+ *     // Implementation using Firebase Cloud Messaging
+ *   }
+ * }
+ * ```
+ */
+interface NotificationService {
+  /**
+   * Send a notification to the user.
+   * 
+   * @param message Notification message content
+   * @param options Optional notification configuration
+   * @returns Promise resolving when notification is queued
+   * 
+   * @ai-pattern Async service method with options parameter
+   */
+  send(message: string, options?: NotificationOptions): Promise<void>;
+}
+
+// ❌ BAD: Minimal interface without context
+interface NotificationService {
+  send(message: string): Promise<void>;
+}
+```
 
 ### Version Management
 
