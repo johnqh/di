@@ -12,7 +12,7 @@ export { AnalyticsEvent };
  */
 interface AnalyticsEventData {
   event: AnalyticsEvent;
-  parameters?: Record<string, any>;
+  parameters?: Record<string, unknown>;
 }
 
 /**
@@ -30,7 +30,7 @@ interface _AnalyticsClient {
    * Set user properties for analytics
    * @param properties User properties to set
    */
-  setUserProperties(properties: Record<string, any>): void;
+  setUserProperties(properties: Record<string, unknown>): void;
 
   /**
    * Set current user ID for analytics
@@ -61,7 +61,7 @@ interface _AnalyticsContextProvider {
    * Get current context data that should be included with all events
    * @returns Context data to merge with event parameters
    */
-  getCurrentContext(): Record<string, any>;
+  getCurrentContext(): Record<string, unknown>;
 }
 
 export {

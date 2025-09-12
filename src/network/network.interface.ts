@@ -11,7 +11,7 @@ interface NetworkRequestOptions {
   timeout?: number;
 }
 
-interface NetworkResponse<T = any> {
+interface NetworkResponse<T = unknown> {
   ok: boolean;
   status: number;
   statusText: string;
@@ -23,7 +23,7 @@ interface NetworkClient {
   /**
    * Make a network request
    */
-  request<T = any>(
+  request<T = unknown>(
     url: string,
     options?: NetworkRequestOptions
   ): Promise<NetworkResponse<T>>;
@@ -31,7 +31,7 @@ interface NetworkClient {
   /**
    * Make a GET request
    */
-  get<T = any>(
+  get<T = unknown>(
     url: string,
     options?: Omit<NetworkRequestOptions, 'method' | 'body'>
   ): Promise<NetworkResponse<T>>;
@@ -39,25 +39,25 @@ interface NetworkClient {
   /**
    * Make a POST request
    */
-  post<T = any>(
+  post<T = unknown>(
     url: string,
-    body?: any,
+    body?: unknown,
     options?: Omit<NetworkRequestOptions, 'method'>
   ): Promise<NetworkResponse<T>>;
 
   /**
    * Make a PUT request
    */
-  put<T = any>(
+  put<T = unknown>(
     url: string,
-    body?: any,
+    body?: unknown,
     options?: Omit<NetworkRequestOptions, 'method'>
   ): Promise<NetworkResponse<T>>;
 
   /**
    * Make a DELETE request
    */
-  delete<T = any>(
+  delete<T = unknown>(
     url: string,
     options?: Omit<NetworkRequestOptions, 'method' | 'body'>
   ): Promise<NetworkResponse<T>>;
@@ -66,13 +66,13 @@ interface NetworkClient {
 class NetworkError extends Error {
   public readonly status: number;
   public readonly statusText: string;
-  public readonly response?: any;
+  public readonly response?: unknown;
 
   constructor(
     message: string,
     status: number,
     statusText: string,
-    response?: any
+    response?: unknown
   ) {
     super(message);
     this.name = 'NetworkError';

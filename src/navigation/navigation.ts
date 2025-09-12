@@ -5,7 +5,7 @@
 
 interface NavigationOptions {
   replace?: boolean;
-  state?: any;
+  state?: unknown;
   preventScrollReset?: boolean;
 }
 
@@ -110,7 +110,7 @@ interface LocationHook {
   search: string;
   searchParams: Record<string, string>;
   hash: string;
-  state: any;
+  state: unknown;
   key: string;
 }
 

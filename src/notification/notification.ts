@@ -10,7 +10,7 @@ interface NotificationOptions {
   tag?: string;
   requireInteraction?: boolean;
   silent?: boolean;
-  data?: any;
+  data?: unknown;
   actions?: NotificationAction[];
   timestamp?: number;
 }
@@ -79,7 +79,7 @@ interface NotificationService {
    * Set notification click handler
    * @param handler Function to call when notification is clicked
    */
-  setClickHandler(handler: (data?: any) => void): void;
+  setClickHandler(handler: (data?: unknown) => void): void;
 
   /**
    * Check if permission is granted
