@@ -70,10 +70,10 @@ describe('Library Integration', () => {
   test('should work across platform boundaries', () => {
     // Test that interfaces work for cross-platform scenarios
     const storageTypes: DI.StorageType[] = [
-      'localStorage',    // Web
-      'sessionStorage',  // Web
-      'asyncStorage',    // React Native
-      'memory'          // Universal fallback
+      DI.StorageType.LOCAL_STORAGE,    // Web
+      DI.StorageType.SESSION_STORAGE,  // Web
+      DI.StorageType.ASYNC_STORAGE,    // React Native
+      DI.StorageType.MEMORY           // Universal fallback
     ];
 
     storageTypes.forEach(type => {
@@ -83,6 +83,12 @@ describe('Library Integration', () => {
     const chainTypes = Object.values(DI.ChainType);
     expect(chainTypes).toContain('evm');
     expect(chainTypes).toContain('solana');
+    
+    const storageTypeValues = Object.values(DI.StorageType);
+    expect(storageTypeValues).toContain('localStorage');
+    expect(storageTypeValues).toContain('sessionStorage');
+    expect(storageTypeValues).toContain('asyncStorage');
+    expect(storageTypeValues).toContain('memory');
   });
 
   test('should maintain type safety', () => {

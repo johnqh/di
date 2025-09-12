@@ -74,11 +74,12 @@ export interface AppConfig {
 }
 
 // Storage Types
-export type StorageType =
-  | 'localStorage'
-  | 'sessionStorage'
-  | 'asyncStorage'
-  | 'memory';
+export enum StorageType {
+  LOCAL_STORAGE = 'localStorage',
+  SESSION_STORAGE = 'sessionStorage',
+  ASYNC_STORAGE = 'asyncStorage',
+  MEMORY = 'memory',
+}
 
 // Analytics Types
 export interface AnalyticsEventProperties {

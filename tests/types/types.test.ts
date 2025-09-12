@@ -54,16 +54,23 @@ describe('WalletType Enum', () => {
   });
 });
 
-describe('StorageType', () => {
-  test('should be a union type with correct values', () => {
+describe('StorageType Enum', () => {
+  test('should have correct storage type values', () => {
+    expect(StorageType.LOCAL_STORAGE).toBe('localStorage');
+    expect(StorageType.SESSION_STORAGE).toBe('sessionStorage');
+    expect(StorageType.ASYNC_STORAGE).toBe('asyncStorage');
+    expect(StorageType.MEMORY).toBe('memory');
+  });
+
+  test('should be usable as a value array', () => {
     const validStorageTypes: StorageType[] = [
-      'localStorage',
-      'sessionStorage',
-      'asyncStorage',
-      'memory'
+      StorageType.LOCAL_STORAGE,
+      StorageType.SESSION_STORAGE,
+      StorageType.ASYNC_STORAGE,
+      StorageType.MEMORY
     ];
     
-    // This test verifies the type exists and can be used
+    // This test verifies the enum exists and can be used as values
     validStorageTypes.forEach(type => {
       expect(typeof type).toBe('string');
     });
