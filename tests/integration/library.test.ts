@@ -8,9 +8,7 @@ describe('Library Integration', () => {
   test('should export all core types', () => {
     // Test enum exports
     expect(DI.AnalyticsEvent.USER_LOGIN).toBe('user_login');
-    expect(DI.AuthStatus.AUTHENTICATED).toBe('authenticated');
-    expect(DI.ChainType.ETHEREUM).toBe('ethereum');
-    expect(DI.LoginMethod.WALLET).toBe('wallet');
+    expect(DI.ChainType.EVM).toBe('evm');
     expect(DI.WalletType.METAMASK).toBe('metamask');
   });
 
@@ -18,12 +16,6 @@ describe('Library Integration', () => {
     // This test verifies that all interfaces are properly exported
     // and can be used for type checking in consuming applications
     
-    const mockUser: DI.AuthUser = {
-      id: 'test-user',
-      email: 'test@example.com',
-      displayName: 'Test User',
-    };
-
     const mockConfig: DI.AppConfig = {
       wildDuckBackendUrl: 'https://api.example.com',
       indexerBackendUrl: 'https://indexer.example.com',
@@ -44,7 +36,6 @@ describe('Library Integration', () => {
       useMockFallback: true,
     };
 
-    expect(mockUser.id).toBe('test-user');
     expect(mockConfig.firebase.projectId).toBe('firebase-project');
   });
 
@@ -90,9 +81,8 @@ describe('Library Integration', () => {
     });
 
     const chainTypes = Object.values(DI.ChainType);
-    expect(chainTypes).toContain('ethereum');
+    expect(chainTypes).toContain('evm');
     expect(chainTypes).toContain('solana');
-    expect(chainTypes).toContain('polygon');
   });
 
   test('should maintain type safety', () => {

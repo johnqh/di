@@ -73,33 +73,6 @@ export interface AppConfig {
   useMockFallback: boolean;
 }
 
-// Authentication Types
-export interface AuthUser {
-  id: string;
-  email?: string;
-  displayName?: string;
-  photoURL?: string;
-  emailVerified?: boolean;
-  isAnonymous?: boolean;
-  metadata?: {
-    creationTime?: string;
-    lastSignInTime?: string;
-  };
-  providerData?: Array<{
-    providerId: string;
-    uid: string;
-    displayName?: string;
-    email?: string;
-    phoneNumber?: string;
-    photoURL?: string;
-  }>;
-}
-
-export interface AuthCredential {
-  providerId: string;
-  signInMethod: string;
-}
-
 // Storage Types
 export type StorageType =
   | 'localStorage'
@@ -136,30 +109,10 @@ export enum AnalyticsEvent {
   CUSTOM_EVENT = 'custom_event',
 }
 
-// Authentication Status Enum
-export enum AuthStatus {
-  AUTHENTICATED = 'authenticated',
-  UNAUTHENTICATED = 'unauthenticated',
-  LOADING = 'loading',
-  ERROR = 'error',
-}
-
 // Chain Type Enum
 export enum ChainType {
-  ETHEREUM = 'ethereum',
+  EVM = 'evm',
   SOLANA = 'solana',
-  POLYGON = 'polygon',
-  BSC = 'bsc',
-  AVALANCHE = 'avalanche',
-}
-
-// Login Method Enum
-export enum LoginMethod {
-  WALLET = 'wallet',
-  EMAIL = 'email',
-  GOOGLE = 'google',
-  APPLE = 'apple',
-  TWITTER = 'twitter',
 }
 
 // Wallet Type Enum

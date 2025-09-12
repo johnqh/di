@@ -15,9 +15,6 @@ export * from './env';
 export * from './analytics/analytics';
 export * from './analytics/analytics.interface';
 
-// Authentication interfaces
-export * from './auth/auth.interface';
-
 // Navigation interfaces
 export * from './navigation/navigation';
 

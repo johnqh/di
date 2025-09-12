@@ -2,13 +2,7 @@
  * Platform-agnostic analytics service interface
  */
 
-import {
-  AnalyticsEvent,
-  ChainType,
-  LoginMethod,
-  WalletType,
-  AnalyticsEventProperties,
-} from '../types';
+import { AnalyticsEvent, AnalyticsEventProperties } from '../types';
 
 interface AnalyticsService {
   /**
@@ -89,15 +83,6 @@ interface AnalyticsConfig {
  */
 interface EmailAnalyticsService extends AnalyticsService {
   /**
-   * Track user authentication
-   */
-  trackAuth(
-    method: LoginMethod,
-    walletType?: WalletType,
-    chainType?: ChainType
-  ): void;
-
-  /**
    * Track email action
    */
   trackEmailAction(
@@ -148,17 +133,6 @@ interface EmailAnalyticsService extends AnalyticsService {
  * Analytics event builders for common events
  */
 class AnalyticsEventBuilder {
-  static userLogin(
-    method: LoginMethod,
-    walletType?: WalletType
-  ): AnalyticsEventProperties {
-    return {
-      method,
-      wallet_type: walletType,
-      timestamp: Date.now(),
-    };
-  }
-
   static emailAction(
     action: string,
     emailId: string,

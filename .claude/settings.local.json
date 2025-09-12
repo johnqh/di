@@ -12,7 +12,8 @@
       "Bash(npm test)",
       "Bash(npm run test:coverage:*)",
       "Bash(git push:*)",
-      "Read(//Users/qianghuang/design_system/**)"
+      "Read(//Users/qianghuang/design_system/**)",
+      "Bash(mkdir:*)"
     ],
     "deny": [],
     "ask": []

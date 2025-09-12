@@ -4,17 +4,12 @@
 
 import {
   AnalyticsEvent,
-  AuthStatus,
   ChainType,
-  LoginMethod,
   WalletType,
   StorageType,
   EnvironmentVariables,
   AppConfig,
   FirebaseConfig,
-  AuthUser,
-  AuthCredential,
-  EmailAddress,
 } from '../../src/types';
 
 describe('AnalyticsEvent Enum', () => {
@@ -42,32 +37,10 @@ describe('AnalyticsEvent Enum', () => {
   });
 });
 
-describe('AuthStatus Enum', () => {
-  test('should have correct authentication status values', () => {
-    expect(AuthStatus.AUTHENTICATED).toBe('authenticated');
-    expect(AuthStatus.UNAUTHENTICATED).toBe('unauthenticated');
-    expect(AuthStatus.LOADING).toBe('loading');
-    expect(AuthStatus.ERROR).toBe('error');
-  });
-});
-
 describe('ChainType Enum', () => {
   test('should have correct blockchain chain types', () => {
-    expect(ChainType.ETHEREUM).toBe('ethereum');
+    expect(ChainType.EVM).toBe('evm');
     expect(ChainType.SOLANA).toBe('solana');
-    expect(ChainType.POLYGON).toBe('polygon');
-    expect(ChainType.BSC).toBe('bsc');
-    expect(ChainType.AVALANCHE).toBe('avalanche');
-  });
-});
-
-describe('LoginMethod Enum', () => {
-  test('should have correct login method values', () => {
-    expect(LoginMethod.WALLET).toBe('wallet');
-    expect(LoginMethod.EMAIL).toBe('email');
-    expect(LoginMethod.GOOGLE).toBe('google');
-    expect(LoginMethod.APPLE).toBe('apple');
-    expect(LoginMethod.TWITTER).toBe('twitter');
   });
 });
 
@@ -98,58 +71,6 @@ describe('StorageType', () => {
 });
 
 describe('Interface Type Validation', () => {
-  test('AuthUser interface should be properly typed', () => {
-    const mockUser: AuthUser = {
-      id: 'test-user-id',
-      email: 'test@example.com',
-      displayName: 'Test User',
-      photoURL: 'https://example.com/photo.jpg',
-      emailVerified: true,
-      isAnonymous: false,
-      metadata: {
-        creationTime: '2023-01-01T00:00:00.000Z',
-        lastSignInTime: '2023-01-02T00:00:00.000Z',
-      },
-      providerData: [{
-        providerId: 'google.com',
-        uid: 'google-uid',
-        displayName: 'Test User',
-        email: 'test@example.com',
-        photoURL: 'https://example.com/photo.jpg',
-      }]
-    };
-
-    expect(mockUser.id).toBe('test-user-id');
-    expect(mockUser.email).toBe('test@example.com');
-    expect(mockUser.emailVerified).toBe(true);
-  });
-
-  test('AuthCredential interface should be properly typed', () => {
-    const mockCredential: AuthCredential = {
-      providerId: 'google.com',
-      signInMethod: 'popup',
-    };
-
-    expect(mockCredential.providerId).toBe('google.com');
-    expect(mockCredential.signInMethod).toBe('popup');
-  });
-
-  test('EmailAddress interface should be properly typed', () => {
-    const mockEmail: EmailAddress = {
-      id: 'email-1',
-      address: 'test@example.com',
-      verified: true,
-      primary: true,
-      createdAt: new Date('2023-01-01'),
-      updatedAt: new Date('2023-01-02'),
-    };
-
-    expect(mockEmail.id).toBe('email-1');
-    expect(mockEmail.address).toBe('test@example.com');
-    expect(mockEmail.verified).toBe(true);
-    expect(mockEmail.createdAt).toBeInstanceOf(Date);
-  });
-
   test('FirebaseConfig interface should be properly typed', () => {
     const mockConfig: FirebaseConfig = {
       apiKey: 'test-api-key',
