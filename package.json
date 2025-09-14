@@ -44,6 +44,9 @@
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
   },
+  "dependencies": {
+    "@johnqh/types": "^1.0.0"
+  },
   "peerDependencies": {
     "react": ">=18.0.0"
   },

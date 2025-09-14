@@ -4,7 +4,7 @@
  */
 
 // AnalyticsEvent is now imported from local types
-import { AnalyticsEvent } from '../types';
+import { AnalyticsEvent } from '@johnqh/types';
 export { AnalyticsEvent };
 
 /**

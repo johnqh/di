@@ -2,4 +2,10 @@
  * Network dependency injection interfaces
  */
 
-export * from './network.interface';
+// Network interfaces are now exported from @johnqh/types
+export {
+  type NetworkClient,
+  type NetworkResponse,
+  type NetworkRequestOptions,
+  NetworkError,
+} from '@johnqh/types';

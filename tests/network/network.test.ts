@@ -6,7 +6,7 @@ import {
   NetworkClient,
   NetworkRequestOptions,
   NetworkResponse,
-} from '../../src/network/network.interface';
+} from '@johnqh/types';
 
 // Mock implementation for testing interface compliance
 class MockNetworkClient implements NetworkClient {

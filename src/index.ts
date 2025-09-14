@@ -13,7 +13,13 @@ export * from './env';
 
 // Analytics interfaces
 export * from './analytics/analytics';
-export * from './analytics/analytics.interface';
+// Analytics service interfaces are now exported from @johnqh/types
+export {
+  type AnalyticsService,
+  type AnalyticsConfig,
+  type EmailAnalyticsService,
+  AnalyticsEventBuilder,
+} from '@johnqh/types';
 
 // Navigation interfaces
 export * from './navigation/navigation';

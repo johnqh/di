@@ -7,6 +7,14 @@
  * @ai-pattern Type definitions with runtime enum support
  */
 
+// Re-export infrastructure enums from @johnqh/types
+export {
+  StorageType,
+  AnalyticsEvent,
+  WalletType,
+  ChainType,
+} from '@johnqh/types';
+
 /**
  * Environment variables interface with typed NODE_ENV and flexible additional properties.
  *
@@ -170,37 +178,6 @@ export interface AppConfig {
 }
 
 /**
- * Storage type enumeration for cross-platform storage abstraction.
- *
- * Provides runtime-accessible values for different storage mechanisms
- * across web browsers, React Native, and Node.js environments.
- *
- * @ai-enum-type Storage mechanism selector
- * @ai-pattern Cross-platform storage abstraction
- * @ai-runtime-value Enum values available at runtime for dynamic selection
- * @ai-cross-platform Web (localStorage/sessionStorage), React Native (AsyncStorage), Universal (memory)
- *
- * @example
- * ```typescript
- * // Use enum values for storage factory
- * const storage = storageFactory.create(StorageType.LOCAL_STORAGE);
- *
- * // Runtime value access
- * Object.values(StorageType) // ['localStorage', 'sessionStorage', 'asyncStorage', 'memory']
- * ```
- */
-export enum StorageType {
-  /** Web browser localStorage for persistent client-side storage */
-  LOCAL_STORAGE = 'localStorage',
-  /** Web browser sessionStorage for session-based storage */
-  SESSION_STORAGE = 'sessionStorage',
-  /** React Native AsyncStorage for mobile persistent storage */
-  ASYNC_STORAGE = 'asyncStorage',
-  /** In-memory storage for testing or temporary data */
-  MEMORY = 'memory',
-}
-
-/**
  * Flexible analytics event properties interface.
  *
  * Supports arbitrary key-value pairs for analytics event metadata
@@ -213,113 +190,4 @@ export enum StorageType {
 export interface AnalyticsEventProperties {
   /** Flexible analytics properties supporting common data types */
   [key: string]: string | number | boolean | undefined;
-}
-
-/**
- * Standardized analytics events enumeration.
- *
- * Provides consistent event naming for common application analytics scenarios.
- * Organized by functional categories for better code organization and analytics reporting.
- *
- * @ai-enum-type Analytics event identifiers
- * @ai-pattern Standardized event naming convention
- * @ai-analytics Pre-defined events for consistent tracking
- * @ai-categories User auth, email actions, navigation, errors, custom events
- *
- * @example
- * ```typescript
- * // Use predefined events for consistency
- * analytics.track(AnalyticsEvent.USER_LOGIN, { method: 'email' });
- * analytics.track(AnalyticsEvent.EMAIL_OPENED, { email_id: 'msg-123' });
- * ```
- */
-export enum AnalyticsEvent {
-  /** User successfully logged into the application */
-  USER_LOGIN = 'user_login',
-  /** User logged out of the application */
-  USER_LOGOUT = 'user_logout',
-  /** New user completed account registration */
-  USER_SIGNUP = 'user_signup',
-
-  /** User sent an email message */
-  EMAIL_SENT = 'email_sent',
-  /** User received a new email message */
-  EMAIL_RECEIVED = 'email_received',
-  /** User opened an email message */
-  EMAIL_OPENED = 'email_opened',
-  /** User clicked a link within an email */
-  EMAIL_CLICKED = 'email_clicked',
-
-  /** User viewed a web page */
-  PAGE_VIEW = 'page_view',
-  /** User viewed a mobile screen */
-  SCREEN_VIEW = 'screen_view',
-
-  /** An application error occurred */
-  ERROR_OCCURRED = 'error_occurred',
-
-  /** Custom application-specific event */
-  CUSTOM_EVENT = 'custom_event',
-}
-
-/**
- * Blockchain network type enumeration.
- *
- * Identifies different blockchain ecosystems for wallet and transaction processing.
- * Essential for multi-chain applications and crypto wallet integrations.
- *
- * @ai-enum-type Blockchain network identifier
- * @ai-domain Cryptocurrency and blockchain applications
- * @ai-pattern Multi-chain support with network abstraction
- *
- * @example
- * ```typescript
- * // Chain-specific wallet operations
- * if (chainType === ChainType.EVM) {
- *   // Handle Ethereum-compatible chains
- * } else if (chainType === ChainType.SOLANA) {
- *   // Handle Solana network operations
- * }
- * ```
- */
-export enum ChainType {
-  /** Ethereum Virtual Machine compatible chains (Ethereum, Polygon, BSC, etc.) */
-  EVM = 'evm',
-  /** Solana blockchain network */
-  SOLANA = 'solana',
-}
-
-/**
- * Cryptocurrency wallet type enumeration.
- *
- * Identifies different wallet providers and connection methods for blockchain interactions.
- * Supports both browser extension wallets and protocol-based connections.
- *
- * @ai-enum-type Wallet provider identifier
- * @ai-domain Cryptocurrency wallet integration
- * @ai-pattern Multi-wallet support with provider abstraction
- * @ai-web3 Browser extension wallets and connection protocols
- *
- * @example
- * ```typescript
- * // Wallet-specific connection logic
- * switch (walletType) {
- *   case WalletType.METAMASK:
- *     return connectMetaMask();
- *   case WalletType.WALLETCONNECT:
- *     return connectWalletConnect();
- * }
- * ```
- */
-export enum WalletType {
-  /** MetaMask browser extension wallet */
-  METAMASK = 'metamask',
-  /** Phantom wallet (primarily for Solana) */
-  PHANTOM = 'phantom',
-  /** Coinbase Wallet */
-  COINBASE = 'coinbase',
-  /** WalletConnect protocol for mobile wallets */
-  WALLETCONNECT = 'walletconnect',
-  /** Generic injected wallet provider */
-  INJECTED = 'injected',
 }
