@@ -15,7 +15,8 @@
       "Read(//Users/qianghuang/design_system/**)",
       "Bash(mkdir:*)",
       "Bash(npm test:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(npm version:*)"
     ],
     "deny": [],
     "ask": []
