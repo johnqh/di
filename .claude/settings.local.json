@@ -16,7 +16,10 @@
       "Bash(mkdir:*)",
       "Bash(npm test:*)",
       "Bash(node:*)",
-      "Bash(npm version:*)"
+      "Bash(npm version:*)",
+      "Bash(npm run clean:*)",
+      "Bash(npm update:*)",
+      "Bash(git stash:*)"
     ],
     "deny": [],
     "ask": []
