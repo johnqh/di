@@ -19,7 +19,9 @@
       "Bash(npm version:*)",
       "Bash(npm run clean:*)",
       "Bash(npm update:*)",
-      "Bash(git stash:*)"
+      "Bash(git stash:*)",
+      "Bash(npm view:*)",
+      "Bash(npm ls:*)"
     ],
     "deny": [],
     "ask": []
