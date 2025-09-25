@@ -7,13 +7,16 @@
  * @ai-pattern Type definitions with runtime enum support
  */
 
-// Re-export infrastructure enums from @johnqh/types
-export {
+// Import and re-export infrastructure enums and utility types from @johnqh/types
+import {
   StorageType,
   AnalyticsEvent,
   WalletType,
   ChainType,
+  Optional,
 } from '@johnqh/types';
+
+export { StorageType, AnalyticsEvent, WalletType, ChainType, Optional };
 
 /**
  * Environment variables interface with typed NODE_ENV and flexible additional properties.
@@ -24,9 +27,9 @@ export {
  */
 export interface EnvironmentVariables {
   /** Node.js environment setting with strict typing */
-  NODE_ENV?: 'development' | 'production' | 'test';
+  NODE_ENV?: Optional<'development' | 'production' | 'test'>;
   /** Additional environment variables with flexible string keys */
-  [key: string]: string | undefined;
+  [key: string]: Optional<string>;
 }
 
 /**
@@ -62,8 +65,8 @@ export interface EnvProvider {
    */
   get<K extends keyof EnvironmentVariables>(
     key: K,
-    defaultValue?: string
-  ): EnvironmentVariables[K] | string | undefined;
+    defaultValue?: Optional<string>
+  ): Optional<EnvironmentVariables[K] | string>;
 
   /**
    * Check if currently running in development environment.
@@ -124,9 +127,9 @@ export interface FirebaseConfig {
   /** Firebase application ID */
   appId: string;
   /** Google Analytics measurement ID (optional) */
-  measurementId?: string;
+  measurementId?: Optional<string>;
   /** VAPID key for web push notifications (optional) */
-  vapidKey?: string;
+  vapidKey?: Optional<string>;
 }
 
 /**
@@ -189,5 +192,5 @@ export interface AppConfig {
  */
 export interface AnalyticsEventProperties {
   /** Flexible analytics properties supporting common data types */
-  [key: string]: string | number | boolean | undefined;
+  [key: string]: Optional<string | number | boolean>;
 }

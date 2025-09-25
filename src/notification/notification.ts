@@ -1,3 +1,5 @@
+import { Optional } from '@johnqh/types';
+
 /**
  * Platform-agnostic notification interfaces for cross-platform push notifications and alerts.
  *
@@ -42,23 +44,23 @@
  */
 interface NotificationOptions {
   /** Notification body text */
-  body?: string;
+  body?: Optional<string>;
   /** Icon URL or identifier */
-  icon?: string;
+  icon?: Optional<string>;
   /** Badge URL or identifier */
-  badge?: string;
+  badge?: Optional<string>;
   /** Unique tag for notification grouping */
-  tag?: string;
+  tag?: Optional<string>;
   /** Keep notification until user interacts */
-  requireInteraction?: boolean;
+  requireInteraction?: Optional<boolean>;
   /** Show notification without sound */
-  silent?: boolean;
+  silent?: Optional<boolean>;
   /** Custom data to associate with notification */
-  data?: unknown;
+  data?: Optional<unknown>;
   /** Interactive action buttons */
-  actions?: NotificationAction[];
+  actions?: Optional<NotificationAction[]>;
   /** Notification timestamp */
-  timestamp?: number;
+  timestamp?: Optional<number>;
 }
 
 /**
@@ -73,7 +75,7 @@ interface NotificationAction {
   /** Action button title */
   title: string;
   /** Optional action icon */
-  icon?: string;
+  icon?: Optional<string>;
 }
 
 /**
@@ -86,9 +88,9 @@ interface NotificationResult {
   /** Whether operation succeeded */
   success: boolean;
   /** Error message if operation failed */
-  error?: string;
+  error?: Optional<string>;
   /** Unique notification identifier for tracking */
-  notificationId?: string;
+  notificationId?: Optional<string>;
 }
 
 /**
@@ -103,7 +105,7 @@ interface NotificationPermissionResult {
   /** Detailed permission state */
   permission: 'granted' | 'denied' | 'default';
   /** Error message if request failed */
-  error?: string;
+  error?: Optional<string>;
 }
 
 /**
@@ -149,7 +151,7 @@ interface NotificationService {
    */
   showNotification(
     title: string,
-    options?: NotificationOptions
+    options?: Optional<NotificationOptions>
   ): Promise<NotificationResult>;
 
   /**
@@ -167,7 +169,7 @@ interface NotificationService {
    * Set notification click handler
    * @param handler Function to call when notification is clicked
    */
-  setClickHandler(handler: (data?: unknown) => void): void;
+  setClickHandler(handler: (data?: Optional<unknown>) => void): void;
 
   /**
    * Check if permission is granted
@@ -201,7 +203,7 @@ interface NotificationCapabilities {
   /** Platform supports vibration patterns */
   supportsVibration: boolean;
   /** Maximum number of actions supported */
-  maxActions?: number;
+  maxActions?: Optional<number>;
 }
 
 /**
@@ -239,7 +241,7 @@ interface NotificationClient {
   /** Simplified show notification method */
   show(
     title: string,
-    options?: NotificationOptions
+    options?: Optional<NotificationOptions>
   ): Promise<NotificationResult>;
   /** Simplified permission request method */
   requestPermissions(): Promise<NotificationPermissionResult>;

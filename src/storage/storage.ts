@@ -14,7 +14,7 @@
  *   setItem(key: string, value: string): void {
  *     localStorage.setItem(key, value);
  *   }
- *   getItem(key: string): string | null {
+ *   getItem(key: string): Optional<string> {
  *     return localStorage.getItem(key);
  *   }
  * }
@@ -24,14 +24,14 @@
  *   async setItem(key: string, value: string): Promise<void> {
  *     await AsyncStorage.setItem(key, value);
  *   }
- *   async getItem(key: string): Promise<string | null> {
+ *   async getItem(key: string): Promise<Optional<string>> {
  *     return await AsyncStorage.getItem(key);
  *   }
  * }
  * ```
  */
 
-import { StorageType } from '../types';
+import { StorageType, Optional } from '../types';
 
 /**
  * Basic platform storage interface for low-level storage operations.
@@ -63,7 +63,7 @@ interface PlatformStorage {
    * @param key Storage key
    * @returns The stored value or null if not found
    */
-  getItem(key: string): Promise<string | null> | string | null;
+  getItem(key: string): Promise<Optional<string>> | Optional<string>;
 
   /**
    * Remove a value by key
@@ -74,12 +74,12 @@ interface PlatformStorage {
   /**
    * Clear all storage (optional)
    */
-  clear?(): Promise<void> | void;
+  clear?: Optional<() => Promise<void> | void>;
 
   /**
    * Get all keys (optional)
    */
-  getAllKeys?(): Promise<string[]> | string[];
+  getAllKeys?: Optional<() => Promise<string[]> | string[]>;
 }
 
 /**
@@ -92,7 +92,7 @@ interface PlatformStorage {
  * @example
  * ```typescript
  * class RedisAdvancedStorage implements AdvancedPlatformStorage {
- *   setItem(key: string, value: string, ttl?: number): Promise<void> {
+ *   setItem(key: string, value: string, ttl?: Optional<number>): Promise<void> {
  *     if (ttl) {
  *       return this.client.setex(key, ttl / 1000, value);
  *     }
@@ -108,7 +108,11 @@ interface AdvancedPlatformStorage extends PlatformStorage {
    * @param value Value to store
    * @param ttl Time to live in milliseconds (optional)
    */
-  setItem(key: string, value: string, ttl?: number): Promise<void> | void;
+  setItem(
+    key: string,
+    value: string,
+    ttl?: Optional<number>
+  ): Promise<void> | void;
 
   /**
    * Check if a key exists
@@ -120,7 +124,7 @@ interface AdvancedPlatformStorage extends PlatformStorage {
    * Clear items matching a pattern
    * @param pattern Pattern to match (optional)
    */
-  clearPattern(pattern?: string): Promise<void> | void;
+  clearPattern(pattern?: Optional<string>): Promise<void> | void;
 }
 
 /**
@@ -134,9 +138,9 @@ interface StorageProvider {
   /** Underlying platform storage implementation */
   storage: PlatformStorage | AdvancedPlatformStorage;
   /** Get value by key with simplified method name */
-  get(key: string): Promise<string | null> | string | null;
+  get(key: string): Promise<Optional<string>> | Optional<string>;
   /** Set value by key with simplified method name and optional TTL */
-  set(key: string, value: string, ttl?: number): Promise<void> | void;
+  set(key: string, value: string, ttl?: Optional<number>): Promise<void> | void;
   /** Remove value by key with simplified method name */
   remove(key: string): Promise<void> | void;
   /** Clear all storage with simplified method name */
@@ -169,7 +173,7 @@ interface StorageService {
    * @param key Storage key
    * @returns Promise or direct value depending on platform
    */
-  getItem(key: string): Promise<string | null> | string | null;
+  getItem(key: string): Promise<Optional<string>> | Optional<string>;
 
   /**
    * Set item in storage
@@ -219,7 +223,7 @@ interface StorageService {
  * @example
  * ```typescript
  * class JSONStorageService implements SerializedStorageService {
- *   async getObject<T>(key: string): Promise<T | null> {
+ *   async getObject<T>(key: string): Promise<Optional<T>> {
  *     const json = await this.storage.getItem(key);
  *     return json ? JSON.parse(json) : null;
  *   }
@@ -232,7 +236,7 @@ interface SerializedStorageService {
    * @param key Storage key
    * @returns Typed object or null if not found
    */
-  getObject<T>(key: string): Promise<T | null> | T | null;
+  getObject<T>(key: string): Promise<Optional<T>> | Optional<T>;
 
   /**
    * Set object in storage with automatic serialization
@@ -306,13 +310,13 @@ interface StorageFactory {
  */
 interface StorageConfig {
   /** Key prefix for namespacing storage entries */
-  prefix?: string;
+  prefix?: Optional<string>;
   /** Enable encryption for stored values */
-  encryption?: boolean;
+  encryption?: Optional<boolean>;
   /** Enable compression for stored values */
-  compression?: boolean;
+  compression?: Optional<boolean>;
   /** Default time to live in milliseconds */
-  ttl?: number;
+  ttl?: Optional<number>;
 }
 
 export {

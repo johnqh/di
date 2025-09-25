@@ -33,9 +33,9 @@
  * ```
  */
 
-// AnalyticsEvent is now imported from local types
-import { AnalyticsEvent } from '@johnqh/types';
-export { AnalyticsEvent };
+// AnalyticsEvent and Optional are now imported from @johnqh/types
+import { AnalyticsEvent, Optional } from '@johnqh/types';
+export { AnalyticsEvent, Optional };
 
 /**
  * Analytics event data interface for passing event with parameters.
@@ -57,7 +57,7 @@ export { AnalyticsEvent };
  */
 interface AnalyticsEventData {
   event: AnalyticsEvent;
-  parameters?: Record<string, unknown>;
+  parameters?: Optional<Record<string, unknown>>;
 }
 
 /**
@@ -95,7 +95,7 @@ interface _AnalyticsClient {
    * Set current user ID for analytics
    * @param userId User identifier
    */
-  setUserId(userId: string | null): void;
+  setUserId(userId: Optional<string>): void;
 
   /**
    * Enable or disable analytics collection
@@ -108,7 +108,7 @@ interface _AnalyticsClient {
    * @param screenName Name of the current screen/page
    * @param screenClass Optional screen class
    */
-  setCurrentScreen(screenName: string, screenClass?: string): void;
+  setCurrentScreen(screenName: string, screenClass?: Optional<string>): void;
 }
 
 /**

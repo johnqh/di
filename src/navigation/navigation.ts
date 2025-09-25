@@ -1,3 +1,5 @@
+import { Optional } from '@johnqh/types';
+
 /**
  * Platform-agnostic navigation interfaces for cross-platform routing and navigation.
  *
@@ -42,11 +44,11 @@
  */
 interface NavigationOptions {
   /** Replace current entry instead of pushing new one */
-  replace?: boolean;
+  replace?: Optional<boolean>;
   /** State data to associate with navigation */
-  state?: unknown;
+  state?: Optional<unknown>;
   /** Prevent scroll reset on navigation (web-specific) */
-  preventScrollReset?: boolean;
+  preventScrollReset?: Optional<boolean>;
 }
 
 /**
@@ -60,7 +62,7 @@ interface NavigationState {
   /** Current active path */
   currentPath: string;
   /** Previous path in navigation history */
-  previousPath?: string;
+  previousPath?: Optional<string>;
   /** Path parameters (e.g., /user/:id -> {id: '123'}) */
   params: Record<string, string>;
   /** URL search/query parameters */
@@ -90,13 +92,13 @@ interface NavigationService {
    * @param path Target path
    * @param options Navigation options
    */
-  navigate(path: string, options?: NavigationOptions): void;
+  navigate(path: string, options?: Optional<NavigationOptions>): void;
 
   /**
    * Go back to previous route
    * @param fallbackPath Fallback path if no history
    */
-  goBack(fallbackPath?: string): void;
+  goBack(fallbackPath?: Optional<string>): void;
 
   /**
    * Go forward in navigation history
@@ -108,7 +110,7 @@ interface NavigationService {
    * @param path Target path
    * @param options Navigation options
    */
-  replace(path: string, options?: NavigationOptions): void;
+  replace(path: string, options?: Optional<NavigationOptions>): void;
 
   /**
    * Get current navigation state
@@ -169,9 +171,9 @@ interface NavigationService {
  * ```
  */
 interface NavigationHook {
-  navigate: (path: string, options?: NavigationOptions) => void;
-  goBack: (fallbackPath?: string) => void;
-  replace: (path: string, options?: NavigationOptions) => void;
+  navigate: (path: string, options?: Optional<NavigationOptions>) => void;
+  goBack: (fallbackPath?: Optional<string>) => void;
+  replace: (path: string, options?: Optional<NavigationOptions>) => void;
   currentPath: string;
   searchParams: Record<string, string>;
   params: Record<string, string>;
@@ -226,11 +228,11 @@ interface LocationHook {
  * ```
  */
 interface NavigationConfig {
-  enableBackGesture?: boolean; // React Native specific
-  enableSwipeGesture?: boolean; // React Native specific
-  animationType?: 'slide' | 'fade' | 'none'; // React Native specific
-  enableAnalytics?: boolean; // Track navigation events
-  fallbackPath?: string; // Default fallback path
+  enableBackGesture?: Optional<boolean>; // React Native specific
+  enableSwipeGesture?: Optional<boolean>; // React Native specific
+  animationType?: Optional<'slide' | 'fade' | 'none'>; // React Native specific
+  enableAnalytics?: Optional<boolean>; // Track navigation events
+  fallbackPath?: Optional<string>; // Default fallback path
 }
 
 export {

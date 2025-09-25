@@ -11,14 +11,14 @@
  * ```typescript
  * // Web implementation using environment variables
  * class WebEnvProvider implements EnvProvider {
- *   get(key: string): string | undefined {
+ *   get(key: string): Optional<string> {
  *     return import.meta.env[key] || process.env[key];
  *   }
  * }
  *
  * // React Native implementation using react-native-config
  * class RNEnvProvider implements EnvProvider {
- *   get(key: string): string | undefined {
+ *   get(key: string): Optional<string> {
  *     return Config[key];
  *   }
  * }
@@ -30,9 +30,16 @@ import type {
   AppConfig,
   EnvironmentVariables,
   FirebaseConfig,
+  Optional,
 } from './types';
 
-export type { EnvProvider, AppConfig, EnvironmentVariables, FirebaseConfig };
+export type {
+  EnvProvider,
+  AppConfig,
+  EnvironmentVariables,
+  FirebaseConfig,
+  Optional,
+};
 
 /**
  * Environment factory interface for creating environment providers.
@@ -89,7 +96,7 @@ export interface EnvFactory {
  *     return this.get('NODE_ENV') === 'development';
  *   }
  *
- *   get(key: string, defaultValue?: string): string | undefined {
+ *   get(key: string, defaultValue?: Optional<string>): Optional<string> {
  *     return process.env[key] || defaultValue;
  *   }
  * }
@@ -114,5 +121,5 @@ export interface EnvUtils {
   /**
    * Get environment variable with fallback
    */
-  get(key: string, defaultValue?: string): string | undefined;
+  get(key: string, defaultValue?: Optional<string>): Optional<string>;
 }
