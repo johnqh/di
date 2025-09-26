@@ -44,7 +44,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "@johnqh/types": "^1.6.4"
+    "@johnqh/types": "^1.6.6"
   },
   "peerDependencies": {
     "react": ">=18.0.0"
