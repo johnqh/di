@@ -5,6 +5,44 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./analytics": {
+      "import": "./dist/analytics/analytics.js",
+      "types": "./dist/analytics/analytics.d.ts"
+    },
+    "./env": {
+      "import": "./dist/env.js",
+      "types": "./dist/env.d.ts"
+    },
+    "./logging": {
+      "import": "./dist/logging/index.js",
+      "types": "./dist/logging/index.d.ts"
+    },
+    "./navigation": {
+      "import": "./dist/navigation/navigation.js",
+      "types": "./dist/navigation/navigation.d.ts"
+    },
+    "./network": {
+      "import": "./dist/network/index.js",
+      "types": "./dist/network/index.d.ts"
+    },
+    "./notification": {
+      "import": "./dist/notification/notification.js",
+      "types": "./dist/notification/notification.d.ts"
+    },
+    "./storage": {
+      "import": "./dist/storage/storage.js",
+      "types": "./dist/storage/storage.d.ts"
+    },
+    "./types": {
+      "import": "./dist/types.js",
+      "types": "./dist/types.d.ts"
+    }
+  },
   "files": [
     "dist/**/*"
   ],
@@ -44,7 +82,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "@johnqh/types": "^1.7.3"
+    "@johnqh/types": "^1.7.6"
   },
   "peerDependencies": {
     "react": ">=18.0.0"

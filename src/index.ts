@@ -32,3 +32,6 @@ export * from './notification/notification';
 
 // Storage interfaces
 export * from './storage/storage';
+
+// Logging interfaces
+export * from './logging';
