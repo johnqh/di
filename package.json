@@ -82,7 +82,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "@johnqh/types": "^1.8.9"
+    "@johnqh/types": "^1.8.10"
   },
   "peerDependencies": {
     "react": ">=18.0.0"
