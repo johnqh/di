@@ -6,13 +6,13 @@
  */
 
 // Core types and enums
-export * from './types';
+export * from './types.js';
 
 // Environment interfaces
-export * from './env';
+export * from './env.js';
 
 // Analytics interfaces
-export * from './analytics/analytics';
+export * from './analytics/analytics.js';
 // Analytics service interfaces are now exported from @johnqh/types
 export {
   type AnalyticsService,
@@ -22,16 +22,16 @@ export {
 } from '@johnqh/types';
 
 // Navigation interfaces
-export * from './navigation/navigation';
+export * from './navigation/navigation.js';
 
 // Network interfaces
-export * from './network';
+export * from './network/index.js';
 
 // Notification interfaces
-export * from './notification/notification';
+export * from './notification/notification.js';
 
 // Storage interfaces
-export * from './storage/storage';
+export * from './storage/storage.js';
 
 // Logging interfaces
-export * from './logging';
+export * from './logging/index.js';
