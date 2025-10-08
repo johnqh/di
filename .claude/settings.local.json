@@ -25,7 +25,9 @@
       "Bash(find:*)",
       "Bash(git commit:*)",
       "Bash(git add:*)",
-      "Read(//Users/johnhuang/0xmail/mail_box_lib/**)"
+      "Read(//Users/johnhuang/0xmail/mail_box_lib/**)",
+      "Read(//Users/johnhuang/0xmail/types/src/utils/**)",
+      "Read(//Users/johnhuang/0xmail/types/src/types/**)"
     ],
     "deny": [],
     "ask": []

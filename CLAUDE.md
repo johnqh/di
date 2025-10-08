@@ -19,11 +19,14 @@ The library is organized into domain-specific modules:
 - **`src/types.ts`** - Core type definitions, enums, and foundational interfaces
 - **`src/env.ts`** - Environment configuration interfaces (`EnvProvider`, `AppConfig`)
 - **`src/analytics/`** - Analytics tracking interfaces with event-driven patterns
-- **`src/auth/`** - Authentication interfaces supporting multiple providers (wallet, social, email)
 - **`src/network/`** - HTTP client interfaces with platform-agnostic request/response types
 - **`src/storage/`** - Storage abstraction interfaces (localStorage, AsyncStorage, etc.)
 - **`src/navigation/`** - Navigation interfaces for cross-platform routing
 - **`src/notification/`** - Notification interfaces for push notifications and local alerts
+- **`src/theme/`** - Theme and appearance interfaces for dark mode and styling
+- **`src/hooks/`** - React hooks for API call management and async operations
+- **`src/utils/`** - Utility functions for async operations and error handling
+- **`src/service-keys.ts`** - Standard service keys for dependency injection containers
 
 ### Key Patterns
 1. **Interface segregation**: Each domain has focused, single-purpose interfaces

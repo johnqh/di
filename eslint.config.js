@@ -19,6 +19,12 @@ export default [
         AbortSignal: 'readonly',
         RequestInit: 'readonly',
         Response: 'readonly',
+        console: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        Promise: 'readonly',
+        Map: 'readonly',
+        Date: 'readonly',
       },
     },
     plugins: {
