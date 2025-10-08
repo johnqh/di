@@ -17,6 +17,8 @@ export default [
         FormData: 'readonly',
         Blob: 'readonly',
         AbortSignal: 'readonly',
+        RequestInit: 'readonly',
+        Response: 'readonly',
       },
     },
     plugins: {
