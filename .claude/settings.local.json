@@ -24,7 +24,8 @@
       "Bash(npm ls:*)",
       "Bash(find:*)",
       "Bash(git commit:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Read(//Users/johnhuang/0xmail/mail_box_lib/**)"
     ],
     "deny": [],
     "ask": []
