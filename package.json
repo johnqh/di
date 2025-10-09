@@ -1,6 +1,6 @@
 {
   "name": "@johnqh/di",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Platform-agnostic dependency injection interfaces for React and React Native projects",
   "type": "module",
   "main": "dist/index.js",
@@ -91,7 +91,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "@johnqh/types": "^1.8.16"
+    "@johnqh/types": "^1.8.17"
   },
   "peerDependencies": {
     "react": ">=18.0.0"
