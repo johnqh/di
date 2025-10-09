@@ -65,7 +65,6 @@ class MockEnvFactory implements EnvFactory {
     return {
       wildDuckBackendUrl: envProvider.get('WILD_DUCK_BACKEND_URL', 'https://api.example.com')!,
       indexerBackendUrl: envProvider.get('INDEXER_BACKEND_URL', 'https://indexer.example.com')!,
-      wildDuckApiToken: envProvider.get('WILD_DUCK_API_TOKEN', 'default-token')!,
       revenueCatApiKey: envProvider.get('REVENUE_CAT_API_KEY', 'default-rc-key')!,
       walletConnectProjectId: envProvider.get('WALLET_CONNECT_PROJECT_ID', 'default-wc-id')!,
       privyAppId: envProvider.get('PRIVY_APP_ID', 'default-privy-id')!,
@@ -258,7 +257,6 @@ describe('Environment Integration Tests', () => {
     // Verify all required config properties are present
     expect(config.wildDuckBackendUrl).toBeDefined();
     expect(config.indexerBackendUrl).toBeDefined();
-    expect(config.wildDuckApiToken).toBeDefined();
     expect(config.revenueCatApiKey).toBeDefined();
     expect(config.walletConnectProjectId).toBeDefined();
     expect(config.privyAppId).toBeDefined();

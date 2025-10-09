@@ -268,7 +268,6 @@ describe('Interface Type Validation', () => {
     const mockAppConfig: AppConfig = {
       wildDuckBackendUrl: 'https://api.example.com',
       indexerBackendUrl: 'https://indexer.example.com',
-      wildDuckApiToken: 'test-token',
       revenueCatApiKey: 'rc-key',
       walletConnectProjectId: 'wc-project-id',
       privyAppId: 'privy-app-id',
@@ -295,7 +294,6 @@ describe('Interface Type Validation', () => {
     expect(mockAppConfig.useMockFallback).toBe(false);
     
     // Verify configuration completeness for email/crypto app
-    expect(typeof mockAppConfig.wildDuckApiToken).toBe('string');
     expect(typeof mockAppConfig.cloudflareWorkerUrl).toBe('string');
   });
 

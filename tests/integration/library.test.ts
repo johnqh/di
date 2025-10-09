@@ -19,7 +19,6 @@ describe('Library Integration', () => {
     const mockConfig: DI.AppConfig = {
       wildDuckBackendUrl: 'https://api.example.com',
       indexerBackendUrl: 'https://indexer.example.com',
-      wildDuckApiToken: 'token',
       revenueCatApiKey: 'rc-key',
       walletConnectProjectId: 'wc-id',
       privyAppId: 'privy-id',

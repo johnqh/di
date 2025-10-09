@@ -159,8 +159,6 @@ export interface AppConfig {
   /** Backend URL for blockchain/crypto indexer service */
   indexerBackendUrl: string;
 
-  /** API token for WildDuck email server authentication */
-  wildDuckApiToken: string;
   /** RevenueCat API key for subscription management */
   revenueCatApiKey: string;
   /** WalletConnect project ID for crypto wallet integration */
