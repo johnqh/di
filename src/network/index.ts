@@ -2,9 +2,9 @@
  * Network dependency injection interfaces for HTTP client abstraction.
  *
  * @ai-context Network client interfaces exported from external dependency
- * @ai-pattern Re-export pattern for network interfaces defined in @johnqh/types
+ * @ai-pattern Re-export pattern for network interfaces defined in @sudobility/types
  * @ai-platform Universal HTTP client interfaces (fetch, axios, custom implementations)
- * @ai-usage Network interfaces are defined in @johnqh/types - implement for fetch, axios, or custom clients
+ * @ai-usage Network interfaces are defined in @sudobility/types - implement for fetch, axios, or custom clients
  *
  * @example
  * ```typescript
@@ -22,10 +22,10 @@
  * ```
  */
 
-// Network interfaces are now exported from @johnqh/types
+// Network interfaces are now exported from @sudobility/types
 export {
   type NetworkClient,
   type NetworkResponse,
   type NetworkRequestOptions,
   NetworkError,
-} from '@johnqh/types';
+} from '@sudobility/types';

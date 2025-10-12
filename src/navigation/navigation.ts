@@ -1,4 +1,4 @@
-import { Optional } from '@johnqh/types';
+import { Optional } from '@sudobility/types';
 
 /**
  * Platform-agnostic navigation interfaces for cross-platform routing and navigation.

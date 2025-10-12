@@ -33,8 +33,8 @@
  * ```
  */
 
-// AnalyticsEvent and Optional are now imported from @johnqh/types
-import { AnalyticsEvent, Optional } from '@johnqh/types';
+// AnalyticsEvent and Optional are now imported from @sudobility/types
+import { AnalyticsEvent, Optional } from '@sudobility/types';
 export { AnalyticsEvent, Optional };
 
 /**

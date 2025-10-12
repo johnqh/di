@@ -1,4 +1,4 @@
-import { Optional } from '@johnqh/types';
+import { Optional } from '@sudobility/types';
 
 /**
  * Platform-agnostic notification interfaces for cross-platform push notifications and alerts.

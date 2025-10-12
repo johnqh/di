@@ -7,14 +7,14 @@
  * @ai-pattern Type definitions with runtime enum support
  */
 
-// Import and re-export infrastructure enums and utility types from @johnqh/types
+// Import and re-export infrastructure enums and utility types from @sudobility/types
 import {
   StorageType,
   AnalyticsEvent,
   WalletType,
   ChainType,
   Optional,
-} from '@johnqh/types';
+} from '@sudobility/types';
 
 export { StorageType, AnalyticsEvent, WalletType, ChainType, Optional };
 
