@@ -6,7 +6,7 @@ import {
   NetworkClient,
   NetworkRequestOptions,
   NetworkResponse,
-} from '@johnqh/types';
+} from '@sudobility/types';
 
 // Mock implementation for testing interface compliance
 class MockNetworkClient implements NetworkClient {
