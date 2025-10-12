@@ -1,5 +1,5 @@
 {
-  "name": "@johnqh/di",
+  "name": "@sudobility/di",
   "version": "1.4.5",
   "description": "Platform-agnostic dependency injection interfaces for React and React Native projects",
   "type": "module",
@@ -78,7 +78,7 @@
   ],
   "author": "johnqh",
   "devDependencies": {
-    "@johnqh/types": "^1.8.20",
+    "@sudobility/types": "^1.8.21",
     "@types/node": "^24.5.2",
     "@types/react": "^19.2.2",
     "@typescript-eslint/eslint-plugin": "^8.44.1",
@@ -92,7 +92,7 @@
     "vitest": "^3.2.4"
   },
   "peerDependencies": {
-    "@johnqh/types": "^1.8.20",
+    "@sudobility/types": "^1.8.20",
     "react": ">=18.0.0"
   },
   "repository": {
@@ -100,6 +100,6 @@
     "url": "https://github.com/johnqh/di.git"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "restricted"
   }
 }
