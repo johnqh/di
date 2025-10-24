@@ -31,7 +31,7 @@
  * ```
  */
 
-import { StorageType, Optional } from '../types';
+import type { StorageType, Optional } from '@sudobility/types';
 
 /**
  * Basic platform storage interface for low-level storage operations.

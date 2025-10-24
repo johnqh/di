@@ -7,16 +7,8 @@
  * @ai-pattern Type definitions with runtime enum support
  */
 
-// Import and re-export infrastructure enums and utility types from @sudobility/types
-import {
-  StorageType,
-  AnalyticsEvent,
-  WalletType,
-  ChainType,
-  Optional,
-} from '@sudobility/types';
-
-export { StorageType, AnalyticsEvent, WalletType, ChainType, Optional };
+// Import utility types from @sudobility/types (used internally, not re-exported)
+import type { Optional } from '@sudobility/types';
 
 /**
  * Environment variables interface with typed NODE_ENV and flexible additional properties.

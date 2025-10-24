@@ -1,13 +1,15 @@
 /**
  * Network dependency injection interfaces for HTTP client abstraction.
  *
- * @ai-context Network client interfaces exported from external dependency
- * @ai-pattern Re-export pattern for network interfaces defined in @sudobility/types
+ * @ai-context Network client interfaces defined in external dependency
+ * @ai-pattern Network interfaces are provided by @sudobility/types peer dependency
  * @ai-platform Universal HTTP client interfaces (fetch, axios, custom implementations)
- * @ai-usage Network interfaces are defined in @sudobility/types - implement for fetch, axios, or custom clients
+ * @ai-usage Import network interfaces directly from @sudobility/types
  *
  * @example
  * ```typescript
+ * import { NetworkClient, NetworkRequestOptions, NetworkResponse } from '@sudobility/types';
+ *
  * // Implementation using fetch API
  * class FetchNetworkClient implements NetworkClient {
  *   async request<T>(options: NetworkRequestOptions): Promise<NetworkResponse<T>> {
@@ -22,10 +24,5 @@
  * ```
  */
 
-// Network interfaces are now exported from @sudobility/types
-export {
-  type NetworkClient,
-  type NetworkResponse,
-  type NetworkRequestOptions,
-  NetworkError,
-} from '@sudobility/types';
+// Network interfaces are provided by @sudobility/types peer dependency
+// Import them directly from @sudobility/types when needed

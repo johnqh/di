@@ -21,7 +21,7 @@
  * ```
  */
 
-import type { Optional } from '../types.js';
+import type { Optional } from '@sudobility/types';
 import { logger } from './logger.js';
 
 /**

@@ -3,13 +3,14 @@
  */
 
 import * as DI from '../../src/index';
+import { AnalyticsEvent, ChainType, WalletType, StorageType } from '@sudobility/types';
 
 describe('Library Integration', () => {
   test('should export all core types', () => {
-    // Test enum exports
-    expect(DI.AnalyticsEvent.USER_LOGIN).toBe('user_login');
-    expect(DI.ChainType.EVM).toBe('evm');
-    expect(DI.WalletType.METAMASK).toBe('metamask');
+    // Test enum exports from @sudobility/types (peer dependency)
+    expect(AnalyticsEvent.USER_LOGIN).toBe('user_login');
+    expect(ChainType.EVM).toBe('evm');
+    expect(WalletType.METAMASK).toBe('metamask');
   });
 
   test('should provide complete TypeScript interface support', () => {
@@ -68,22 +69,22 @@ describe('Library Integration', () => {
 
   test('should work across platform boundaries', () => {
     // Test that interfaces work for cross-platform scenarios
-    const storageTypes: DI.StorageType[] = [
-      DI.StorageType.LOCAL_STORAGE,    // Web
-      DI.StorageType.SESSION_STORAGE,  // Web
-      DI.StorageType.ASYNC_STORAGE,    // React Native
-      DI.StorageType.MEMORY           // Universal fallback
+    const storageTypesArray: StorageType[] = [
+      StorageType.LOCAL_STORAGE,    // Web
+      StorageType.SESSION_STORAGE,  // Web
+      StorageType.ASYNC_STORAGE,    // React Native
+      StorageType.MEMORY           // Universal fallback
     ];
 
-    storageTypes.forEach(type => {
+    storageTypesArray.forEach(type => {
       expect(typeof type).toBe('string');
     });
 
-    const chainTypes = Object.values(DI.ChainType);
+    const chainTypes = Object.values(ChainType);
     expect(chainTypes).toContain('evm');
     expect(chainTypes).toContain('solana');
-    
-    const storageTypeValues = Object.values(DI.StorageType);
+
+    const storageTypeValues = Object.values(StorageType);
     expect(storageTypeValues).toContain('localStorage');
     expect(storageTypeValues).toContain('sessionStorage');
     expect(storageTypeValues).toContain('asyncStorage');
@@ -93,7 +94,7 @@ describe('Library Integration', () => {
   test('should maintain type safety', () => {
     // Test that the library maintains strict TypeScript typing
     const eventData: DI.AnalyticsEventData = {
-      event: DI.AnalyticsEvent.PAGE_VIEW,
+      event: AnalyticsEvent.PAGE_VIEW,
       parameters: {
         page_title: 'Home',
         user_id: 'user-123',
@@ -101,7 +102,7 @@ describe('Library Integration', () => {
       },
     };
 
-    expect(eventData.event).toBe(DI.AnalyticsEvent.PAGE_VIEW);
+    expect(eventData.event).toBe(AnalyticsEvent.PAGE_VIEW);
     expect(eventData.parameters?.page_title).toBe('Home');
   });
 });

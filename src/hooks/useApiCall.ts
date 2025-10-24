@@ -22,7 +22,7 @@
  */
 
 import { useCallback, useState } from 'react';
-import type { Optional } from '../types.js';
+import type { Optional } from '@sudobility/types';
 import { withLoadingState } from '../utils/async-helpers.js';
 
 /**

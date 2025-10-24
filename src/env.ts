@@ -30,16 +30,10 @@ import type {
   AppConfig,
   EnvironmentVariables,
   FirebaseConfig,
-  Optional,
 } from './types';
+import type { Optional } from '@sudobility/types';
 
-export type {
-  EnvProvider,
-  AppConfig,
-  EnvironmentVariables,
-  FirebaseConfig,
-  Optional,
-};
+export type { EnvProvider, AppConfig, EnvironmentVariables, FirebaseConfig };
 
 /**
  * Environment factory interface for creating environment providers.

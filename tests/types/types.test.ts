@@ -11,6 +11,8 @@ import {
   ChainType,
   WalletType,
   StorageType,
+} from '@sudobility/types';
+import {
   EnvironmentVariables,
   AppConfig,
   FirebaseConfig,

@@ -14,19 +14,11 @@ export * from './env.js';
 // Analytics interfaces
 export * from './analytics/analytics.js';
 export * from './analytics/platform-analytics.js';
-// Analytics service interfaces are now exported from @sudobility/types
-export {
-  type AnalyticsService,
-  type AnalyticsConfig,
-  type EmailAnalyticsService,
-  AnalyticsEventBuilder,
-} from '@sudobility/types';
 
 // Navigation interfaces
 export * from './navigation/navigation.js';
 
 // Network interfaces
-export * from './network/index.js';
 export * from './network/platform-network.js';
 
 // Notification interfaces
