@@ -1,3 +1,4 @@
+/// <reference types="vitest/globals" />
 /**
  * Tests for network interfaces and type validation
  */
@@ -31,6 +32,8 @@ class MockNetworkClient implements NetworkClient {
       statusText: 'OK',
       data: { message: 'Mock response' } as T,
       headers: { 'content-type': 'application/json' },
+      success: true,
+      timestamp: new Date().toISOString(),
     };
   }
 
@@ -245,12 +248,14 @@ describe('NetworkResponse Interface', () => {
       statusText: 'OK',
       data: { id: 1, name: 'John Doe' },
       headers: { 'content-type': 'application/json' },
+      success: true,
+      timestamp: new Date().toISOString(),
     };
 
     expect(response.ok).toBe(true);
     expect(response.status).toBe(200);
-    expect(response.data.id).toBe(1);
-    expect(response.data.name).toBe('John Doe');
+    expect(response.data?.id).toBe(1);
+    expect(response.data?.name).toBe('John Doe');
   });
 
   test('should handle error responses', () => {
@@ -260,6 +265,8 @@ describe('NetworkResponse Interface', () => {
       statusText: 'Not Found',
       data: null,
       headers: { 'content-type': 'text/plain' },
+      success: false,
+      timestamp: new Date().toISOString(),
     };
 
     expect(errorResponse.ok).toBe(false);
@@ -274,6 +281,8 @@ describe('NetworkResponse Interface', () => {
       statusText: 'OK',
       data: 'plain text response',
       headers: { 'content-type': 'text/plain' },
+      success: true,
+      timestamp: new Date().toISOString(),
     };
 
     const arrayResponse: NetworkResponse<number[]> = {
@@ -282,6 +291,8 @@ describe('NetworkResponse Interface', () => {
       statusText: 'OK',
       data: [1, 2, 3, 4, 5],
       headers: { 'content-type': 'application/json' },
+      success: true,
+      timestamp: new Date().toISOString(),
     };
 
     expect(stringResponse.data).toBe('plain text response');
@@ -300,6 +311,8 @@ describe('Network Interface Integration', () => {
       statusText: 'OK',
       data: { id: 1, name: 'John Doe', email: 'john@example.com' },
       headers: { 'content-type': 'application/json' },
+      success: true,
+      timestamp: new Date().toISOString(),
     });
 
     // Mock an error response
@@ -309,6 +322,8 @@ describe('Network Interface Integration', () => {
       statusText: 'Not Found',
       data: { error: 'User not found' },
       headers: { 'content-type': 'application/json' },
+      success: false,
+      timestamp: new Date().toISOString(),
     });
 
     // Test successful request
@@ -324,7 +339,7 @@ describe('Network Interface Integration', () => {
     const errorResponse = await client.request('https://api.example.com/users/999');
     expect(errorResponse.ok).toBe(false);
     expect(errorResponse.status).toBe(404);
-    expect(errorResponse.data.error).toBe('User not found');
+    expect((errorResponse.data as any)?.error).toBe('User not found');
 
     // Verify request history
     const history = client.getRequestHistory();
