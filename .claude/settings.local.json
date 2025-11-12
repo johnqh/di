@@ -27,7 +27,9 @@
       "Bash(git add:*)",
       "Read(//Users/johnhuang/0xmail/mail_box_lib/**)",
       "Read(//Users/johnhuang/0xmail/types/src/utils/**)",
-      "Read(//Users/johnhuang/0xmail/types/src/types/**)"
+      "Read(//Users/johnhuang/0xmail/types/src/types/**)",
+      "mcp__ide__getDiagnostics",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
