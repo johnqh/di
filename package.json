@@ -1,6 +1,6 @@
 {
   "name": "@sudobility/di",
-  "version": "1.4.17",
+  "version": "1.4.18",
   "description": "Platform-agnostic dependency injection interfaces for React and React Native projects",
   "type": "module",
   "main": "dist/index.js",
@@ -78,7 +78,7 @@
   ],
   "author": "johnqh",
   "devDependencies": {
-    "@sudobility/types": "^1.9.11",
+    "@sudobility/types": "^1.9.12",
     "@types/node": "^24.5.2",
     "@types/react": "^19.2.2",
     "@typescript-eslint/eslint-plugin": "^8.44.1",
