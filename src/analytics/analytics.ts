@@ -34,8 +34,9 @@
  */
 
 // AnalyticsEvent and Optional are now imported from @sudobility/types
-import { AnalyticsEvent, Optional } from '@sudobility/types';
-export { AnalyticsEvent, Optional };
+import { AnalyticsEvent, type Optional } from '@sudobility/types';
+export { AnalyticsEvent };
+export type { Optional };
 
 /**
  * Analytics event data interface for passing event with parameters.
