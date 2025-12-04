@@ -235,6 +235,58 @@ interface NavigationConfig {
   fallbackPath?: Optional<string>; // Default fallback path
 }
 
+/**
+ * URL service interface for URL manipulation operations.
+ *
+ * @ai-context Service interface for URL query parameter manipulation
+ * @ai-pattern Service interface for browser URL operations without page reload
+ * @ai-platform Web (uses History API), React Native (may use linking API)
+ * @ai-usage Use for modifying URL state without triggering navigation
+ *
+ * @example
+ * ```typescript
+ * // Web implementation
+ * class WebURLService implements URLService {
+ *   removeQueryParam(param: string): void {
+ *     const url = new URL(window.location.href);
+ *     url.searchParams.delete(param);
+ *     window.history.replaceState({}, '', url.toString());
+ *   }
+ *   getQueryParam(param: string): Optional<string> {
+ *     const url = new URL(window.location.href);
+ *     return url.searchParams.get(param);
+ *   }
+ * }
+ * ```
+ */
+interface URLService {
+  /**
+   * Remove a query parameter from the current URL
+   * @param param Parameter name to remove
+   */
+  removeQueryParam(param: string): void;
+
+  /**
+   * Get a query parameter value from the current URL
+   * @param param Parameter name to retrieve
+   * @returns Parameter value or null if not found
+   */
+  getQueryParam?(param: string): Optional<string>;
+
+  /**
+   * Set a query parameter on the current URL
+   * @param param Parameter name to set
+   * @param value Parameter value
+   */
+  setQueryParam?(param: string, value: string): void;
+
+  /**
+   * Get the current URL
+   * @returns Current URL string
+   */
+  getCurrentUrl?(): string;
+}
+
 export {
   type NavigationOptions,
   type NavigationState,
@@ -242,4 +294,5 @@ export {
   type NavigationHook,
   type LocationHook,
   type NavigationConfig,
+  type URLService,
 };

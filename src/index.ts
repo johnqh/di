@@ -42,3 +42,6 @@ export * from './hooks/index.js';
 
 // Utility functions
 export * from './utils/index.js';
+
+// Mock implementations for testing
+export * from './mocks/index.js';

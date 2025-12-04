@@ -1,6 +1,6 @@
 {
   "name": "@sudobility/di",
-  "version": "1.4.31",
+  "version": "1.4.32",
   "description": "Platform-agnostic dependency injection interfaces for React and React Native projects",
   "type": "module",
   "main": "dist/index.js",
