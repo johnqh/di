@@ -1,14 +1,37 @@
 {
   "name": "@sudobility/di",
-  "version": "1.4.32",
-  "description": "Platform-agnostic dependency injection interfaces for React and React Native projects",
+  "version": "1.5.0",
+  "description": "Platform-agnostic dependency injection interfaces for React and React Native projects with platform-specific implementations",
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/web/index.js",
+  "types": "dist/web/index.d.ts",
+  "react-native": "dist/rn/index.js",
   "exports": {
     ".": {
+      "react-native": {
+        "import": "./dist/rn/index.js",
+        "types": "./dist/rn/index.d.ts"
+      },
+      "default": {
+        "import": "./dist/web/index.js",
+        "types": "./dist/web/index.d.ts"
+      }
+    },
+    "./interfaces": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./mocks": {
+      "import": "./dist/mocks/index.js",
+      "types": "./dist/mocks/index.d.ts"
+    },
+    "./web": {
+      "import": "./dist/web/index.js",
+      "types": "./dist/web/index.d.ts"
+    },
+    "./rn": {
+      "import": "./dist/rn/index.js",
+      "types": "./dist/rn/index.d.ts"
     },
     "./analytics": {
       "import": "./dist/analytics/analytics.js",
@@ -93,7 +116,29 @@
   },
   "peerDependencies": {
     "@sudobility/types": "^1.9.31",
-    "react": ">=18.0.0"
+    "react": ">=18.0.0",
+    "react-native": ">=0.70.0",
+    "@react-native-async-storage/async-storage": ">=1.19.0",
+    "@react-native-community/netinfo": ">=9.0.0",
+    "@notifee/react-native": ">=7.0.0",
+    "firebase": ">=10.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react-native": {
+      "optional": true
+    },
+    "@react-native-async-storage/async-storage": {
+      "optional": true
+    },
+    "@react-native-community/netinfo": {
+      "optional": true
+    },
+    "@notifee/react-native": {
+      "optional": true
+    },
+    "firebase": {
+      "optional": true
+    }
   },
   "repository": {
     "type": "git",

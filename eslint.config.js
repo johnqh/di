@@ -29,6 +29,20 @@ export default [
         Set: 'readonly',
         Date: 'readonly',
         Array: 'readonly',
+        // Web Storage APIs
+        Storage: 'readonly',
+        localStorage: 'readonly',
+        sessionStorage: 'readonly',
+        // Web APIs
+        window: 'readonly',
+        navigator: 'readonly',
+        fetch: 'readonly',
+        AbortController: 'readonly',
+        Notification: 'readonly',
+        // React Native globals
+        __DEV__: 'readonly',
+        require: 'readonly',
+        process: 'readonly',
       },
     },
     plugins: {
