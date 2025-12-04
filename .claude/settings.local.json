@@ -28,7 +28,10 @@
       "Read(../types/src/utils/**)",
       "Read(../types/src/types/**)",
       "mcp__ide__getDiagnostics",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(npm run lint:fix:*)",
+      "Bash(tree:*)",
+      "Bash(wc:*)"
     ],
     "deny": [],
     "ask": []
