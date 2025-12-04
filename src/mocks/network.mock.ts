@@ -1,11 +1,16 @@
 /**
  * Mock implementations for network interfaces.
  *
- * @ai-context Test mocks for PlatformNetwork
+ * @ai-context Test mocks for PlatformNetwork and NetworkClient
  * @ai-usage Use in unit tests to mock network requests
  */
 
 import type { PlatformNetwork } from '../network/platform-network.js';
+import type {
+  NetworkClient,
+  NetworkResponse,
+  NetworkRequestOptions,
+} from '@sudobility/types';
 
 /**
  * Recorded network request for testing assertions.
@@ -171,5 +176,205 @@ export class MockPlatformNetwork implements PlatformNetwork {
     this.mockResponses.clear();
     this.defaultResponse = { status: 200, body: {} };
     this.networkStatusListeners.clear();
+  }
+}
+
+/**
+ * Recorded HTTP request for MockNetworkClient.
+ */
+export interface RecordedHttpRequest {
+  method: string;
+  url: string;
+  body?: unknown;
+  options?: Partial<NetworkRequestOptions>;
+  timestamp: number;
+}
+
+/**
+ * Mock response for MockNetworkClient.
+ */
+export interface MockHttpResponse<T = unknown> {
+  data?: T;
+  status?: number;
+  statusText?: string;
+  headers?: Record<string, string>;
+  ok?: boolean;
+  error?: Error;
+  delay?: number;
+}
+
+/**
+ * Mock implementation of NetworkClient for testing HTTP requests.
+ *
+ * @example
+ * ```typescript
+ * const client = new MockNetworkClient();
+ * client.setMockResponse('/api/users', { data: [{ id: 1, name: 'John' }] });
+ * const response = await client.get<User[]>('/api/users');
+ * expect(response.data).toEqual([{ id: 1, name: 'John' }]);
+ * expect(client.getRequests()).toHaveLength(1);
+ * ```
+ */
+export class MockNetworkClient implements NetworkClient {
+  private requests: RecordedHttpRequest[] = [];
+  private mockResponses: Map<string, MockHttpResponse> = new Map();
+  private defaultResponse: MockHttpResponse = {
+    data: {},
+    status: 200,
+    ok: true,
+  };
+
+  async request<T = unknown>(
+    url: string,
+    options: NetworkRequestOptions = {}
+  ): Promise<NetworkResponse<T>> {
+    const method = options.method ?? 'GET';
+    this.requests.push({
+      method,
+      url,
+      body: options.body,
+      options,
+      timestamp: Date.now(),
+    });
+
+    const mockKey = `${method}:${url}`;
+    const mockConfig =
+      this.mockResponses.get(mockKey) ??
+      this.mockResponses.get(url) ??
+      this.defaultResponse;
+
+    if (mockConfig.error) {
+      throw mockConfig.error;
+    }
+
+    if (mockConfig.delay) {
+      await new Promise((resolve) => setTimeout(resolve, mockConfig.delay));
+    }
+
+    return {
+      data: mockConfig.data as T,
+      status: mockConfig.status ?? 200,
+      statusText: mockConfig.statusText ?? 'OK',
+      headers: mockConfig.headers ?? {},
+      ok: mockConfig.ok ?? true,
+      success: mockConfig.ok ?? true,
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  async get<T = unknown>(
+    url: string,
+    options?: Omit<NetworkRequestOptions, 'method' | 'body'>
+  ): Promise<NetworkResponse<T>> {
+    return this.request<T>(url, { ...options, method: 'GET' });
+  }
+
+  async post<T = unknown>(
+    url: string,
+    body?: unknown,
+    options?: Omit<NetworkRequestOptions, 'method'>
+  ): Promise<NetworkResponse<T>> {
+    const bodyStr =
+      typeof body === 'string' ? body : body ? JSON.stringify(body) : undefined;
+    return this.request<T>(url, { ...options, method: 'POST', body: bodyStr });
+  }
+
+  async put<T = unknown>(
+    url: string,
+    body?: unknown,
+    options?: Omit<NetworkRequestOptions, 'method'>
+  ): Promise<NetworkResponse<T>> {
+    const bodyStr =
+      typeof body === 'string' ? body : body ? JSON.stringify(body) : undefined;
+    return this.request<T>(url, { ...options, method: 'PUT', body: bodyStr });
+  }
+
+  async delete<T = unknown>(
+    url: string,
+    options?: Omit<NetworkRequestOptions, 'method' | 'body'>
+  ): Promise<NetworkResponse<T>> {
+    return this.request<T>(url, { ...options, method: 'DELETE' });
+  }
+
+  // Test helper methods
+
+  /**
+   * Set a mock response for a URL (optionally with method)
+   */
+  setMockResponse<T = unknown>(
+    url: string,
+    response: MockHttpResponse<T>,
+    method?: string
+  ): void {
+    const key = method ? `${method}:${url}` : url;
+    this.mockResponses.set(key, response as MockHttpResponse);
+  }
+
+  /**
+   * Set the default response for unmocked URLs
+   */
+  setDefaultResponse<T = unknown>(response: MockHttpResponse<T>): void {
+    this.defaultResponse = response as MockHttpResponse;
+  }
+
+  /**
+   * Clear a mock response
+   */
+  clearMockResponse(url: string, method?: string): void {
+    const key = method ? `${method}:${url}` : url;
+    this.mockResponses.delete(key);
+  }
+
+  /**
+   * Clear all mock responses
+   */
+  clearAllMockResponses(): void {
+    this.mockResponses.clear();
+  }
+
+  /**
+   * Get all recorded requests
+   */
+  getRequests(): RecordedHttpRequest[] {
+    return [...this.requests];
+  }
+
+  /**
+   * Get requests by method
+   */
+  getRequestsByMethod(method: string): RecordedHttpRequest[] {
+    return this.requests.filter((r) => r.method === method);
+  }
+
+  /**
+   * Get requests to a specific URL
+   */
+  getRequestsByUrl(url: string): RecordedHttpRequest[] {
+    return this.requests.filter((r) => r.url === url);
+  }
+
+  /**
+   * Get the last request
+   */
+  getLastRequest(): RecordedHttpRequest | undefined {
+    return this.requests[this.requests.length - 1];
+  }
+
+  /**
+   * Check if a URL was called
+   */
+  wasUrlCalled(url: string, method?: string): boolean {
+    return this.requests.some(
+      (r) => r.url === url && (!method || r.method === method)
+    );
+  }
+
+  /**
+   * Reset all state
+   */
+  reset(): void {
+    this.requests = [];
+    this.mockResponses.clear();
+    this.defaultResponse = { data: {}, status: 200, ok: true };
   }
 }

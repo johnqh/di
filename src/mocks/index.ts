@@ -45,8 +45,11 @@ export {
 // Network mocks
 export {
   MockPlatformNetwork,
+  MockNetworkClient,
   type RecordedRequest,
+  type RecordedHttpRequest,
   type MockResponseConfig,
+  type MockHttpResponse,
 } from './network.mock.js';
 
 // Storage mocks
@@ -89,3 +92,17 @@ export {
   createDebugLogger,
   type RecordedLogEntry,
 } from './logging.mock.js';
+
+// Firebase mocks
+export {
+  MockAnalyticsService,
+  MockRemoteConfigService,
+  MockRemoteConfigValue,
+  MockFCMService,
+  MockFirebaseService,
+  getMockFirebaseService,
+  initializeMockFirebaseService,
+  resetMockFirebaseService,
+  type RecordedFirebaseAnalyticsEvent,
+  type RecordedFCMEvent,
+} from './firebase.mock.js';
