@@ -418,3 +418,27 @@ export function createWebFirebaseService(
 ): FirebaseService {
   return new WebFirebaseService(config, options);
 }
+
+// Singleton management
+let firebaseService: WebFirebaseService | null = null;
+
+export function getFirebaseService(): WebFirebaseService {
+  if (!firebaseService) {
+    throw new Error(
+      'Firebase service not initialized. Call initializeFirebaseService() first.'
+    );
+  }
+  return firebaseService;
+}
+
+export function initializeFirebaseService(
+  config: FirebaseConfig,
+  options?: FirebaseInitOptions
+): WebFirebaseService {
+  firebaseService = new WebFirebaseService(config, options);
+  return firebaseService;
+}
+
+export function resetFirebaseService(): void {
+  firebaseService = null;
+}

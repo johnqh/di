@@ -1,6 +1,6 @@
 {
   "name": "@sudobility/di",
-  "version": "1.5.0",
+  "version": "1.5.2",
   "description": "Platform-agnostic dependency injection interfaces for React and React Native projects with platform-specific implementations",
   "type": "module",
   "main": "dist/web/index.js",
@@ -121,6 +121,10 @@
     "@react-native-async-storage/async-storage": ">=1.19.0",
     "@react-native-community/netinfo": ">=9.0.0",
     "@notifee/react-native": ">=7.0.0",
+    "@react-native-firebase/app": ">=18.0.0",
+    "@react-native-firebase/analytics": ">=18.0.0",
+    "@react-native-firebase/remote-config": ">=18.0.0",
+    "@react-native-firebase/messaging": ">=18.0.0",
     "firebase": ">=10.0.0"
   },
   "peerDependenciesMeta": {
@@ -134,6 +138,18 @@
       "optional": true
     },
     "@notifee/react-native": {
+      "optional": true
+    },
+    "@react-native-firebase/app": {
+      "optional": true
+    },
+    "@react-native-firebase/analytics": {
+      "optional": true
+    },
+    "@react-native-firebase/remote-config": {
+      "optional": true
+    },
+    "@react-native-firebase/messaging": {
       "optional": true
     },
     "firebase": {

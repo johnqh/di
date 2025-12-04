@@ -148,6 +148,60 @@ declare module '@react-native-firebase/analytics' {
   export default analytics;
 }
 
+declare module '@react-native-firebase/remote-config' {
+  interface RemoteConfigValue {
+    asBoolean(): boolean;
+    asString(): string;
+    asNumber(): number;
+    getSource(): string;
+  }
+
+  interface FirebaseRemoteConfig {
+    setConfigSettings(settings: {
+      minimumFetchIntervalMillis?: number;
+    }): Promise<void>;
+    fetchAndActivate(): Promise<boolean>;
+    getValue(key: string): RemoteConfigValue;
+    getAll(): Record<string, RemoteConfigValue>;
+  }
+
+  function remoteConfig(): FirebaseRemoteConfig;
+  export default remoteConfig;
+}
+
+declare module '@react-native-firebase/messaging' {
+  interface RemoteMessage {
+    messageId?: string;
+    from?: string;
+    collapseKey?: string;
+    notification?: {
+      title?: string;
+      body?: string;
+      ios?: {
+        imageUrl?: string;
+      };
+      android?: {
+        imageUrl?: string;
+      };
+    };
+    data?: Record<string, string>;
+  }
+
+  interface FirebaseMessaging {
+    requestPermission(): Promise<number>;
+    getToken(): Promise<string>;
+    deleteToken(): Promise<void>;
+    onMessage(callback: (message: RemoteMessage) => void): () => void;
+    onNotificationOpenedApp(
+      callback: (message: RemoteMessage) => void
+    ): () => void;
+    getInitialNotification(): Promise<RemoteMessage | null>;
+  }
+
+  function messaging(): FirebaseMessaging;
+  export default messaging;
+}
+
 declare module '@react-navigation/native' {
   export interface NavigationRoute {
     key?: string;

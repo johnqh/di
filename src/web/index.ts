@@ -8,6 +8,43 @@
 // Re-export all interfaces from main package
 export * from '../index.js';
 
+// ============================================================================
+// UNIFIED EXPORTS (same names as React Native for cross-platform code)
+// ============================================================================
+
+// Network - unified names
+export { webNetworkClient as networkClient } from './network/network.web.js';
+export { WebNetworkService as NetworkService } from './network/web-network.service.js';
+export {
+  getNetworkService,
+  initializeNetworkService,
+  resetNetworkService,
+} from './network/network-singleton.js';
+
+// Storage - unified names
+export {
+  webStorage as storage,
+  advancedWebStorage as advancedStorage,
+} from './storage/storage.web.js';
+export { WebStorageService as StorageService } from './storage/web-storage.service.js';
+export {
+  getStorageService,
+  initializeStorageService,
+  resetStorageService,
+} from './storage/storage-singleton.js';
+
+// Firebase - unified names
+export { WebFirebaseService as FirebaseService } from './firebase/firebase.web.js';
+export {
+  getFirebaseService,
+  initializeFirebaseService,
+  resetFirebaseService,
+} from './firebase/firebase.web.js';
+
+// ============================================================================
+// PLATFORM-SPECIFIC EXPORTS (web-prefixed names for explicit usage)
+// ============================================================================
+
 // Web Network implementations
 export { WebNetworkClient, webNetworkClient } from './network/network.web.js';
 export { WebNetworkService } from './network/web-network.service.js';
@@ -61,7 +98,6 @@ export type {
   FCMPermissionState,
   FCMState,
   FCMService,
-  FirebaseService,
   FirebaseConfig,
   FirebaseInitOptions,
 } from './firebase/firebase.interface.js';
