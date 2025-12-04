@@ -14,7 +14,7 @@ export * from '../index.js';
 
 // Network - unified names
 export { rnNetworkClient as networkClient } from './network/network.rn.js';
-export { RNNetworkService as NetworkService } from './network/network.rn.js';
+export { RNNetworkService as PlatformNetworkService } from './network/network.rn.js';
 export {
   getNetworkService,
   initializeNetworkService,
@@ -26,7 +26,7 @@ export {
   rnStorage as storage,
   advancedRNStorage as advancedStorage,
 } from './storage/storage.rn.js';
-export { RNStorageService as StorageService } from './storage/storage-singleton.js';
+export { RNStorageService as PlatformStorageService } from './storage/storage-singleton.js';
 export {
   getStorageService,
   initializeStorageService,
@@ -34,7 +34,7 @@ export {
 } from './storage/storage-singleton.js';
 
 // Firebase - unified names
-export { RNFirebaseService as FirebaseService } from './firebase/firebase.rn.js';
+export { RNFirebaseService as PlatformFirebaseService } from './firebase/firebase.rn.js';
 export {
   getFirebaseService,
   initializeFirebaseService,
@@ -42,7 +42,7 @@ export {
 } from './firebase/firebase.rn.js';
 
 // Theme - unified names
-export { RNThemeService as ThemeService } from './theme/theme.rn.js';
+export { RNThemeService as PlatformThemeService } from './theme/theme.rn.js';
 export {
   getThemeService,
   initializeThemeService,
@@ -50,7 +50,7 @@ export {
 } from './theme/theme.rn.js';
 
 // Navigation - unified names
-export { RNNavigationService as NavigationService } from './navigation/navigation.rn.js';
+export { RNNavigationService as PlatformNavigationService } from './navigation/navigation.rn.js';
 export {
   getNavigationService,
   initializeNavigationService,
@@ -58,7 +58,7 @@ export {
 } from './navigation/navigation.rn.js';
 
 // Notifications - unified names
-export { RNNotificationService as NotificationService } from './notification/notification.rn.js';
+export { RNNotificationService as PlatformNotificationService } from './notification/notification.rn.js';
 export {
   getNotificationService,
   initializeNotificationService,

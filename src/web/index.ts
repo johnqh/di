@@ -14,7 +14,7 @@ export * from '../index.js';
 
 // Network - unified names
 export { webNetworkClient as networkClient } from './network/network.web.js';
-export { WebNetworkService as NetworkService } from './network/web-network.service.js';
+export { WebNetworkService as PlatformNetworkService } from './network/web-network.service.js';
 export {
   getNetworkService,
   initializeNetworkService,
@@ -26,7 +26,7 @@ export {
   webStorage as storage,
   advancedWebStorage as advancedStorage,
 } from './storage/storage.web.js';
-export { WebStorageService as StorageService } from './storage/web-storage.service.js';
+export { WebStorageService as PlatformStorageService } from './storage/web-storage.service.js';
 export {
   getStorageService,
   initializeStorageService,
@@ -34,7 +34,7 @@ export {
 } from './storage/storage-singleton.js';
 
 // Firebase - unified names
-export { WebFirebaseService as FirebaseService } from './firebase/firebase.web.js';
+export { WebFirebaseService as PlatformFirebaseService } from './firebase/firebase.web.js';
 export {
   getFirebaseService,
   initializeFirebaseService,
