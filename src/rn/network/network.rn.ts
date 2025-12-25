@@ -94,10 +94,23 @@ export class RNNetworkClient implements NetworkClient {
     options?: Optional<Omit<NetworkRequestOptions, 'method'>>
   ): Promise<NetworkResponse<T>> {
     const bodyToSend = this.convertBody(body);
+
+    // Auto-add Content-Type header for JSON bodies (matching web behavior)
+    const headers = { ...options?.headers };
+    if (
+      typeof body === 'object' &&
+      body !== null &&
+      !(body instanceof FormData) &&
+      !(body instanceof Blob)
+    ) {
+      headers['Content-Type'] = 'application/json';
+    }
+
     return this.request<T>(url, {
       ...options,
       method: 'POST',
       body: bodyToSend,
+      headers,
     });
   }
 
@@ -107,10 +120,23 @@ export class RNNetworkClient implements NetworkClient {
     options?: Optional<Omit<NetworkRequestOptions, 'method'>>
   ): Promise<NetworkResponse<T>> {
     const bodyToSend = this.convertBody(body);
+
+    // Auto-add Content-Type header for JSON bodies (matching web behavior)
+    const headers = { ...options?.headers };
+    if (
+      typeof body === 'object' &&
+      body !== null &&
+      !(body instanceof FormData) &&
+      !(body instanceof Blob)
+    ) {
+      headers['Content-Type'] = 'application/json';
+    }
+
     return this.request<T>(url, {
       ...options,
       method: 'PUT',
       body: bodyToSend,
+      headers,
     });
   }
 
