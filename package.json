@@ -1,6 +1,6 @@
 {
   "name": "@sudobility/di",
-  "version": "1.5.7",
+  "version": "1.5.8",
   "description": "Platform-agnostic dependency injection interfaces for React and React Native projects with platform-specific implementations",
   "type": "module",
   "main": "dist/web/index.js",
@@ -72,6 +72,10 @@
     "./utils": {
       "import": "./dist/utils/index.js",
       "types": "./dist/utils/index.d.ts"
+    },
+    "./info": {
+      "import": "./dist/info/index.js",
+      "types": "./dist/info/index.d.ts"
     }
   },
   "files": [
@@ -101,7 +105,7 @@
   ],
   "author": "johnqh",
   "devDependencies": {
-    "@sudobility/types": "^1.9.31",
+    "@sudobility/types": "^1.9.32",
     "@types/node": "^24.5.2",
     "@types/react": "^19.2.2",
     "@typescript-eslint/eslint-plugin": "^8.44.1",
@@ -115,7 +119,7 @@
     "vitest": "^3.2.4"
   },
   "peerDependencies": {
-    "@sudobility/types": "^1.9.31",
+    "@sudobility/types": "^1.9.32",
     "react": ">=18.0.0",
     "react-native": ">=0.70.0",
     "@react-native-async-storage/async-storage": ">=1.19.0",

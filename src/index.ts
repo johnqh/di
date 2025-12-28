@@ -28,14 +28,14 @@ export * from './notification/platform-notifications.js';
 // Storage interfaces
 export * from './storage/storage.js';
 
+// Info interfaces
+export * from './info/index.js';
+
 // Theme interfaces
 export * from './theme/platform-theme.js';
 
 // Logging interfaces
 export * from './logging/index.js';
-
-// Service keys
-export * from './service-keys.js';
 
 // React hooks
 export * from './hooks/index.js';
