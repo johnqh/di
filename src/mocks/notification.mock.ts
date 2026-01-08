@@ -260,9 +260,7 @@ export class MockNotificationClient implements NotificationClient {
  * expect(context.hasPermission).toBe(true);
  * ```
  */
-export class MockNotificationContextProvider
-  implements NotificationContextProvider
-{
+export class MockNotificationContextProvider implements NotificationContextProvider {
   client: NotificationClient;
   isSupported: boolean = true;
   hasPermission: boolean = false;
