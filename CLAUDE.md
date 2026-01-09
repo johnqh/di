@@ -4,7 +4,19 @@ This file provides comprehensive guidance for AI assistants (Claude Code, GitHub
 
 ## Project Overview
 
-This is `@johnqh/di` - a TypeScript library providing platform-agnostic dependency injection interfaces for React and React Native projects. The library contains **no implementations**, only abstract interfaces and type definitions that enable clean dependency injection patterns across platforms.
+This is `@sudobility/di` - a TypeScript library providing platform-agnostic dependency injection interfaces for React and React Native projects. The library contains **no implementations**, only abstract interfaces and type definitions that enable clean dependency injection patterns across platforms.
+
+## Package Manager
+
+**This project uses Bun as the package manager.** Always use `bun` commands instead of `npm`:
+
+```bash
+# Install dependencies
+bun install
+
+# Run any script
+bun run <script-name>
+```
 
 ## Architecture
 
@@ -38,30 +50,30 @@ The library is organized into domain-specific modules:
 
 ### Building & Type Checking
 ```bash
-npm run build              # Compile TypeScript to dist/
-npm run build:watch        # Watch mode compilation
-npm run typecheck          # Type check without emitting files
-npm run clean              # Remove dist/ directory
+bun run build              # Compile TypeScript to dist/
+bun run build:watch        # Watch mode compilation
+bun run typecheck          # Type check without emitting files
+bun run clean              # Remove dist/ directory
 ```
 
 ### Testing
 ```bash
-npm test                   # Run all tests
-npm run test:watch         # Run tests in watch mode
-npm run test:coverage      # Run tests with coverage report
-npm run test:ci            # CI-friendly test run
+bun run test               # Run all tests
+bun run test:watch         # Run tests in watch mode
+bun run test:coverage      # Run tests with coverage report
+bun run test:ci            # CI-friendly test run
 ```
 
 ### Code Quality
 ```bash
-npm run lint               # Run ESLint
-npm run lint:fix           # Auto-fix ESLint issues
-npm run format             # Format code with Prettier
+bun run lint               # Run ESLint
+bun run lint:fix           # Auto-fix ESLint issues
+bun run format             # Format code with Prettier
 ```
 
 ### Publishing
 ```bash
-npm run prepublishOnly     # Runs clean -> test -> build (automatic on publish)
+bun run prepublishOnly     # Runs clean -> test -> build (automatic on publish)
 ```
 
 ### CI/CD Pipeline
@@ -90,9 +102,9 @@ The test suite is comprehensive with 60+ tests across 5 categories:
 
 ### Running Specific Tests
 ```bash
-npm test -- tests/analytics/          # Run analytics tests only
-npm test -- --testNamePattern="Enum"  # Run tests matching pattern
-npm test -- --coverage --silent       # Quiet coverage run
+bun test -- tests/analytics/          # Run analytics tests only
+bun test -- --testNamePattern="Enum"  # Run tests matching pattern
+bun test -- --coverage --silent       # Quiet coverage run
 ```
 
 ## Key Configuration Files
@@ -138,7 +150,7 @@ npm test -- --coverage --silent       # Quiet coverage run
 1. **Read this file first** - Contains all project context and patterns
 2. **Check existing interfaces** - Always look at existing code before creating new interfaces
 3. **Follow conventions** - Match existing code style and patterns exactly
-4. **Test everything** - Run `npm test` after any changes
+4. **Test everything** - Run `bun test` after any changes
 5. **Type safety first** - This is a TypeScript-first library
 
 ### Code Generation Guidelines
@@ -191,14 +203,14 @@ import { Platform } from 'react-native';
 
 #### Task: Fix type errors
 **Solution**:
-1. Run `npm run typecheck` to see all errors
+1. Run `bun run typecheck` to see all errors
 2. Check if using `any` - replace with `unknown` or generic
 3. Ensure all interfaces use proper generics
 4. Verify imports are from correct paths
 
 #### Task: Improve test coverage
 **Solution**:
-1. Run `npm run test:coverage` to see gaps
+1. Run `bun run test:coverage` to see gaps
 2. Focus on mock implementations, not interfaces
 3. Test edge cases and error scenarios
 4. Ensure 95% coverage threshold
