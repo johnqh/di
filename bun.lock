@@ -4,7 +4,7 @@
     "": {
       "name": "@sudobility/di",
       "devDependencies": {
-        "@sudobility/types": "^1.9.45",
+        "@sudobility/types": "^1.9.46",
         "@types/node": "^24.5.2",
         "@types/react": "^19.2.2",
         "@typescript-eslint/eslint-plugin": "^8.44.1",
@@ -25,7 +25,7 @@
         "@react-native-firebase/app": ">=18.0.0",
         "@react-native-firebase/messaging": ">=18.0.0",
         "@react-native-firebase/remote-config": ">=18.0.0",
-        "@sudobility/types": "^1.9.45",
+        "@sudobility/types": "^1.9.46",
         "firebase": ">=10.0.0",
         "react": ">=18.0.0",
         "react-native": ">=0.70.0",
@@ -200,7 +200,7 @@
 
     "@rollup/rollup-win32-x64-msvc": ["@rollup/rollup-win32-x64-msvc@4.55.1", "", { "os": "win32", "cpu": "x64" }, "sha512-SPEpaL6DX4rmcXtnhdrQYgzQ5W2uW3SCJch88lB2zImhJRhIIK44fkUrgIV/Q8yUNfw5oyZ5vkeQsZLhCb06lw=="],
 
-    "@sudobility/types": ["@sudobility/types@1.9.45", "", {}, "sha512-bANwJwRnsrRycBbFvBdN3WatK9SbjN99IC0ms80Qq/+MWToT9ZJ8k7pyRjd8/TUsfpRkM6cZzSfG02YEvTUzUw=="],
+    "@sudobility/types": ["@sudobility/types@1.9.46", "", {}, "sha512-tPXjmkK5P8wuCkGFUW85HIXTEhb4Fx/+1SYphhJINswq0YxcCeIcWYtEXCn6XEC17PRgTRHMzlEO9qhAcamF6g=="],
 
     "@types/chai": ["@types/chai@5.2.3", "", { "dependencies": { "@types/deep-eql": "*", "assertion-error": "^2.0.1" } }, "sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA=="],
 
