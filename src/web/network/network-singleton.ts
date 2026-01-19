@@ -14,13 +14,14 @@ let networkServiceInstance: PlatformNetwork | null = null;
 /**
  * Initialize the network service singleton
  * Should be called once at app startup
+ * @param service - Optional custom network service implementation (e.g., with auth retry logic)
  */
-export function initializeNetworkService(): void {
+export function initializeNetworkService(service?: PlatformNetwork): void {
   if (networkServiceInstance) {
     return;
   }
 
-  networkServiceInstance = new WebNetworkService();
+  networkServiceInstance = service ?? new WebNetworkService();
 }
 
 /**
