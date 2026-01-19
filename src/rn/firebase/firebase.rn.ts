@@ -88,6 +88,27 @@ const DEFAULT_OPTIONS: FirebaseInitOptions = {
 };
 
 /**
+ * Hash a user ID for privacy-preserving analytics.
+ * Uses a simple but consistent hash algorithm suitable for analytics.
+ * Returns a 16-character hex string.
+ */
+function hashUserIdForAnalytics(userId: string): string {
+  // Simple hash function - consistent across platforms
+  let hash1 = 0;
+  let hash2 = 0;
+  for (let i = 0; i < userId.length; i++) {
+    const char = userId.charCodeAt(i);
+    hash1 = (hash1 << 5) - hash1 + char;
+    hash1 = hash1 & hash1;
+    hash2 = (hash2 << 7) - hash2 + char;
+    hash2 = hash2 & hash2;
+  }
+  const hex1 = Math.abs(hash1).toString(16).padStart(8, '0');
+  const hex2 = Math.abs(hash2).toString(16).padStart(8, '0');
+  return (hex1 + hex2).slice(0, 16);
+}
+
+/**
  * React Native Analytics Service using Firebase Analytics
  */
 class RNAnalyticsService implements AnalyticsService {
@@ -123,7 +144,13 @@ class RNAnalyticsService implements AnalyticsService {
     const analytics = getAnalyticsModule();
     if (!analytics) return;
 
-    analytics.setUserId(userId).catch(() => {
+    // Hash the user ID for privacy before sending to analytics
+    const hashedId = hashUserIdForAnalytics(userId);
+    analytics.setUserId(hashedId).catch(() => {
+      // Silently handle analytics errors
+    });
+    // Also set as a user property for easier querying
+    analytics.setUserProperty('user_hash', hashedId).catch(() => {
       // Silently handle analytics errors
     });
   }

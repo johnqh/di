@@ -48,6 +48,30 @@ const DEFAULT_OPTIONS: FirebaseInitOptions = {
   enableDevelopmentMode: false,
 };
 
+/**
+ * Hash a user ID for privacy-preserving analytics.
+ * Uses a simple but consistent hash algorithm suitable for analytics.
+ * Returns a 16-character hex string.
+ *
+ * Note: This uses the same algorithm as the React Native implementation
+ * to ensure consistent user IDs across platforms.
+ */
+function hashUserIdForAnalytics(userId: string): string {
+  // Simple hash function - consistent across platforms (web and RN)
+  let hash1 = 0;
+  let hash2 = 0;
+  for (let i = 0; i < userId.length; i++) {
+    const char = userId.charCodeAt(i);
+    hash1 = (hash1 << 5) - hash1 + char;
+    hash1 = hash1 & hash1;
+    hash2 = (hash2 << 7) - hash2 + char;
+    hash2 = hash2 & hash2;
+  }
+  const hex1 = Math.abs(hash1).toString(16).padStart(8, '0');
+  const hex2 = Math.abs(hash2).toString(16).padStart(8, '0');
+  return (hex1 + hex2).slice(0, 16);
+}
+
 class WebAnalyticsService implements AnalyticsService {
   constructor(private analytics: Analytics | null) {}
 
@@ -74,7 +98,11 @@ class WebAnalyticsService implements AnalyticsService {
   setUserId(userId: string): void {
     if (this.analytics && this.isSupported()) {
       try {
-        setUserId(this.analytics, userId);
+        // Hash the user ID for privacy before sending to analytics
+        const hashedId = hashUserIdForAnalytics(userId);
+        setUserId(this.analytics, hashedId);
+        // Also set as a user property for easier querying
+        setUserProperties(this.analytics, { user_hash: hashedId });
       } catch (error) {
         console.error('Error setting user ID:', error);
       }
