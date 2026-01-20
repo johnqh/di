@@ -71,14 +71,21 @@ export class WebNetworkService implements PlatformNetwork {
   }
 
   // Convenience methods for common HTTP verbs
-  async get(url: string, options?: { headers?: Record<string, string>; signal?: AbortSignal }): Promise<Response> {
+  async get(
+    url: string,
+    options?: { headers?: Record<string, string>; signal?: AbortSignal }
+  ): Promise<Response> {
     const init: RequestInit = { method: 'GET' };
     if (options?.headers) init.headers = options.headers;
     if (options?.signal) init.signal = options.signal;
     return this.request(url, init);
   }
 
-  async post(url: string, body?: unknown, options?: { headers?: Record<string, string>; signal?: AbortSignal }): Promise<Response> {
+  async post(
+    url: string,
+    body?: unknown,
+    options?: { headers?: Record<string, string>; signal?: AbortSignal }
+  ): Promise<Response> {
     const init: RequestInit = { method: 'POST' };
     if (options?.headers) init.headers = options.headers;
     if (body) init.body = JSON.stringify(body);
@@ -86,7 +93,11 @@ export class WebNetworkService implements PlatformNetwork {
     return this.request(url, init);
   }
 
-  async put(url: string, body?: unknown, options?: { headers?: Record<string, string>; signal?: AbortSignal }): Promise<Response> {
+  async put(
+    url: string,
+    body?: unknown,
+    options?: { headers?: Record<string, string>; signal?: AbortSignal }
+  ): Promise<Response> {
     const init: RequestInit = { method: 'PUT' };
     if (options?.headers) init.headers = options.headers;
     if (body) init.body = JSON.stringify(body);
@@ -94,7 +105,10 @@ export class WebNetworkService implements PlatformNetwork {
     return this.request(url, init);
   }
 
-  async delete(url: string, options?: { headers?: Record<string, string>; signal?: AbortSignal }): Promise<Response> {
+  async delete(
+    url: string,
+    options?: { headers?: Record<string, string>; signal?: AbortSignal }
+  ): Promise<Response> {
     const init: RequestInit = { method: 'DELETE' };
     if (options?.headers) init.headers = options.headers;
     if (options?.signal) init.signal = options.signal;

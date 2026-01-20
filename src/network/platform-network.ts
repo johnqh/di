@@ -50,7 +50,11 @@ export interface PlatformNetwork {
    * @param options Optional headers and signal
    * @returns Promise resolving to the response
    */
-  post(url: string, body?: unknown, options?: NetworkRequestOptions): Promise<Response>;
+  post(
+    url: string,
+    body?: unknown,
+    options?: NetworkRequestOptions
+  ): Promise<Response>;
 
   /**
    * Make a PUT request
@@ -59,7 +63,11 @@ export interface PlatformNetwork {
    * @param options Optional headers and signal
    * @returns Promise resolving to the response
    */
-  put(url: string, body?: unknown, options?: NetworkRequestOptions): Promise<Response>;
+  put(
+    url: string,
+    body?: unknown,
+    options?: NetworkRequestOptions
+  ): Promise<Response>;
 
   /**
    * Make a DELETE request
