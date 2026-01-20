@@ -18,6 +18,14 @@
  * }
  * ```
  */
+/**
+ * Options for convenience methods (get, post, put, delete)
+ */
+export interface NetworkRequestOptions {
+  headers?: Record<string, string>;
+  signal?: AbortSignal;
+}
+
 export interface PlatformNetwork {
   /**
    * Make an HTTP request
@@ -25,7 +33,41 @@ export interface PlatformNetwork {
    * @param options Request options (method, headers, body, etc.)
    * @returns Promise resolving to the response
    */
-  request(url: string, options: RequestInit): Promise<Response>;
+  request(url: string, options?: RequestInit): Promise<Response>;
+
+  /**
+   * Make a GET request
+   * @param url Request URL
+   * @param options Optional headers and signal
+   * @returns Promise resolving to the response
+   */
+  get(url: string, options?: NetworkRequestOptions): Promise<Response>;
+
+  /**
+   * Make a POST request
+   * @param url Request URL
+   * @param body Request body (will be JSON stringified if object)
+   * @param options Optional headers and signal
+   * @returns Promise resolving to the response
+   */
+  post(url: string, body?: unknown, options?: NetworkRequestOptions): Promise<Response>;
+
+  /**
+   * Make a PUT request
+   * @param url Request URL
+   * @param body Request body (will be JSON stringified if object)
+   * @param options Optional headers and signal
+   * @returns Promise resolving to the response
+   */
+  put(url: string, body?: unknown, options?: NetworkRequestOptions): Promise<Response>;
+
+  /**
+   * Make a DELETE request
+   * @param url Request URL
+   * @param options Optional headers and signal
+   * @returns Promise resolving to the response
+   */
+  delete(url: string, options?: NetworkRequestOptions): Promise<Response>;
 
   /**
    * Check if the device is currently online
