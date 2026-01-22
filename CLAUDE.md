@@ -38,7 +38,11 @@ The library is organized into domain-specific modules:
 - **`src/theme/`** - Theme and appearance interfaces for dark mode and styling
 - **`src/hooks/`** - React hooks for API call management and async operations
 - **`src/utils/`** - Utility functions for async operations and error handling
-- **`src/service-keys.ts`** - Standard service keys for dependency injection containers
+- **`src/info/`** - App info and device info interfaces
+- **`src/logging/`** - Logging service interfaces
+- **`src/mocks/`** - Mock implementations for testing
+- **`src/rn/`** - React Native specific interfaces and utilities
+- **`src/web/`** - Web platform specific interfaces and utilities
 
 ### Key Patterns
 1. **Interface segregation**: Each domain has focused, single-purpose interfaces
