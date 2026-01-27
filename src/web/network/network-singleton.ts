@@ -26,13 +26,11 @@ export function initializeNetworkService(service?: PlatformNetwork): void {
 
 /**
  * Get the network service singleton
- * @throws Error if not initialized
+ * Auto-initializes with default WebNetworkService if not already initialized
  */
 export function getNetworkService(): PlatformNetwork {
   if (!networkServiceInstance) {
-    throw new Error(
-      'Network service not initialized. Call initializeNetworkService() at app startup.'
-    );
+    networkServiceInstance = new WebNetworkService();
   }
   return networkServiceInstance;
 }
