@@ -3,9 +3,10 @@
  *
  * This module provides React Native-specific implementations of the DI interfaces
  * using native modules (AsyncStorage, NetInfo, Notifee, etc.)
- *
- * NOTE: No re-exports from base package. Import interfaces from '@sudobility/di/interfaces'
  */
+
+// Re-export all interfaces from the base package for convenience
+export * from '../index.js';
 
 // ============================================================================
 // UNIFIED EXPORTS (same names as Web for cross-platform code)

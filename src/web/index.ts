@@ -3,9 +3,10 @@
  *
  * This module provides web-specific implementations of the DI interfaces
  * using browser APIs (fetch, localStorage, History API, etc.)
- *
- * NOTE: No re-exports from base package. Import interfaces from '@sudobility/di/interfaces'
  */
+
+// Re-export all interfaces from the base package for convenience
+export * from '../index.js';
 
 // ============================================================================
 // UNIFIED EXPORTS (same names as React Native for cross-platform code)
