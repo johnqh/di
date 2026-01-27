@@ -3,10 +3,9 @@
  *
  * This module provides web-specific implementations of the DI interfaces
  * using browser APIs (fetch, localStorage, History API, etc.)
+ *
+ * NOTE: No re-exports from base package. Import interfaces from '@sudobility/di/interfaces'
  */
-
-// Re-export all interfaces from main package
-export * from '../index.js';
 
 // ============================================================================
 // UNIFIED EXPORTS (same names as React Native for cross-platform code)
@@ -33,13 +32,7 @@ export {
   resetStorageService,
 } from './storage/storage-singleton.js';
 
-// Firebase - unified names
-export { WebFirebaseService as PlatformFirebaseService } from './firebase/firebase.web.js';
-export {
-  getFirebaseService,
-  initializeFirebaseService,
-  resetFirebaseService,
-} from './firebase/firebase.web.js';
+// NOTE: Firebase exports removed - use @sudobility/di_web for Firebase implementations
 
 // ============================================================================
 // PLATFORM-SPECIFIC EXPORTS (web-prefixed names for explicit usage)
@@ -86,22 +79,4 @@ export type {
   UINavigationConfig,
 } from './navigation/ui-navigation.js';
 
-// Web Firebase implementations
-export type {
-  AnalyticsEvent as FirebaseAnalyticsEvent,
-  AnalyticsService as FirebaseAnalyticsService,
-  RemoteConfigValue,
-  RemoteConfigService,
-  FCMNotificationPayload,
-  FCMDataPayload,
-  FCMMessage,
-  FCMPermissionState,
-  FCMState,
-  FCMService,
-  FirebaseConfig,
-  FirebaseInitOptions,
-} from './firebase/firebase.interface.js';
-export {
-  WebFirebaseService,
-  createWebFirebaseService,
-} from './firebase/firebase.web.js';
+// NOTE: Firebase exports removed - use @sudobility/di_web for Firebase implementations

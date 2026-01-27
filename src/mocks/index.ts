@@ -93,16 +93,4 @@ export {
   type RecordedLogEntry,
 } from './logging.mock.js';
 
-// Firebase mocks
-export {
-  MockAnalyticsService,
-  MockRemoteConfigService,
-  MockRemoteConfigValue,
-  MockFCMService,
-  MockFirebaseService,
-  getMockFirebaseService,
-  initializeMockFirebaseService,
-  resetMockFirebaseService,
-  type RecordedFirebaseAnalyticsEvent,
-  type RecordedFCMEvent,
-} from './firebase.mock.js';
+// NOTE: Firebase mocks removed - use @sudobility/di_web or @sudobility/di_rn for Firebase

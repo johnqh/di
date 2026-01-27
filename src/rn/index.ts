@@ -3,10 +3,9 @@
  *
  * This module provides React Native-specific implementations of the DI interfaces
  * using native modules (AsyncStorage, NetInfo, Notifee, etc.)
+ *
+ * NOTE: No re-exports from base package. Import interfaces from '@sudobility/di/interfaces'
  */
-
-// Re-export all interfaces from main package
-export * from '../index.js';
 
 // ============================================================================
 // UNIFIED EXPORTS (same names as Web for cross-platform code)
@@ -33,13 +32,7 @@ export {
   resetStorageService,
 } from './storage/storage-singleton.js';
 
-// Firebase - unified names
-export { RNFirebaseService as PlatformFirebaseService } from './firebase/firebase.rn.js';
-export {
-  getFirebaseService,
-  initializeFirebaseService,
-  resetFirebaseService,
-} from './firebase/firebase.rn.js';
+// NOTE: Firebase removed - use @sudobility/di_rn for Firebase implementations
 
 // Theme - unified names
 export { RNThemeService as PlatformThemeService } from './theme/theme.rn.js';
@@ -141,24 +134,4 @@ export {
 export type { ThemeMode, FontSize } from './theme/theme.rn.js';
 export { RNThemeService, rnThemeService } from './theme/theme.rn.js';
 
-// RN Firebase implementations
-export type {
-  FirebaseService as FirebaseServiceInterface,
-  AnalyticsService as FirebaseAnalyticsService,
-  RemoteConfigService,
-  FCMService,
-  FirebaseInitOptions,
-  RemoteConfigValue,
-  FCMMessage,
-  FCMPermissionState,
-  FCMNotificationPayload,
-  FCMDataPayload,
-  FCMState,
-  FirebaseConfig,
-  AnalyticsEvent as FirebaseAnalyticsEvent,
-} from './firebase/firebase.rn.js';
-export {
-  RNFirebaseService,
-  createRNFirebaseService,
-  rnFirebaseService,
-} from './firebase/firebase.rn.js';
+// NOTE: Firebase removed - use @sudobility/di_rn for Firebase implementations
