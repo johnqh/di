@@ -1,6 +1,6 @@
 {
   "name": "@sudobility/di",
-  "version": "1.5.30",
+  "version": "1.5.31",
   "description": "Platform-agnostic dependency injection interfaces for React and React Native projects with platform-specific implementations",
   "type": "module",
   "main": "dist/web/index.js",
@@ -105,7 +105,7 @@
   ],
   "author": "johnqh",
   "devDependencies": {
-    "@sudobility/types": "^1.9.48",
+    "@sudobility/types": "^1.9.49",
     "@types/node": "^24.5.2",
     "@types/react": "^19.2.2",
     "@typescript-eslint/eslint-plugin": "^8.44.1",
@@ -122,7 +122,7 @@
     "@notifee/react-native": ">=7.0.0",
     "@react-native-async-storage/async-storage": ">=1.19.0",
     "@react-native-community/netinfo": ">=9.0.0",
-    "@sudobility/types": "^1.9.48",
+    "@sudobility/types": "^1.9.49",
     "react": ">=18.0.0",
     "react-native": ">=0.70.0"
   },

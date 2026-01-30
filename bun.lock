@@ -4,7 +4,7 @@
     "": {
       "name": "@sudobility/di",
       "devDependencies": {
-        "@sudobility/types": "^1.9.48",
+        "@sudobility/types": "^1.9.49",
         "@types/node": "^24.5.2",
         "@types/react": "^19.2.2",
         "@typescript-eslint/eslint-plugin": "^8.44.1",
@@ -21,7 +21,7 @@
         "@notifee/react-native": ">=7.0.0",
         "@react-native-async-storage/async-storage": ">=1.19.0",
         "@react-native-community/netinfo": ">=9.0.0",
-        "@sudobility/types": "^1.9.48",
+        "@sudobility/types": "^1.9.49",
         "react": ">=18.0.0",
         "react-native": ">=0.70.0",
       },
@@ -190,7 +190,7 @@
 
     "@rollup/rollup-win32-x64-msvc": ["@rollup/rollup-win32-x64-msvc@4.57.0", "", { "os": "win32", "cpu": "x64" }, "sha512-Zv7v6q6aV+VslnpwzqKAmrk5JdVkLUzok2208ZXGipjb+msxBr/fJPZyeEXiFgH7k62Ak0SLIfxQRZQvTuf7rQ=="],
 
-    "@sudobility/types": ["@sudobility/types@1.9.48", "", {}, "sha512-sCXkeICtA//ftTDHdlLEcojVpOJi/ocvOmUYGh0S0eTl/tG5HWbOP4cz5aJz8jue4c2vYe/cJxj6BwtRlAOLEA=="],
+    "@sudobility/types": ["@sudobility/types@1.9.49", "", {}, "sha512-Gt8kaxnL5uWDsIAW1A6vKKvDUopb+q3QeyuUirVnT7yyqaMKXmcqvAGupvvZ/ATr2bOckcSPns/Bz3lRT1GVTg=="],
 
     "@types/chai": ["@types/chai@5.2.3", "", { "dependencies": { "@types/deep-eql": "*", "assertion-error": "^2.0.1" } }, "sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA=="],
 
