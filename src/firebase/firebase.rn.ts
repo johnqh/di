@@ -29,7 +29,6 @@ let messagingModule: FirebaseMessagingModule | null = null;
 function getAnalytics() {
   if (!analyticsModule) {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const mod = require('@react-native-firebase/analytics');
       analyticsModule = mod;
     } catch (e) {
@@ -43,7 +42,6 @@ function getAnalytics() {
 function getRemoteConfig() {
   if (!remoteConfigModule) {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const mod = require('@react-native-firebase/remote-config');
       remoteConfigModule = mod;
     } catch (e) {
@@ -57,7 +55,6 @@ function getRemoteConfig() {
 function getMessaging() {
   if (!messagingModule) {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const mod = require('@react-native-firebase/messaging');
       messagingModule = mod;
     } catch (e) {
@@ -161,7 +158,14 @@ class RNAnalyticsService implements AnalyticsService {
 }
 
 class RNRemoteConfigValue implements RemoteConfigValue {
-  constructor(private value: { asBoolean: () => boolean; asString: () => string; asNumber: () => number; getSource: () => string }) {}
+  constructor(
+    private value: {
+      asBoolean: () => boolean;
+      asString: () => string;
+      asNumber: () => number;
+      getSource: () => string;
+    }
+  ) {}
 
   asBoolean(): boolean {
     return this.value.asBoolean();
@@ -228,7 +232,14 @@ class RNRemoteConfigService implements RemoteConfigService {
       const result: Record<string, RemoteConfigValue> = {};
 
       for (const [key, value] of Object.entries(allValues)) {
-        result[key] = new RNRemoteConfigValue(value as { asBoolean: () => boolean; asString: () => string; asNumber: () => number; getSource: () => string });
+        result[key] = new RNRemoteConfigValue(
+          value as {
+            asBoolean: () => boolean;
+            asString: () => string;
+            asNumber: () => number;
+            getSource: () => string;
+          }
+        );
       }
 
       return result;
@@ -254,7 +265,7 @@ class RNFCMService implements FCMService {
       const authStatus = await messaging.requestPermission();
       return (
         authStatus === 1 || // AUTHORIZED
-        authStatus === 2    // PROVISIONAL
+        authStatus === 2 // PROVISIONAL
       );
     } catch (error) {
       console.error('Error requesting notification permission:', error);
@@ -292,16 +303,30 @@ class RNFCMService implements FCMService {
     if (!messaging) return () => {};
 
     try {
-      this.unsubscribe = messaging.onMessage((remoteMessage: { notification?: { title?: string; body?: string }; data?: Record<string, string>; messageId?: string; from?: string; collapseKey?: string }) => {
-        const message: FCMMessage = {
-          ...(remoteMessage.notification && { notification: remoteMessage.notification }),
-          ...(remoteMessage.data && { data: remoteMessage.data }),
-          ...(remoteMessage.messageId && { messageId: remoteMessage.messageId }),
-          ...(remoteMessage.from && { from: remoteMessage.from }),
-          ...(remoteMessage.collapseKey && { collapseKey: remoteMessage.collapseKey }),
-        };
-        callback(message);
-      });
+      this.unsubscribe = messaging.onMessage(
+        (remoteMessage: {
+          notification?: { title?: string; body?: string };
+          data?: Record<string, string>;
+          messageId?: string;
+          from?: string;
+          collapseKey?: string;
+        }) => {
+          const message: FCMMessage = {
+            ...(remoteMessage.notification && {
+              notification: remoteMessage.notification,
+            }),
+            ...(remoteMessage.data && { data: remoteMessage.data }),
+            ...(remoteMessage.messageId && {
+              messageId: remoteMessage.messageId,
+            }),
+            ...(remoteMessage.from && { from: remoteMessage.from }),
+            ...(remoteMessage.collapseKey && {
+              collapseKey: remoteMessage.collapseKey,
+            }),
+          };
+          callback(message);
+        }
+      );
 
       return () => {
         if (this.unsubscribe) {
