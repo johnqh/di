@@ -33,7 +33,41 @@ export {
   resetStorageService,
 } from './storage/storage-singleton.js';
 
-// NOTE: Firebase removed - use @sudobility/di_rn for Firebase implementations
+// Firebase - RN implementation
+export {
+  RNFirebaseService,
+  RNAnalyticsService as RNFirebaseAnalyticsService,
+  createRNFirebaseService,
+  getFirebaseService,
+  initializeFirebaseService,
+  resetFirebaseService,
+} from '../firebase/firebase.rn.js';
+
+// Firebase - unified analytics wrapper
+export {
+  FirebaseAnalyticsService,
+  initializeFirebaseAnalytics,
+  getAnalyticsService,
+  resetAnalyticsService,
+  type AnalyticsEventParams,
+} from '../firebase/firebase-analytics.js';
+
+// Firebase - interfaces and types
+export type {
+  AnalyticsEvent,
+  AnalyticsService,
+  RemoteConfigValue,
+  RemoteConfigService,
+  FCMNotificationPayload,
+  FCMDataPayload,
+  FCMMessage,
+  FCMPermissionState,
+  FCMState,
+  FCMService,
+  FirebaseService,
+  FirebaseConfig,
+  FirebaseInitOptions,
+} from '../firebase/firebase.interface.js';
 
 // Theme - unified names
 export { RNThemeService as PlatformThemeService } from './theme/theme.rn.js';
@@ -135,4 +169,3 @@ export {
 export type { ThemeMode, FontSize } from './theme/theme.rn.js';
 export { RNThemeService, rnThemeService } from './theme/theme.rn.js';
 
-// NOTE: Firebase removed - use @sudobility/di_rn for Firebase implementations

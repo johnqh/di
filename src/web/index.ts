@@ -33,7 +33,40 @@ export {
   resetStorageService,
 } from './storage/storage-singleton.js';
 
-// NOTE: Firebase exports removed - use @sudobility/di_web for Firebase implementations
+// Firebase - web implementation
+export {
+  WebFirebaseService,
+  createWebFirebaseService,
+  getFirebaseService,
+  initializeFirebaseService,
+  resetFirebaseService,
+} from '../firebase/firebase.web.js';
+
+// Firebase - unified analytics wrapper
+export {
+  FirebaseAnalyticsService,
+  initializeFirebaseAnalytics,
+  getAnalyticsService,
+  resetAnalyticsService,
+  type AnalyticsEventParams,
+} from '../firebase/firebase-analytics.js';
+
+// Firebase - interfaces and types
+export type {
+  AnalyticsEvent,
+  AnalyticsService,
+  RemoteConfigValue,
+  RemoteConfigService,
+  FCMNotificationPayload,
+  FCMDataPayload,
+  FCMMessage,
+  FCMPermissionState,
+  FCMState,
+  FCMService,
+  FirebaseService,
+  FirebaseConfig,
+  FirebaseInitOptions,
+} from '../firebase/firebase.interface.js';
 
 // ============================================================================
 // PLATFORM-SPECIFIC EXPORTS (web-prefixed names for explicit usage)
@@ -80,4 +113,3 @@ export type {
   UINavigationConfig,
 } from './navigation/ui-navigation.js';
 
-// NOTE: Firebase exports removed - use @sudobility/di_web for Firebase implementations
