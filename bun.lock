@@ -8,7 +8,7 @@
         "@react-native-firebase/app": "^23.8.3",
         "@react-native-firebase/messaging": "^23.8.3",
         "@react-native-firebase/remote-config": "^23.8.3",
-        "@sudobility/types": "^1.9.49",
+        "@sudobility/types": "^1.9.50",
         "@types/node": "^24.5.2",
         "@types/react": "^19.2.2",
         "@typescript-eslint/eslint-plugin": "^8.44.1",
@@ -30,7 +30,7 @@
         "@react-native-firebase/app": ">=18.0.0",
         "@react-native-firebase/messaging": ">=18.0.0",
         "@react-native-firebase/remote-config": ">=18.0.0",
-        "@sudobility/types": "^1.9.49",
+        "@sudobility/types": "^1.9.50",
         "firebase": ">=11.0.0",
         "react": ">=18.0.0",
         "react-native": ">=0.70.0",
@@ -431,7 +431,7 @@
 
     "@sinonjs/fake-timers": ["@sinonjs/fake-timers@10.3.0", "", { "dependencies": { "@sinonjs/commons": "^3.0.0" } }, "sha512-V4BG07kuYSUkTCSBHG8G8TNhM+F19jXFWnQtzj+we8DrkpSBCee9Z3Ms8yiGer/dlmhe35/Xdgyo3/0rQKg7YA=="],
 
-    "@sudobility/types": ["@sudobility/types@1.9.49", "", {}, "sha512-Gt8kaxnL5uWDsIAW1A6vKKvDUopb+q3QeyuUirVnT7yyqaMKXmcqvAGupvvZ/ATr2bOckcSPns/Bz3lRT1GVTg=="],
+    "@sudobility/types": ["@sudobility/types@1.9.50", "", {}, "sha512-SKopIMJqgNVopcz/MNukrm936yKuBJMFcz4uUbQz9XB7cDjyuExoVeyMnvidMKtOLkmJSRdYYV4+M7eG7KN2aw=="],
 
     "@types/babel__core": ["@types/babel__core@7.20.5", "", { "dependencies": { "@babel/parser": "^7.20.7", "@babel/types": "^7.20.7", "@types/babel__generator": "*", "@types/babel__template": "*", "@types/babel__traverse": "*" } }, "sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA=="],
 
