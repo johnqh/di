@@ -91,19 +91,19 @@ export class WebNetworkClient implements NetworkClient {
       if (!response.ok) {
         // Include response data in error for better debugging
         let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
-        if (
-          data &&
-          typeof data === 'object' &&
-          'message' in data &&
-          typeof (data as { message: unknown }).message === 'string'
-        ) {
-          errorMessage += ` - ${(data as { message: string }).message}`;
+        if (data && typeof data === 'object') {
+          const errorData = data as { message?: string; error?: string };
+          const detail = errorData.error || errorData.message;
+          if (typeof detail === 'string') {
+            errorMessage += ` - ${detail}`;
+          }
         }
 
         throw new NetworkError(
           errorMessage,
           response.status,
-          response.statusText
+          response.statusText,
+          data
         );
       }
 
