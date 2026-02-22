@@ -1,428 +1,357 @@
-# CLAUDE.md - AI Assistant Context
+# di - AI Development Guide
 
-This file provides comprehensive guidance for AI assistants (Claude Code, GitHub Copilot, Cursor, etc.) when working with this repository. It contains essential context, patterns, and instructions to enable effective AI-assisted development.
+## Overview
 
-## Project Overview
+`@sudobility/di` is a TypeScript library that provides platform-agnostic dependency injection interfaces, abstract types, and platform-specific implementations for React (web) and React Native projects. It enables clean separation of concerns through interface-based contracts, with concrete implementations for web (browser APIs) and React Native (native modules), plus a unified Firebase integration layer. The library also ships mock implementations for testing and async utility functions.
 
-This is `@sudobility/di` - a TypeScript library providing platform-agnostic dependency injection interfaces for React and React Native projects. The library contains **no implementations**, only abstract interfaces and type definitions that enable clean dependency injection patterns across platforms.
+- **Package name:** `@sudobility/di`
+- **Version:** 1.5.36
+- **License:** (restricted/private)
+- **Package manager:** Bun
+- **Module system:** ESM only (`"type": "module"`)
+- **TypeScript target:** ES2020, strict mode enabled
 
-## Package Manager
+## Project Structure
 
-**This project uses Bun as the package manager.** Always use `bun` commands instead of `npm`:
+```
+src/
+├── index.ts                         # Main barrel export (all interfaces, mocks, utils)
+├── types.ts                         # Core types: EnvironmentVariables, EnvProvider, FirebaseConfig, AppConfig, AnalyticsEventProperties
+├── env.ts                           # EnvFactory, EnvUtils (re-exports from types.ts)
+├── analytics/
+│   ├── analytics.ts                 # AnalyticsClient, AnalyticsContextProvider, AnalyticsEventData
+│   └── platform-analytics.ts        # PlatformAnalytics interface
+├── firebase/
+│   ├── firebase.interface.ts        # AnalyticsService, RemoteConfigService, FCMService, FirebaseService, FirebaseConfig, FirebaseInitOptions
+│   ├── firebase-analytics.ts        # FirebaseAnalyticsService class (unified wrapper + singleton)
+│   ├── firebase.web.ts              # WebFirebaseService implementation
+│   ├── firebase.rn.ts               # RNFirebaseService implementation
+│   └── index.ts                     # Firebase module exports
+├── hooks/
+│   ├── index.ts                     # Hooks barrel export
+│   └── useApiCall.ts                # useApiCall, useApiCallStrict, useApiGroup hooks
+├── info/
+│   ├── info.ts                      # InfoInterface (toast/alert display)
+│   ├── info-singleton.ts            # initializeInfoService / getInfoService singleton
+│   └── index.ts                     # Info module exports
+├── logging/
+│   ├── logging.interface.ts         # LogType enum, Logger, LoggerProvider interfaces
+│   └── index.ts                     # Logging module exports
+├── mocks/
+│   ├── index.ts                     # All mock exports
+│   ├── analytics.mock.ts            # MockAnalyticsClient, MockAnalyticsContextProvider, MockPlatformAnalytics
+│   ├── env.mock.ts                  # MockEnvProvider, MockEnvFactory, MockEnvUtils
+│   ├── logging.mock.ts              # MockLogger, MockLoggerProvider
+│   ├── navigation.mock.ts           # MockNavigationService, MockNavigationHook, MockLocationHook
+│   ├── network.mock.ts              # MockPlatformNetwork, MockNetworkClient
+│   ├── notification.mock.ts         # MockNotificationService, MockNotificationClient, MockPlatformNotifications
+│   ├── storage.mock.ts              # MockPlatformStorage, MockStorageService, MockSerializedStorageService
+│   └── theme.mock.ts                # MockPlatformTheme
+├── navigation/
+│   └── navigation.ts                # NavigationService, NavigationHook, LocationHook, URLService, NavigationConfig
+├── network/
+│   ├── index.ts                     # Note: network interfaces from @sudobility/types
+│   └── platform-network.ts          # PlatformNetwork, NetworkRequestOptions interfaces
+├── notification/
+│   ├── notification.ts              # NotificationService, NotificationClient, NotificationContextProvider, NotificationCapabilities
+│   └── platform-notifications.ts    # PlatformNotifications interface
+├── storage/
+│   └── storage.ts                   # PlatformStorage, AdvancedPlatformStorage, StorageProvider, StorageService, SerializedStorageService, StorageFactory, StorageConfig
+├── theme/
+│   └── platform-theme.ts            # PlatformTheme interface
+├── utils/
+│   ├── index.ts                     # Utils barrel export
+│   ├── async-helpers.ts             # safeAsync, withLoadingState, safeParallel, withTimeout, withCache, debounceAsync
+│   └── logger.ts                    # SimpleLogger interface, ConsoleLogger, setLogger singleton
+├── rn/
+│   ├── index.ts                     # React Native barrel (re-exports interfaces + RN implementations)
+│   ├── types.d.ts                   # Type stubs for RN native modules (AsyncStorage, NetInfo, Notifee, Firebase RN, React Navigation)
+│   ├── analytics/analytics.rn.ts    # RNAnalyticsClient
+│   ├── env/env.rn.ts                # RNEnvProvider
+│   ├── logging/logging.rn.ts        # RNLogger, RNLoggerProvider
+│   ├── navigation/navigation.rn.ts  # RNNavigationService
+│   ├── network/
+│   │   ├── network.rn.ts            # RNNetworkClient, RNNetworkService
+│   │   └── network-singleton.ts     # Network singleton management
+│   ├── notification/notification.rn.ts # RNNotificationService
+│   ├── storage/
+│   │   ├── storage.rn.ts            # RNStorage, AdvancedRNStorage
+│   │   └── storage-singleton.ts     # RNStorageService singleton
+│   └── theme/theme.rn.ts            # RNThemeService
+└── web/
+    ├── index.ts                     # Web barrel (re-exports interfaces + web implementations)
+    ├── types.d.ts                   # Type stubs for Firebase web SDK
+    ├── navigation/
+    │   ├── navigation.web.ts        # WebUINavigationService
+    │   └── ui-navigation.ts         # UINavigationService, UINavigationHook, UILocationHook interfaces
+    ├── network/
+    │   ├── network.web.ts           # WebNetworkClient
+    │   ├── web-network.service.ts   # WebNetworkService
+    │   └── network-singleton.ts     # Network singleton management
+    └── storage/
+        ├── storage.web.ts           # WebStorage, AdvancedWebStorage
+        ├── web-storage.service.ts   # WebStorageService, WebSerializedStorageService
+        └── storage-singleton.ts     # Storage singleton management
+
+tests/
+├── analytics/analytics.test.ts
+├── env/env.test.ts
+├── integration/library.test.ts
+├── logging/logging.test.ts
+├── network/network.test.ts
+└── types/types.test.ts
+```
+
+## Key Interfaces
+
+### Core Types (`src/types.ts`)
+| Interface | Purpose |
+|---|---|
+| `EnvironmentVariables` | Typed environment variable map with `NODE_ENV` |
+| `EnvProvider` | Access and validate environment configuration (get, isDevelopment, isProduction, isTest, getAll) |
+| `FirebaseConfig` | Firebase project configuration (apiKey, authDomain, projectId, etc.) |
+| `AppConfig` | Centralized app config (WildDuck backend, indexer, RevenueCat, WalletConnect, Privy, Firebase, Cloudflare) |
+| `AnalyticsEventProperties` | Flexible key-value analytics event metadata |
+
+### Environment (`src/env.ts`)
+| Interface | Purpose |
+|---|---|
+| `EnvFactory` | Factory for creating EnvProvider instances with platform detection |
+| `EnvUtils` | Utility interface for environment detection and variable access |
+
+### Analytics (`src/analytics/`)
+| Interface | Purpose |
+|---|---|
+| `AnalyticsClient` | Core analytics: trackEvent, setUserProperties, setUserId, setAnalyticsEnabled, setCurrentScreen |
+| `AnalyticsContextProvider` | Automatic context injection into analytics events (getCurrentContext) |
+| `PlatformAnalytics` | Simplified analytics: trackEvent, setUserProperty, setUserId, isEnabled |
+| `AnalyticsEventData` | Event data object with AnalyticsEvent enum and optional parameters |
+
+### Firebase (`src/firebase/`)
+| Interface | Purpose |
+|---|---|
+| `AnalyticsService` | Firebase analytics: logEvent, setUserProperties, setUserId, isSupported |
+| `RemoteConfigService` | Firebase Remote Config: fetchAndActivate, getValue, getAll, isSupported |
+| `FCMService` | Firebase Cloud Messaging: requestPermission, getToken, onMessage, isSupported |
+| `FirebaseService` | Composite Firebase service (analytics + remoteConfig + messaging) |
+| `FirebaseInitOptions` | Firebase initialization flags (enableAnalytics, enableRemoteConfig, etc.) |
+
+### Navigation (`src/navigation/`)
+| Interface | Purpose |
+|---|---|
+| `NavigationService` | Full navigation: navigate, goBack, goForward, replace, getCurrentState, addListener |
+| `NavigationHook` | React hook interface for navigation (navigate, goBack, replace, currentPath, params) |
+| `LocationHook` | React hook for URL location (pathname, search, searchParams, hash, state) |
+| `URLService` | URL manipulation without page reload (removeQueryParam, getQueryParam, setQueryParam) |
+| `NavigationConfig` | Platform-specific navigation config (gestures, animations, analytics) |
+
+### Network (`src/network/`)
+| Interface | Purpose |
+|---|---|
+| `PlatformNetwork` | HTTP operations: request, get, post, put, delete, isOnline, watchNetworkStatus |
+| `NetworkRequestOptions` | Options for convenience HTTP methods (headers, signal) |
+
+### Notification (`src/notification/`)
+| Interface | Purpose |
+|---|---|
+| `NotificationService` | Full notification service: showNotification, requestPermission, closeNotification, getCapabilities |
+| `NotificationClient` | Simplified facade wrapping service + config |
+| `NotificationContextProvider` | React context provider for notification state |
+| `NotificationCapabilities` | Platform capability flags (supportsActions, supportsIcon, supportsBadge, etc.) |
+| `PlatformNotifications` | Simple notifications: showNotification, requestPermission, scheduleNotification |
+
+### Storage (`src/storage/`)
+| Interface | Purpose |
+|---|---|
+| `PlatformStorage` | Low-level storage (setItem, getItem, removeItem, clear, getAllKeys) |
+| `AdvancedPlatformStorage` | Extended storage with TTL, hasItem, clearPattern |
+| `StorageProvider` | Facade with simplified get/set/remove/clear |
+| `StorageService` | High-level storage with isAvailable, getType (StorageType enum) |
+| `SerializedStorageService` | Object storage with automatic JSON serialization (getObject, setObject) |
+| `StorageFactory` | Factory for creating storage services by type |
+| `StorageConfig` | Storage configuration (prefix, encryption, compression, ttl) |
+
+### Theme (`src/theme/`)
+| Interface | Purpose |
+|---|---|
+| `PlatformTheme` | Theme management: applyTheme, applyFontSize, getCurrentTheme, watchSystemTheme |
+
+### Info (`src/info/`)
+| Interface | Purpose |
+|---|---|
+| `InfoInterface` | User-facing info display: show(title, text, type, interval) |
+
+### Logging (`src/logging/`)
+| Interface | Purpose |
+|---|---|
+| `Logger` | Logging service with type property and log() method |
+| `LoggerProvider` | Factory for creating/switching Logger instances (getLogger, setLogType) |
+| `LogType` | Enum: None, Console, File |
+
+### Hooks (`src/hooks/`)
+| Interface/Hook | Purpose |
+|---|---|
+| `useApiCall` | Hook managing API call state (loading, error) that returns undefined on error |
+| `useApiCallStrict` | Hook that throws errors instead of suppressing |
+| `useApiGroup` | Hook for multiple related API calls with shared loading state |
+| `UseApiCallOptions` | Config: onError callback, context string |
+| `UseApiCallReturn` | Return type: isLoading, error, clearError, executeAsync, execute |
+
+### Utilities (`src/utils/`)
+| Function/Type | Purpose |
+|---|---|
+| `safeAsync<T>` | Try-catch wrapper returning AsyncResult (never throws) |
+| `withLoadingState<T>` | Async wrapper managing React loading/error state |
+| `safeParallel<T>` | Promise.all wrapper with error safety |
+| `withTimeout<T>` | Promise.race timeout wrapper |
+| `withCache<T>` | Memoization with TTL expiration |
+| `clearExpiredCache` | Periodic cache cleanup |
+| `debounceAsync` | Debounce wrapper for async operations |
+| `SimpleLogger` | Logger interface used by async helpers |
+| `setLogger` | Replace default ConsoleLogger singleton |
+
+## Development Commands
 
 ```bash
 # Install dependencies
 bun install
 
-# Run any script
-bun run <script-name>
+# Build (TypeScript compilation to dist/)
+bun run build
+bun run build:watch
+
+# Type checking
+bun run typecheck
+
+# Testing (Vitest)
+bun run test                 # Run all tests
+bun run test:watch           # Watch mode
+bun run test:coverage        # With coverage report
+bun run test:ci              # CI-friendly with coverage
+
+# Code quality
+bun run lint                 # ESLint
+bun run lint:fix             # Auto-fix
+bun run format               # Prettier
+
+# Clean build artifacts
+bun run clean
+
+# Publish (runs clean -> test -> build automatically)
+bun run prepublishOnly
 ```
-
-## Architecture
-
-### Core Design Philosophy
-- **Interface-only library**: Contains no platform-specific code or implementations
-- **Cross-platform compatibility**: All interfaces work on web, React Native, and Node.js
-- **Dependency injection focus**: Enables clean separation of concerns through abstract contracts
-
-### Module Structure
-The library is organized into domain-specific modules:
-
-- **`src/types.ts`** - Core type definitions, enums, and foundational interfaces
-- **`src/env.ts`** - Environment configuration interfaces (`EnvProvider`, `AppConfig`)
-- **`src/analytics/`** - Analytics tracking interfaces with event-driven patterns
-- **`src/network/`** - HTTP client interfaces with platform-agnostic request/response types
-- **`src/storage/`** - Storage abstraction interfaces (localStorage, AsyncStorage, etc.)
-- **`src/navigation/`** - Navigation interfaces for cross-platform routing
-- **`src/notification/`** - Notification interfaces for push notifications and local alerts
-- **`src/theme/`** - Theme and appearance interfaces for dark mode and styling
-- **`src/hooks/`** - React hooks for API call management and async operations
-- **`src/utils/`** - Utility functions for async operations and error handling
-- **`src/info/`** - App info and device info interfaces
-- **`src/logging/`** - Logging service interfaces
-- **`src/mocks/`** - Mock implementations for testing
-- **`src/rn/`** - React Native specific interfaces and utilities
-- **`src/web/`** - Web platform specific interfaces and utilities
-
-### Key Patterns
-1. **Interface segregation**: Each domain has focused, single-purpose interfaces
-2. **Generic typing**: Heavy use of TypeScript generics for type safety
-3. **Platform detection**: Enums and types that work across React/React Native boundaries
-4. **Event-driven**: Analytics and other services use event enum patterns
-
-## Development Commands
-
-### Building & Type Checking
-```bash
-bun run build              # Compile TypeScript to dist/
-bun run build:watch        # Watch mode compilation
-bun run typecheck          # Type check without emitting files
-bun run clean              # Remove dist/ directory
-```
-
-### Testing
-```bash
-bun run test               # Run all tests
-bun run test:watch         # Run tests in watch mode
-bun run test:coverage      # Run tests with coverage report
-bun run test:ci            # CI-friendly test run
-```
-
-### Code Quality
-```bash
-bun run lint               # Run ESLint
-bun run lint:fix           # Auto-fix ESLint issues
-bun run format             # Format code with Prettier
-```
-
-### Publishing
-```bash
-bun run prepublishOnly     # Runs clean -> test -> build (automatic on publish)
-```
-
-### CI/CD Pipeline
-The repository uses GitHub Actions for automated testing and deployment:
-
-- **Triggers**: Push to main branch or merged PRs
-- **Test Matrix**: Node.js 20.x and 22.x
-- **Quality Gates**: TypeScript checking, linting, full test suite with coverage
-- **Deployment**: Automatic npm publishing and GitHub releases
-- **Skip Releases**: Add `[skip ci]` or `[skip-ci]` to commit messages to skip deployment
-
-## Testing Architecture
-
-The test suite is comprehensive with 60+ tests across 5 categories:
-
-- **`tests/types/`** - Enum validation and interface type checking
-- **`tests/analytics/`** - Analytics interface compliance testing
-- **`tests/env/`** - Environment provider interface testing
-- **`tests/network/`** - Network client interface testing  
-- **`tests/integration/`** - End-to-end library integration tests
-
-### Test Patterns
-- **Mock implementations**: Tests use concrete mock classes implementing interfaces
-- **Type safety validation**: Tests verify TypeScript interface contracts
-- **Cross-platform scenarios**: Tests validate platform-agnostic patterns
 
 ### Running Specific Tests
+
 ```bash
-bun test -- tests/analytics/          # Run analytics tests only
-bun test -- --testNamePattern="Enum"  # Run tests matching pattern
-bun test -- --coverage --silent       # Quiet coverage run
+bun test -- tests/analytics/
+bun test -- --testNamePattern="Enum"
 ```
 
-## Key Configuration Files
+## Architecture / Patterns
 
-### TypeScript Configuration
-- **Target**: ES2020 with DOM support for cross-platform compatibility
-- **Module**: ESNext with bundler resolution for modern tooling
-- **Strict mode**: Enabled with selective unused parameter allowance for interfaces
+### Interface-Based Dependency Injection
+The core of the library defines abstract TypeScript interfaces that decouple application logic from platform-specific implementations. Consuming projects import interfaces and either use the provided web/RN implementations or write their own.
 
-### Jest Configuration
-- **ES Modules**: Full ESM support with ts-jest transformation
-- **Coverage**: 95% threshold on statements, branches, functions, and lines
-- **Exclusions**: Interface files and pure export files excluded from coverage
+### Three-Layer Export Structure
+The package exposes multiple entry points via `exports` in package.json:
+- **`@sudobility/di/interfaces`** (`src/index.ts`) -- All interfaces, types, mocks, and utils
+- **`@sudobility/di/web`** (`src/web/index.ts`) -- Web implementations + all interfaces
+- **`@sudobility/di/rn`** (`src/rn/index.ts`) -- React Native implementations + all interfaces
+- **`@sudobility/di/mocks`** -- Mock implementations for testing
+- **Domain-specific subpaths** (`/analytics`, `/env`, `/logging`, `/navigation`, `/network`, `/notification`, `/storage`, `/types`, `/hooks`, `/utils`, `/info`, `/firebase`)
 
-### ESLint Configuration
-- **Interface-friendly**: Unused parameters ignored in interface definitions (`args: 'none'`)
-- **Global types**: FormData, Blob, AbortSignal available for network interfaces
-- **Any types**: Warnings allowed for necessary interface flexibility
+### Unified Platform Names
+Both `web/index.ts` and `rn/index.ts` export platform services under unified names (e.g., `PlatformNetworkService`, `PlatformStorageService`, `networkClient`, `storage`) so cross-platform code can import from either without changing import names.
 
-## Working with This Codebase
+### Singleton Pattern
+Platform implementations use a singleton pattern with `initialize*`, `get*`, and `reset*` functions (e.g., `initializeNetworkService()`, `getNetworkService()`, `resetNetworkService()`). The `reset*` variants are for testing.
 
-### Adding New Interfaces
-1. Create interface files in appropriate domain directory
-2. Export from domain's main file and `src/index.ts`
-3. Add corresponding test file with mock implementation
-4. Ensure 95% test coverage threshold is maintained
+### Internal Naming Convention
+Internal interfaces use underscore prefix (`_AnalyticsClient`) and are re-exported with clean names (`AnalyticsClient`).
 
-### Interface Design Guidelines
-- Use generic types for flexibility: `NetworkResponse<T>`, `StorageProvider<K, V>`
-- Include platform detection enums where relevant
-- Prefix internal interfaces with underscore, export clean names
-- Use `any` sparingly and only where interface flexibility is essential
+### Type Stubs for Native Modules
+`src/rn/types.d.ts` and `src/web/types.d.ts` contain `declare module` stubs for native packages (AsyncStorage, NetInfo, Notifee, Firebase RN/Web SDK, React Navigation) so the library compiles without requiring those packages to be installed.
 
-### Common Pitfalls
-- Interface files generate no coverage - exclude them in Jest config
-- ES modules require careful Jest configuration for TypeScript
-- Cross-platform types need DOM lib for web APIs (FormData, Blob, etc.)
-- Unused parameters in interface methods are expected - configure ESLint accordingly
+### Peer Dependencies as Optional
+All platform-specific packages (react-native, AsyncStorage, Firebase, Notifee, NetInfo) are declared as optional peer dependencies, since only the relevant platform's packages need to be installed.
 
-## AI Assistant Instructions
+### Key Design Rules
+1. **Interface-only core** -- `src/index.ts` exports only interfaces, types, enums, mocks, and utils (no platform code)
+2. **Platform code lives in `src/web/` and `src/rn/`** -- Concrete implementations separated by platform
+3. **Zero required runtime dependencies** -- All dependencies are peer or dev
+4. **Strict TypeScript** -- Full strict mode with `exactOptionalPropertyTypes`, `noUncheckedIndexedAccess`, `noImplicitOverride`
+5. **ESM only** -- No CommonJS output
+6. **95% test coverage threshold** -- Enforced globally on statements, branches, functions, and lines
 
-### Quick Start for AI Assistants
-1. **Read this file first** - Contains all project context and patterns
-2. **Check existing interfaces** - Always look at existing code before creating new interfaces
-3. **Follow conventions** - Match existing code style and patterns exactly
-4. **Test everything** - Run `bun test` after any changes
-5. **Type safety first** - This is a TypeScript-first library
+## Common Tasks
 
-### Code Generation Guidelines
+### Adding a New Service Interface
 
-#### When Creating New Interfaces
-```typescript
-// ✅ GOOD: Generic, flexible interface
-export interface DataProvider<T> {
-  get(id: string): Promise<T>;
-  set(id: string, value: T): Promise<void>;
-  delete(id: string): Promise<void>;
-}
+1. Create a new directory under `src/` (e.g., `src/cache/`).
+2. Define the interface file (e.g., `src/cache/cache.ts`):
+   ```typescript
+   import type { Optional } from '@sudobility/types';
 
-// ❌ BAD: Too specific, not flexible
-export interface UserDataProvider {
-  getUser(id: string): Promise<User>;
-  setUser(id: string, user: User): Promise<void>;
-}
-```
+   export interface CacheService {
+     get<T>(key: string): Promise<Optional<T>>;
+     set<T>(key: string, value: T, ttl?: number): Promise<void>;
+     delete(key: string): Promise<void>;
+     clear(): Promise<void>;
+   }
+   ```
+3. Export from `src/index.ts`:
+   ```typescript
+   export * from './cache/cache.js';
+   ```
+4. Add a mock in `src/mocks/cache.mock.ts` and export from `src/mocks/index.ts`.
+5. Add tests in `tests/cache/cache.test.ts` with mock implementations.
+6. Add the subpath export to `package.json` under `"exports"`.
+7. Maintain 95% test coverage.
 
-#### When Adding Platform-Specific Types
-```typescript
-// ✅ GOOD: Platform-agnostic with detection
-export enum Platform {
-  Web = 'web',
-  iOS = 'ios',
-  Android = 'android',
-}
+### Adding a Platform Implementation
 
-export interface PlatformProvider {
-  platform: Platform;
-  isWeb(): boolean;
-  isMobile(): boolean;
-}
+1. Create the implementation file under `src/web/` or `src/rn/` (e.g., `src/web/cache/cache.web.ts`).
+2. Implement the interface using platform APIs.
+3. Add a singleton with `initialize*`, `get*`, `reset*` functions.
+4. Export from the platform's `index.ts` under both unified and platform-specific names.
 
-// ❌ BAD: Platform-specific implementation
-import { Platform } from 'react-native';
-// Never import platform-specific libraries
-```
+### Adding Type Stubs for Native Modules
 
-### Common AI Tasks and Solutions
+If a new native module dependency is needed, add `declare module` stubs in:
+- `src/rn/types.d.ts` for React Native packages
+- `src/web/types.d.ts` for web-specific Firebase/browser packages
 
-#### Task: Add a new domain interface
-**Solution**: 
-1. Create new directory under `src/` (e.g., `src/cache/`)
-2. Create interface file (e.g., `cache.interface.ts`)
-3. Export from `src/index.ts`
-4. Add tests in `tests/cache/cache.test.ts`
-5. Update this CLAUDE.md file
+## Peer / Key Dependencies
 
-#### Task: Fix type errors
-**Solution**:
-1. Run `bun run typecheck` to see all errors
-2. Check if using `any` - replace with `unknown` or generic
-3. Ensure all interfaces use proper generics
-4. Verify imports are from correct paths
+### Required Peer
+| Package | Version |
+|---|---|
+| `@sudobility/types` | ^1.9.51 |
+| `react` | >=18.0.0 |
 
-#### Task: Improve test coverage
-**Solution**:
-1. Run `bun run test:coverage` to see gaps
-2. Focus on mock implementations, not interfaces
-3. Test edge cases and error scenarios
-4. Ensure 95% coverage threshold
+### Optional Peers (React Native)
+| Package | Version |
+|---|---|
+| `react-native` | >=0.70.0 |
+| `@react-native-async-storage/async-storage` | >=1.19.0 |
+| `@react-native-community/netinfo` | >=9.0.0 |
+| `@notifee/react-native` | >=7.0.0 |
+| `@react-native-firebase/app` | >=18.0.0 |
+| `@react-native-firebase/analytics` | >=18.0.0 |
+| `@react-native-firebase/messaging` | >=18.0.0 |
+| `@react-native-firebase/remote-config` | >=18.0.0 |
 
-### AI Context Markers and Documentation Standards
+### Optional Peers (Web)
+| Package | Version |
+|---|---|
+| `firebase` | >=11.0.0 |
 
-The codebase uses standardized AI context markers to help AI assistants understand code purpose, patterns, and usage. These markers are embedded in JSDoc comments throughout the codebase.
-
-#### Standard AI Context Markers
-
-```typescript
-/**
- * Interface description
- * 
- * @ai-context Core interface for dependency injection
- * @ai-pattern Generic provider pattern  
- * @ai-platform Cross-platform compatible (Web, React Native, Node.js)
- * @ai-usage Implement this interface to create services for Firebase, etc.
- * @ai-test See tests/analytics/analytics.test.ts
- * @ai-interface-type Service Provider | Data Container | Configuration
- * @ai-domain Email applications | Blockchain integration | Analytics
- * @ai-security Contains sensitive data - handle securely
- * @ai-cross-platform Works across web and mobile platforms
- * @ai-runtime-value Enum values available at runtime
- * @ai-generics Uses generic constraints for type safety
- * 
- * @example
- * ```typescript
- * class MyImplementation implements MyInterface {
- *   // Implementation details
- * }
- * ```
- */
-```
-
-#### Test Documentation Standards
-
-```typescript
-/**
- * @ai-test-suite Description of test suite purpose
- * @ai-test-category Category of tests being run
- * @ai-test-pattern Type of testing pattern used
- * @ai-purpose Specific purpose of this test
- * @ai-coverage What this test covers
- * @ai-use-case Real-world usage scenario being tested
- */
-```
-
-#### Enum Documentation Standards
-
-```typescript
-/**
- * @ai-enum-type Purpose of the enumeration
- * @ai-pattern How this enum should be used
- * @ai-runtime-value Available as values at runtime
- * @ai-categories Functional categories within the enum
- */
-export enum ExampleEnum {
-  /** Detailed description of each enum value */
-  VALUE_ONE = 'value-one',
-}
-```
-
-### Project Invariants (Never Change These)
-
-1. **No implementations** - This library contains ONLY interfaces
-2. **No dependencies** - Zero runtime dependencies allowed
-3. **Platform agnostic** - Must work on web, iOS, and Android
-4. **95% test coverage** - Never reduce coverage threshold
-5. **Strict TypeScript** - Keep strict mode enabled
-6. **ESM only** - Module type is ESM, no CommonJS
-
-### Frequently Asked Questions for AI
-
-**Q: Can I add a new npm dependency?**
-A: No. This is an interface-only library with zero runtime dependencies.
-
-**Q: Should I add implementation code?**
-A: No. Only interfaces, types, and enums. Implementations belong in consuming projects.
-
-**Q: How do I handle platform-specific types?**
-A: Use enums and type unions. Never import platform-specific libraries.
-
-**Q: What about utility functions?**
-A: Only type utilities are allowed (e.g., type guards), no runtime utilities.
-
-**Q: How detailed should interfaces be?**
-A: Detailed enough for type safety, generic enough for multiple implementations.
-
-### Performance Considerations for AI
-
-- **Keep interfaces small** - Single responsibility principle
-- **Use generics liberally** - Flexibility without runtime cost
-- **Avoid deep nesting** - Flat interface hierarchies perform better
-- **Minimize re-exports** - Direct imports are more efficient
-
-### Security Considerations
-
-- **No secrets** - Never include API keys or credentials
-- **Type-safe APIs** - Interfaces should encourage secure patterns
-- **Validation hints** - Include JSDoc comments for validation requirements
-
-## AI-Assisted Development Optimizations
-
-This project has been specifically optimized for AI-assisted development with the following enhancements:
-
-### 1. Comprehensive JSDoc Documentation
-
-Every interface, enum, and significant code element includes detailed JSDoc documentation with:
-- Purpose and usage descriptions
-- Parameter explanations with types and examples
-- Return value documentation
-- Cross-platform compatibility notes
-- Security considerations
-- Practical usage examples
-
-### 2. AI Context Markers
-
-Standardized `@ai-*` markers throughout the codebase provide context to AI assistants:
-- `@ai-context` - Overall purpose of the code
-- `@ai-pattern` - Design patterns being used
-- `@ai-platform` - Platform compatibility information
-- `@ai-usage` - How to implement or use the code
-- `@ai-example` - Practical examples
-- `@ai-security` - Security considerations
-- `@ai-test-*` - Testing-related context
-
-### 3. Enhanced Test Patterns
-
-Test files include AI-friendly patterns:
-- Descriptive test categorization with `@ai-test-category`
-- Clear purpose statements with `@ai-purpose`
-- Pattern identification with `@ai-test-pattern`
-- Real-world usage examples in test scenarios
-- Comprehensive edge case coverage
-
-### 4. Runtime-Accessible Enums
-
-All enums are designed for runtime access:
-- Converted from type unions to proper enums
-- String values for integration with external APIs
-- Comprehensive documentation for each enum value
-- Usage examples showing runtime iteration and switching
-
-### 5. Type Safety with Flexibility
-
-Interfaces balance strict typing with necessary flexibility:
-- Generic type parameters where appropriate
-- Optional properties clearly marked and documented
-- Union types for legitimate variants
-- Index signatures for extensible configurations
-
-### AI Assistant Best Practices
-
-When working with this codebase, AI assistants should:
-
-1. **Read Documentation First** - Always check existing JSDoc and AI context markers
-2. **Follow Established Patterns** - Use the same documentation and naming conventions
-3. **Maintain Type Safety** - Preserve strict TypeScript typing while adding flexibility
-4. **Include Examples** - Provide practical usage examples in all documentation
-5. **Cross-Platform Awareness** - Consider web, React Native, and Node.js compatibility
-6. **Test Coverage** - Maintain comprehensive test coverage with descriptive patterns
-
-### Code Generation Guidelines for AI
-
-When generating code:
-
-```typescript
-// ✅ GOOD: Comprehensive interface with AI markers
-/**
- * Service for managing user notifications across platforms.
- * 
- * @ai-context Notification service interface for dependency injection
- * @ai-pattern Service provider with async operations
- * @ai-platform Works on web (Web Notifications API) and mobile (push notifications)
- * @ai-usage Implement for Firebase, OneSignal, or custom notification services
- * 
- * @example
- * ```typescript
- * class FirebaseNotifications implements NotificationService {
- *   async send(message: string, options?: NotificationOptions) {
- *     // Implementation using Firebase Cloud Messaging
- *   }
- * }
- * ```
- */
-interface NotificationService {
-  /**
-   * Send a notification to the user.
-   * 
-   * @param message Notification message content
-   * @param options Optional notification configuration
-   * @returns Promise resolving when notification is queued
-   * 
-   * @ai-pattern Async service method with options parameter
-   */
-  send(message: string, options?: NotificationOptions): Promise<void>;
-}
-
-// ❌ BAD: Minimal interface without context
-interface NotificationService {
-  send(message: string): Promise<void>;
-}
-```
-
-### Version Management
-
-- **Semantic versioning** - MAJOR.MINOR.PATCH
-- **Breaking changes** - Any interface change is breaking
-- **Deprecation** - Use `@deprecated` JSDoc tag
-- **Changelog** - Update CHANGELOG.md for all changes
+### Key Dev Dependencies
+| Package | Purpose |
+|---|---|
+| `typescript` | ^5.9.2 |
+| `vitest` | ^3.2.4 (test runner) |
+| `@vitest/coverage-v8` | ^3.2.4 (coverage) |
+| `eslint` | ^9.36.0 |
+| `prettier` | ^3.6.2 |
