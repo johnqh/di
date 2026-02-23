@@ -136,22 +136,27 @@ export const safeParallel = async <T extends readonly unknown[]>(
  * @ai-pattern Promise.race with timeout promise
  */
 export const withTimeout = async <T>(
-  operation: () => Promise<T>,
+  operation: (signal: AbortSignal) => Promise<T>,
   timeoutMs: number,
   context?: string
 ): Promise<T> => {
-  const timeoutPromise = new Promise<never>((_, reject) =>
-    setTimeout(
-      () => reject(new Error(`Operation timed out after ${timeoutMs}ms`)),
-      timeoutMs
-    )
-  );
+  const controller = new AbortController();
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    timeoutId = setTimeout(() => {
+      controller.abort();
+      reject(new Error(`Operation timed out after ${timeoutMs}ms`));
+    }, timeoutMs);
+  });
 
   try {
-    return await Promise.race([operation(), timeoutPromise]);
+    return await Promise.race([operation(controller.signal), timeoutPromise]);
   } catch (error) {
     logger.error(`Timeout operation failed`, context, error);
     throw error;
+  } finally {
+    clearTimeout(timeoutId);
   }
 };
 

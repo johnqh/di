@@ -20,6 +20,9 @@ export type {
   FirebaseInitOptions,
 } from './firebase.interface.js';
 
+// Export shared utilities
+export { hashUserIdForAnalytics } from './firebase-utils.js';
+
 // Export the unified analytics wrapper
 export {
   FirebaseAnalyticsService,

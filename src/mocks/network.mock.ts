@@ -268,6 +268,9 @@ export class MockNetworkClient implements NetworkClient {
     status: 200,
     ok: true,
   };
+  private latencyMs: number = 0;
+  private errorRate: number = 0;
+  private offline: boolean = false;
 
   async request<T = unknown>(
     url: string,
@@ -282,6 +285,14 @@ export class MockNetworkClient implements NetworkClient {
       timestamp: Date.now(),
     });
 
+    if (this.offline) {
+      throw new Error('Network request failed: offline');
+    }
+
+    if (this.errorRate > 0 && Math.random() < this.errorRate) {
+      throw new Error('Simulated random network error');
+    }
+
     const mockKey = `${method}:${url}`;
     const mockConfig =
       this.mockResponses.get(mockKey) ??
@@ -292,8 +303,9 @@ export class MockNetworkClient implements NetworkClient {
       throw mockConfig.error;
     }
 
-    if (mockConfig.delay) {
-      await new Promise((resolve) => setTimeout(resolve, mockConfig.delay));
+    const totalDelay = (mockConfig.delay ?? 0) + this.latencyMs;
+    if (totalDelay > 0) {
+      await new Promise((resolve) => setTimeout(resolve, totalDelay));
     }
 
     return {
@@ -415,11 +427,44 @@ export class MockNetworkClient implements NetworkClient {
   }
 
   /**
+   * Set simulated latency added to every request
+   * @param ms - Latency in milliseconds (0 to disable)
+   */
+  setLatency(ms: number): void {
+    this.latencyMs = ms;
+  }
+
+  /**
+   * Set random error rate for requests
+   * @param rate - Error probability between 0 (never) and 1 (always)
+   */
+  setErrorRate(rate: number): void {
+    this.errorRate = Math.max(0, Math.min(1, rate));
+  }
+
+  /**
+   * Simulate going offline - all requests will throw
+   */
+  simulateOffline(): void {
+    this.offline = true;
+  }
+
+  /**
+   * Simulate going back online
+   */
+  simulateOnline(): void {
+    this.offline = false;
+  }
+
+  /**
    * Reset all state
    */
   reset(): void {
     this.requests = [];
     this.mockResponses.clear();
     this.defaultResponse = { data: {}, status: 200, ok: true };
+    this.latencyMs = 0;
+    this.errorRate = 0;
+    this.offline = false;
   }
 }

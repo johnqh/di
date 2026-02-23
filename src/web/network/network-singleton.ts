@@ -4,7 +4,7 @@
  */
 
 import type { PlatformNetwork } from '../../network/platform-network.js';
-import { WebNetworkService } from './web-network.service';
+import { WebNetworkService } from './web-network.service.js';
 
 /**
  * Singleton network service instance

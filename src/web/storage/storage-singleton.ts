@@ -4,7 +4,7 @@
  */
 
 import type { StorageService } from '../../storage/storage.js';
-import { WebStorageService } from './web-storage.service';
+import { WebStorageService } from './web-storage.service.js';
 import { StorageType } from '@sudobility/types';
 
 /**

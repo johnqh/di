@@ -2,6 +2,7 @@ import js from '@eslint/js';
 import typescript from '@typescript-eslint/eslint-plugin';
 import typescriptParser from '@typescript-eslint/parser';
 import prettier from 'eslint-plugin-prettier';
+import importX from 'eslint-plugin-import-x';
 
 export default [
   js.configs.recommended,
@@ -48,6 +49,7 @@ export default [
     plugins: {
       '@typescript-eslint': typescript,
       prettier: prettier,
+      'import-x': importX,
     },
     rules: {
       'prettier/prettier': 'error',
@@ -64,6 +66,11 @@ export default [
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-require-imports': 'off',
+      'import-x/extensions': [
+        'error',
+        'always',
+        { ignorePackages: true },
+      ],
     },
   },
 ];

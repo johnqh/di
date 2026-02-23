@@ -39,6 +39,7 @@ import {
   FCMMessage,
   FCMPermissionState,
 } from './firebase.interface.js';
+import { hashUserIdForAnalytics } from './firebase-utils.js';
 
 // Default configuration
 const DEFAULT_OPTIONS: FirebaseInitOptions = {
@@ -47,30 +48,6 @@ const DEFAULT_OPTIONS: FirebaseInitOptions = {
   enableMessaging: true,
   enableDevelopmentMode: false,
 };
-
-/**
- * Hash a user ID for privacy-preserving analytics.
- * Uses a simple but consistent hash algorithm suitable for analytics.
- * Returns a 16-character hex string.
- *
- * Note: This uses the same algorithm as the React Native implementation
- * to ensure consistent user IDs across platforms.
- */
-function hashUserIdForAnalytics(userId: string): string {
-  // Simple hash function - consistent across platforms (web and RN)
-  let hash1 = 0;
-  let hash2 = 0;
-  for (let i = 0; i < userId.length; i++) {
-    const char = userId.charCodeAt(i);
-    hash1 = (hash1 << 5) - hash1 + char;
-    hash1 = hash1 & hash1;
-    hash2 = (hash2 << 7) - hash2 + char;
-    hash2 = hash2 & hash2;
-  }
-  const hex1 = Math.abs(hash1).toString(16).padStart(8, '0');
-  const hex2 = Math.abs(hash2).toString(16).padStart(8, '0');
-  return (hex1 + hex2).slice(0, 16);
-}
 
 class WebAnalyticsService implements AnalyticsService {
   constructor(private analytics: Analytics | null) {}
@@ -351,10 +328,10 @@ export class WebFirebaseService implements FirebaseService {
       }
 
       // Initialize app (avoid duplicate initialization)
+      // Exclude vapidKey since it's not a Firebase app config property
+      const { vapidKey: _, ...firebaseAppConfig } = this.config;
       this.app =
-        getApps().length === 0
-          ? initializeApp(this.config as unknown as Record<string, unknown>)
-          : getApp();
+        getApps().length === 0 ? initializeApp(firebaseAppConfig) : getApp();
       this.configured = true;
     } catch (error) {
       console.error('Error initializing Firebase:', error);
