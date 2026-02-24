@@ -16,7 +16,7 @@ import {
 export class WebNetworkClient implements NetworkClient {
   private defaultTimeout: number;
 
-  constructor(defaultTimeout: number = 10000) {
+  constructor(defaultTimeout: number = 30000) {
     this.defaultTimeout = defaultTimeout;
   }
 
