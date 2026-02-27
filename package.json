@@ -1,6 +1,6 @@
 {
   "name": "@sudobility/di",
-  "version": "1.5.42",
+  "version": "1.5.43",
   "description": "Platform-agnostic dependency injection interfaces for React and React Native projects with platform-specific implementations",
   "type": "module",
   "main": "dist/web/index.js",
@@ -113,7 +113,7 @@
     "@react-native-firebase/app": "^23.8.3",
     "@react-native-firebase/messaging": "^23.8.3",
     "@react-native-firebase/remote-config": "^23.8.3",
-    "@sudobility/types": "^1.9.54",
+    "@sudobility/types": "^1.9.55",
     "@types/node": "^24.5.2",
     "@types/react": "^19.2.2",
     "@typescript-eslint/eslint-plugin": "^8.44.1",
@@ -136,7 +136,7 @@
     "@react-native-firebase/app": ">=18.0.0",
     "@react-native-firebase/messaging": ">=18.0.0",
     "@react-native-firebase/remote-config": ">=18.0.0",
-    "@sudobility/types": "^1.9.54",
+    "@sudobility/types": "^1.9.55",
     "firebase": ">=11.0.0",
     "react": ">=18.0.0",
     "react-native": ">=0.70.0"
