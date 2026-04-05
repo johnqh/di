@@ -27,11 +27,6 @@ declare module 'react-native' {
   export const Appearance: Appearance;
 }
 
-declare module 'react-native-config' {
-  const Config: Record<string, string | undefined>;
-  export default Config;
-}
-
 declare module '@react-native-async-storage/async-storage' {
   interface AsyncStorageStatic {
     setItem(key: string, value: string): Promise<void>;

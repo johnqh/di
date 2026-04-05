@@ -16,10 +16,10 @@
  *   }
  * }
  *
- * // React Native implementation using react-native-config
+ * // React Native implementation using process.env
  * class RNEnvProvider implements EnvProvider {
  *   get(key: string): Optional<string> {
- *     return Config[key];
+ *     return process.env[key];
  *   }
  * }
  * ```
