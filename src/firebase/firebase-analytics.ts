@@ -59,7 +59,8 @@ export class FirebaseAnalyticsService {
    * Track a page view (web) or screen view (RN)
    */
   trackPageView(pagePath: string, pageTitle?: string): void {
-    this.trackEvent('page_view', {
+    const sanitized = pagePath.replace(/\//g, '_').replace(/^_+|_+$/g, '');
+    this.trackEvent(`page_view_${sanitized}`, {
       page_path: pagePath,
       page_title: pageTitle,
     });
@@ -82,7 +83,7 @@ export class FirebaseAnalyticsService {
    * Track a button click
    */
   trackButtonClick(buttonName: string, params?: AnalyticsEventParams): void {
-    this.trackEvent('button_click', {
+    this.trackEvent(`button_click_${buttonName}`, {
       button_name: buttonName,
       ...params,
     });
@@ -107,7 +108,7 @@ export class FirebaseAnalyticsService {
    * Track an error
    */
   trackError(errorMessage: string, errorCode?: string): void {
-    this.trackEvent('error_occurred', {
+    this.trackEvent(`error_occurred_${errorCode ?? 'unknown'}`, {
       error_message: errorMessage,
       error_code: errorCode,
     });
