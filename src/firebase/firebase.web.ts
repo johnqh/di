@@ -11,6 +11,7 @@ import {
   setUserProperties,
   setUserId,
 } from 'firebase/analytics';
+import { setConsent } from '@firebase/analytics';
 import {
   getRemoteConfig,
   RemoteConfig,
@@ -349,6 +350,12 @@ export class WebFirebaseService implements FirebaseService {
     }
 
     try {
+      // Deny analytics cookie storage so GA4 operates in cookieless mode.
+      // Events are still sent but no _ga or _gid cookies are set.
+      setConsent({
+        analytics_storage: 'denied',
+        ad_storage: 'denied',
+      });
       return getAnalytics(this.app);
     } catch (error) {
       console.error('Error initializing Analytics:', error);
