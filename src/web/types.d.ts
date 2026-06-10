@@ -89,3 +89,11 @@ declare module 'firebase/messaging' {
   export function deleteToken(messaging: Messaging): Promise<boolean>;
   export function isSupported(): Promise<boolean>;
 }
+
+/**
+ * Google Tag Manager / gtag.js dataLayer
+ * Used for Google Consent Mode v2 defaults
+ */
+interface Window {
+  dataLayer?: unknown[];
+}
