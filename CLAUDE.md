@@ -1,5 +1,10 @@
 # di - AI Development Guide
 
+> **Git policy — never auto-commit or auto-push.** Leave your work in the working tree.
+> Run `git commit`, `git push`, `gh pr create`, or `scripts/push_all.sh` **only when the user
+> explicitly asks in that turn**. Approval for an earlier change does not carry forward, and
+> finishing a task is not permission to commit it.
+
 ## Overview
 
 `@sudobility/di` is a TypeScript library that provides platform-agnostic dependency injection interfaces, abstract types, and platform-specific implementations for React (web) and React Native projects. It enables clean separation of concerns through interface-based contracts, with concrete implementations for web (browser APIs) and React Native (native modules), plus a unified Firebase integration layer. The library also ships mock implementations for testing and async utility functions.
@@ -355,3 +360,7 @@ If a new native module dependency is needed, add `declare module` stubs in:
 | `@vitest/coverage-v8` | ^3.2.4 (coverage) |
 | `eslint` | ^9.36.0 |
 | `prettier` | ^3.6.2 |
+
+## Git Workflow
+
+- Do not use feature branches for code changes. Always stay on the current branch.
