@@ -1,6 +1,6 @@
 {
   "name": "@sudobility/di",
-  "version": "1.5.62",
+  "version": "1.5.63",
   "description": "Platform-agnostic dependency injection interfaces for React and React Native projects with platform-specific implementations",
   "type": "module",
   "main": "dist/web/index.js",
@@ -9,77 +9,95 @@
   "exports": {
     ".": {
       "react-native": {
+        "types": "./dist/rn/index.d.ts",
         "import": "./dist/rn/index.js",
-        "types": "./dist/rn/index.d.ts"
+        "default": "./dist/rn/index.js"
       },
       "default": {
+        "types": "./dist/web/index.d.ts",
         "import": "./dist/web/index.js",
-        "types": "./dist/web/index.d.ts"
+        "default": "./dist/web/index.js"
       }
     },
     "./interfaces": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "default": "./dist/index.js"
     },
     "./mocks": {
+      "types": "./dist/mocks/index.d.ts",
       "import": "./dist/mocks/index.js",
-      "types": "./dist/mocks/index.d.ts"
+      "default": "./dist/mocks/index.js"
     },
     "./web": {
+      "types": "./dist/web/index.d.ts",
       "import": "./dist/web/index.js",
-      "types": "./dist/web/index.d.ts"
+      "default": "./dist/web/index.js"
     },
     "./rn": {
+      "types": "./dist/rn/index.d.ts",
       "import": "./dist/rn/index.js",
-      "types": "./dist/rn/index.d.ts"
+      "default": "./dist/rn/index.js"
     },
     "./analytics": {
+      "types": "./dist/analytics/analytics.d.ts",
       "import": "./dist/analytics/analytics.js",
-      "types": "./dist/analytics/analytics.d.ts"
+      "default": "./dist/analytics/analytics.js"
     },
     "./env": {
+      "types": "./dist/env.d.ts",
       "import": "./dist/env.js",
-      "types": "./dist/env.d.ts"
+      "default": "./dist/env.js"
     },
     "./logging": {
+      "types": "./dist/logging/index.d.ts",
       "import": "./dist/logging/index.js",
-      "types": "./dist/logging/index.d.ts"
+      "default": "./dist/logging/index.js"
     },
     "./navigation": {
+      "types": "./dist/navigation/navigation.d.ts",
       "import": "./dist/navigation/navigation.js",
-      "types": "./dist/navigation/navigation.d.ts"
+      "default": "./dist/navigation/navigation.js"
     },
     "./network": {
+      "types": "./dist/network/index.d.ts",
       "import": "./dist/network/index.js",
-      "types": "./dist/network/index.d.ts"
+      "default": "./dist/network/index.js"
     },
     "./notification": {
+      "types": "./dist/notification/notification.d.ts",
       "import": "./dist/notification/notification.js",
-      "types": "./dist/notification/notification.d.ts"
+      "default": "./dist/notification/notification.js"
     },
     "./storage": {
+      "types": "./dist/storage/storage.d.ts",
       "import": "./dist/storage/storage.js",
-      "types": "./dist/storage/storage.d.ts"
+      "default": "./dist/storage/storage.js"
     },
     "./types": {
+      "types": "./dist/types.d.ts",
       "import": "./dist/types.js",
-      "types": "./dist/types.d.ts"
+      "default": "./dist/types.js"
     },
     "./hooks": {
+      "types": "./dist/hooks/index.d.ts",
       "import": "./dist/hooks/index.js",
-      "types": "./dist/hooks/index.d.ts"
+      "default": "./dist/hooks/index.js"
     },
     "./utils": {
+      "types": "./dist/utils/index.d.ts",
       "import": "./dist/utils/index.js",
-      "types": "./dist/utils/index.d.ts"
+      "default": "./dist/utils/index.js"
     },
     "./info": {
+      "types": "./dist/info/index.d.ts",
       "import": "./dist/info/index.js",
-      "types": "./dist/info/index.d.ts"
+      "default": "./dist/info/index.js"
     },
     "./firebase": {
+      "types": "./dist/firebase/index.d.ts",
       "import": "./dist/firebase/index.js",
-      "types": "./dist/firebase/index.d.ts"
+      "default": "./dist/firebase/index.js"
     }
   },
   "files": [
