@@ -7,10 +7,8 @@ const REQUIRED = [
   'getFirebaseProxyOrigin',
   'isFirebaseProxyActive',
   'firebaseProxyReady',
-  'forceFirebaseProxy',
   'disableFirebaseProxy',
   'rewriteFirebaseProxyUrl',
-  'isFirebaseReachable',
 ] as const;
 
 describe('di web entry', () => {

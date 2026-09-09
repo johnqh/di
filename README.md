@@ -285,31 +285,40 @@ mainland China. `di` can route that traffic through a reverse proxy
 (see the `firebase-china-proxy` project).
 
 The library holds no default and reads no environment variable. The app
-supplies the origin:
+supplies the origin, once, at startup — before `initializeApp()`:
 
 ```ts
 import { setFirebaseProxy } from '@sudobility/di';
 
 // web
-setFirebaseProxy(import.meta.env.VITE_FIREBASE_PROXY_ORIGIN);
+setFirebaseProxy(import.meta.env.VITE_FIREBASE_PROXY);
 // react native
-setFirebaseProxy(process.env.EXPO_PUBLIC_FIREBASE_PROXY_ORIGIN);
+setFirebaseProxy(process.env.EXPO_PUBLIC_FIREBASE_PROXY);
 ```
 
-Call it once, as early as possible in the entry module, before
-`initializeApp()`. A blank value means standard Firebase — no routing, and no
-reachability probe.
+**Not set** — Firebase is used directly. Nothing is patched, no probe runs.
 
-With an origin set, routing is decided automatically per session: a cached
-verdict (24h) applies immediately, a mainland-China timezone pre-enables
-routing, and a probe against `googleapis.com/generate_204` then confirms or
-corrects it. Await `firebaseProxyReady()` if you need the settled decision.
+**Set** — `di` decides whether this device actually needs the proxy: a cached
+verdict (24h) applies instantly, a mainland-China timezone pre-enables routing
+so early requests are not lost, and a probe against Google then confirms or
+corrects it.
+
+Consumers never ask "am I in China?" — they ask `di`:
+
+```ts
+getFirebaseProxyOrigin(); // the origin while routing, else null
+isFirebaseProxyActive();  // same answer as a boolean
+await firebaseProxyReady(); // resolves once detection settles
+```
+
+`null` means "use Firebase directly", whether because nothing was configured
+or because Google turned out to be reachable. Callers do not need to know
+which, and must not re-implement the distinction.
 
 **React Native limitation:** the proxy is a JavaScript `fetch` wrapper, so it
 covers the Firebase **JS** SDK only. `@react-native-firebase` native modules
 do not route through JS `fetch` and will still reach Google directly. RN apps
 using the native SDKs are not fully covered by this mechanism.
-
 
 ## License
 

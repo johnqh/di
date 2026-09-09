@@ -38,12 +38,7 @@ export {
   getFirebaseProxyOrigin,
   isFirebaseProxyActive,
   firebaseProxyReady,
-  forceFirebaseProxy,
   disableFirebaseProxy,
-  installFirebaseProxy,
   rewriteFirebaseProxyUrl,
-  isFirebaseReachable,
-  isLikelyChinaRegion,
-  isTestEnvironment,
   resetFirebaseProxyForTests,
 } from './firebase-proxy.js';

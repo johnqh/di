@@ -58,12 +58,8 @@ export {
   getFirebaseProxyOrigin,
   isFirebaseProxyActive,
   firebaseProxyReady,
-  forceFirebaseProxy,
   disableFirebaseProxy,
-  installFirebaseProxy,
   rewriteFirebaseProxyUrl,
-  isFirebaseReachable,
-  isLikelyChinaRegion,
 } from '../firebase/firebase-proxy.js';
 
 // Firebase - interfaces and types

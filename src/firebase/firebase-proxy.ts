@@ -14,15 +14,27 @@
  *   /gtm             -> www.googletagmanager.com              (gtag.js)
  *   /ga              -> region1.google-analytics.com          (Analytics collect)
  *
- * CONFIGURATION: this module holds no default origin and reads no environment
- * variable. The app calls setFirebaseProxy(origin) once at startup with its
- * own configured value; a blank value means standard Firebase.
+ * CONFIGURATION — the app's whole job is one line at startup:
  *
- * Once an origin is set, detection decides whether to route:
- *   1. Cached probe result (localStorage, 24h TTL) applies instantly.
- *   2. China timezone heuristic pre-enables the proxy instantly (no cache yet).
+ *   setFirebaseProxy(import.meta.env.VITE_FIREBASE_PROXY);
+ *
+ * Not set -> Firebase is used directly. Nothing is patched, no probe runs.
+ * Set     -> this module decides whether the device actually needs the proxy.
+ *
+ * DETECTION lives here, not in consumers. Callers never ask "am I in China?" —
+ * they ask getFirebaseProxyOrigin(), which returns the origin only while
+ * traffic is genuinely being routed, and null otherwise (unset, or reachable
+ * Google). A caller that gets null behaves exactly as if no proxy existed.
+ *
+ * Detection order, once an origin is configured:
+ *   1. A fresh cached verdict (localStorage, 24h TTL) applies instantly.
+ *   2. On a cache miss, a mainland-China timezone pre-enables routing so the
+ *      first requests are not lost while the probe is in flight.
  *   3. A reachability probe against Google confirms or corrects the decision
- *      and refreshes the cache.
+ *      and refreshes the cache — including turning routing back off once
+ *      Google is directly reachable again.
+ *
+ * Await firebaseProxyReady() for the settled verdict.
  *
  * JS-level only: on React Native this covers fetch-based Firebase usage, but
  * traffic from @react-native-firebase native SDKs cannot be redirected here.
@@ -40,9 +52,9 @@ const HOST_TO_PREFIX: Record<string, string> = {
 };
 
 /**
- * Probe URL: a Google host that is blocked alongside the Firebase endpoints
- * but deliberately NOT in HOST_TO_PREFIX, so the probe always measures the
- * direct route even while the proxy is active.
+ * Probe URL: a Google host blocked alongside the Firebase endpoints but
+ * deliberately NOT in HOST_TO_PREFIX, so the probe always measures the direct
+ * route even while the proxy is active.
  */
 const PROBE_URL = 'https://www.googleapis.com/generate_204';
 
@@ -58,44 +70,12 @@ const CHINA_TIMEZONES = new Set([
 const CACHE_KEY = 'sudobility.firebase-proxy.blocked';
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 
-declare global {
-  /**
-   * Testing escape hatch: set to `true` (forces the origin passed to
-   * setFirebaseProxy) or to a proxy origin string, to route through the proxy
-   * even where Google is directly reachable.
-   */
-  var __SUDOBILITY_FIREBASE_PROXY_FORCED: boolean | string | undefined;
-}
-
-let activeProxyOrigin: string | null = null;
-/** Origin supplied by the app via setFirebaseProxy(); null when unset. */
+/** Origin the app configured, or null when the app set nothing. */
 let configuredOrigin: string | null = null;
+/** Origin traffic is actually routed through right now, or null. */
+let activeProxyOrigin: string | null = null;
 let wrapperInstalled = false;
-let autoConfigurePromise: Promise<boolean> | null = null;
-let forcedByCaller = false;
-
-/**
- * Proxy origin demanded via the global escape hatch, or null.
- *
- * `= true` means "force the origin the app configured"; with no configured
- * origin there is nothing to force, so it yields null. Setting the global to
- * an origin string forces that origin regardless of configuration.
- */
-function forcedOriginFromGlobal(): string | null {
-  const v = globalThis.__SUDOBILITY_FIREBASE_PROXY_FORCED;
-  if (v === true) {
-    return configuredOrigin;
-  }
-  if (typeof v === 'string' && v) {
-    return v;
-  }
-  return null;
-}
-
-/** True while any force (runtime call or global) is in effect. */
-function isProxyForced(): boolean {
-  return forcedByCaller || forcedOriginFromGlobal() !== null;
-}
+let detectionPromise: Promise<boolean> | null = null;
 
 /**
  * Rewrite a URL pointing at a known Firebase/Google host to the equivalent
@@ -132,11 +112,11 @@ function rewriteActive(rawUrl: string): string {
 
 /**
  * Patch globalThis.fetch and navigator.sendBeacon once. The wrapper is a
- * pass-through while no proxy origin is active, so it is safe to install
- * eagerly and toggle routing on/off afterwards.
+ * pass-through while no proxy origin is active, so it is safe to leave
+ * installed and toggle routing on/off afterwards.
  */
 function ensureWrapperInstalled(): void {
-  if (wrapperInstalled) {
+  if (wrapperInstalled || typeof fetch === 'undefined') {
     return;
   }
   wrapperInstalled = true;
@@ -165,88 +145,21 @@ function ensureWrapperInstalled(): void {
   }
 }
 
-/**
- * Route Firebase SDK traffic through the given reverse proxy. Calling it with
- * the origin already active is a no-op; calling it with a different origin
- * re-points routing.
- *
- * Prefer setFirebaseProxy(), which also runs reachability detection. Call
- * this directly only to route unconditionally.
- *
- * @param proxyOrigin - Proxy origin; required, there is no default
- */
-export function installFirebaseProxy(proxyOrigin: string): void {
-  if (activeProxyOrigin === proxyOrigin) {
-    return;
-  }
-  activeProxyOrigin = proxyOrigin;
-  ensureWrapperInstalled();
-}
-
-/**
- * Force the proxy ON for testing, even where Google is directly reachable.
- * Unlike installFirebaseProxy() this overrides an already-active origin and
- * survives autoConfigureFirebaseProxy()'s reachability probe (which would
- * otherwise switch the proxy back off). Undo with disableFirebaseProxy().
- *
- * Import-time alternative: set
- * globalThis.__SUDOBILITY_FIREBASE_PROXY_FORCED = true (or a proxy origin
- * string) before importing the library.
- *
- * @param proxyOrigin - Proxy origin; required, there is no default
- */
-export function forceFirebaseProxy(proxyOrigin: string): void {
-  forcedByCaller = true;
-  activeProxyOrigin = proxyOrigin;
-  ensureWrapperInstalled();
-}
-
-/**
- * Stop routing through the proxy. The fetch wrapper stays installed as a
- * transparent pass-through; a later installFirebaseProxy() re-enables it.
- * Also clears a forceFirebaseProxy() force (an explicit call wins); a force
- * set via the __SUDOBILITY_FIREBASE_PROXY_FORCED global must be unset there.
- */
-export function disableFirebaseProxy(): void {
-  forcedByCaller = false;
-  activeProxyOrigin = null;
-  configuredOrigin = null;
-}
-
-/**
- * Check whether the proxy is active.
- *
- * @returns The active proxy origin, or null when traffic goes direct
- */
-export function getFirebaseProxyOrigin(): string | null {
-  return configuredOrigin;
-}
-
-/**
- * Heuristic: is this device likely inside mainland China? Based on the
- * device timezone; instant and offline, used to pre-enable the proxy before
- * the network probe completes on first launch.
- */
-export function isLikelyChinaRegion(): boolean {
+/** Instant offline heuristic: is the device's timezone mainland China? */
+function isLikelyChinaRegion(): boolean {
   try {
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    return timeZone ? CHINA_TIMEZONES.has(timeZone) : false;
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    return !!tz && CHINA_TIMEZONES.has(tz);
   } catch {
     return false;
   }
 }
 
 /**
- * Probe whether Google's endpoints are directly reachable. Resolves true if
- * the network path works (an opaque no-cors response still counts), false on
- * timeout or network error — i.e. false means "behind the block".
- *
- * Always measures the direct route: the probe host is intentionally not one
- * the proxy shim rewrites.
- *
- * @param timeoutMs - How long to wait before assuming blocked (default 3000)
+ * Probe whether Google is directly reachable. True means the network path
+ * works (an opaque no-cors response counts); false means blocked.
  */
-export async function isFirebaseReachable(timeoutMs = 3000): Promise<boolean> {
+async function isGoogleReachable(timeoutMs = 3000): Promise<boolean> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
@@ -263,7 +176,7 @@ export async function isFirebaseReachable(timeoutMs = 3000): Promise<boolean> {
   }
 }
 
-/** Read the cached probe verdict; null when absent, stale, or unavailable. */
+/** Read the cached verdict; null when absent, stale, or unavailable. */
 function readCachedBlocked(): boolean | null {
   try {
     const raw = globalThis.localStorage?.getItem(CACHE_KEY);
@@ -283,7 +196,7 @@ function readCachedBlocked(): boolean | null {
   }
 }
 
-/** Persist the probe verdict; silently no-op where storage is unavailable. */
+/** Persist the verdict; silently no-op where storage is unavailable. */
 function writeCachedBlocked(blocked: boolean): void {
   try {
     globalThis.localStorage?.setItem(
@@ -295,120 +208,59 @@ function writeCachedBlocked(blocked: boolean): void {
   }
 }
 
-/**
- * Detect test runners (vitest, jest, NODE_ENV=test) so callers can avoid
- * firing real network probes inside a test suite. Tests exercising the proxy
- * call setFirebaseProxy() explicitly with stubbed fetch.
- */
-export function isTestEnvironment(): boolean {
-  const env = (
-    globalThis as {
-      process?: { env?: Record<string, string | undefined> };
-    }
-  ).process?.env;
-  return !!(
-    env &&
-    (env.VITEST || env.JEST_WORKER_ID || env.NODE_ENV === 'test')
-  );
-}
-
-export interface AutoConfigureFirebaseProxyOptions {
-  /** Proxy origin to use when blocked. Required; no default exists. */
-  proxyOrigin?: string;
-  /** Probe timeout in ms (default 3000). */
-  probeTimeoutMs?: number;
-}
-
-/**
- * Decide automatically whether Firebase traffic needs the reverse proxy and
- * configure the shim accordingly. Memoized: concurrent and repeat calls share
- * one detection run per session.
- *
- * Strategy:
- *   1. A fresh cached verdict (24h) applies immediately.
- *   2. Otherwise, a mainland-China timezone pre-enables the proxy so first
- *      requests aren't lost while probing.
- *   3. The reachability probe then confirms or corrects the decision and
- *      refreshes the cache — including turning the proxy back off when
- *      Google became directly reachable again.
- *
- * Driven by setFirebaseProxy(); await firebaseProxyReady() if you want to
- * block until the routing decision is final.
- *
- * @returns true when traffic is routed through the proxy
- */
-export function autoConfigureFirebaseProxy(
-  options: AutoConfigureFirebaseProxyOptions = {}
-): Promise<boolean> {
-  autoConfigurePromise ??= runAutoConfigure(options);
-  return autoConfigurePromise;
-}
-
-async function runAutoConfigure(
-  options: AutoConfigureFirebaseProxyOptions
-): Promise<boolean> {
+async function runDetection(origin: string): Promise<boolean> {
   if (typeof fetch === 'undefined') {
     return false; // no network layer to patch (SSR without fetch)
   }
-  const proxyOrigin = options.proxyOrigin;
-  if (!proxyOrigin) {
-    return false;
-  }
 
-  // A force (testing escape hatch) short-circuits detection entirely: the
-  // proxy goes on, no probe runs, and nothing here will turn it back off.
-  const forcedOrigin = forcedOriginFromGlobal();
-  if (forcedOrigin || forcedByCaller) {
-    forceFirebaseProxy(forcedOrigin ?? proxyOrigin);
-    return true;
-  }
-
-  // Fast path: apply the cached verdict (or the timezone heuristic on a
-  // cache miss) immediately, so a blocked device doesn't leak its first
-  // requests to the direct route while the probe is in flight.
+  // Fast path: apply the cached verdict, or the timezone heuristic on a cache
+  // miss, so a blocked device does not leak its first requests to the direct
+  // route while the probe is in flight.
   const cachedBlocked = readCachedBlocked();
   if (
     cachedBlocked === true ||
     (cachedBlocked === null && isLikelyChinaRegion())
   ) {
-    installFirebaseProxy(proxyOrigin);
+    activeProxyOrigin = origin;
+    ensureWrapperInstalled();
   }
 
-  const reachable = await isFirebaseReachable(options.probeTimeoutMs);
+  const reachable = await isGoogleReachable();
   writeCachedBlocked(!reachable);
 
-  // A force applied while the probe was in flight also wins over its verdict.
-  if (isProxyForced()) {
-    return true;
+  // The app may have cleared the configuration while the probe was in flight.
+  if (configuredOrigin !== origin) {
+    return activeProxyOrigin !== null;
   }
+
   if (reachable) {
-    disableFirebaseProxy();
+    activeProxyOrigin = null;
   } else {
-    installFirebaseProxy(proxyOrigin);
+    activeProxyOrigin = origin;
+    ensureWrapperInstalled();
   }
   return !reachable;
 }
 
 /**
- * Configure the Firebase reverse proxy origin. The library never reads the
- * environment — the app passes its own configured value in.
+ * Configure the Firebase reverse proxy. The library never reads the
+ * environment — the app passes its own configured value in, once, at startup
+ * and before Firebase is initialized.
  *
- * A blank, null or undefined origin means standard Firebase: routing is
- * uninstalled, and no reachability probe or timezone check runs.
+ * Passing a blank value means "no proxy": nothing is patched and no probe
+ * runs. Passing an origin hands this module permission to use it *if* the
+ * device turns out to need it; detection decides.
  *
- * A non-blank origin starts memoized detection: a fresh cached verdict
- * applies immediately, a mainland-China timezone pre-enables routing, and
- * the reachability probe then confirms or corrects the decision.
- *
- * @param origin - Proxy origin, e.g. https://firebaseproxy.example.com
+ * @param origin - Proxy origin, e.g. https://firebaseproxy.example.com.
+ *   Blank, null or undefined means use Firebase directly.
  */
 export function setFirebaseProxy(origin?: string | null): void {
   const trimmed = typeof origin === 'string' ? origin.trim() : '';
 
   if (!trimmed) {
     configuredOrigin = null;
-    autoConfigurePromise = null;
-    disableFirebaseProxy();
+    activeProxyOrigin = null;
+    detectionPromise = null;
     return;
   }
 
@@ -417,31 +269,55 @@ export function setFirebaseProxy(origin?: string | null): void {
   }
 
   configuredOrigin = trimmed;
-  autoConfigurePromise = null;
-  void autoConfigureFirebaseProxy({ proxyOrigin: trimmed });
+  activeProxyOrigin = null;
+  detectionPromise = runDetection(trimmed);
+  void detectionPromise;
 }
 
 /**
- * Resolves to whether Firebase traffic is being routed through the proxy.
- * With no origin configured it resolves false immediately without probing.
- * Repeat callers share the single in-flight detection run.
+ * The proxy origin traffic is being routed through, or null.
+ *
+ * Null means "use Firebase directly" — either the app configured nothing, or
+ * detection found Google directly reachable. Callers do not need to know which.
  */
-export function firebaseProxyReady(): Promise<boolean> {
-  if (!configuredOrigin) {
-    return Promise.resolve(false);
-  }
-  return autoConfigureFirebaseProxy({ proxyOrigin: configuredOrigin });
+export function getFirebaseProxyOrigin(): string | null {
+  return activeProxyOrigin;
 }
 
-/** Synchronous counterpart to firebaseProxyReady(). */
+/** Whether Firebase traffic is currently routed through the proxy. */
 export function isFirebaseProxyActive(): boolean {
   return activeProxyOrigin !== null;
 }
 
-/** Reset all module state. Test-only. */
+/**
+ * Resolves once detection has settled, to whether traffic is being routed.
+ * Resolves false immediately when no origin is configured. Repeat callers
+ * share the single in-flight detection run.
+ */
+export function firebaseProxyReady(): Promise<boolean> {
+  return detectionPromise ?? Promise.resolve(false);
+}
+
+/**
+ * Stop routing through the proxy and forget the configuration. The fetch
+ * wrapper stays installed as a transparent pass-through.
+ */
+export function disableFirebaseProxy(): void {
+  configuredOrigin = null;
+  activeProxyOrigin = null;
+  detectionPromise = null;
+}
+
+/**
+ * Reset module state. Test-only.
+ *
+ * Also clears the "wrapper already installed" flag so a suite that stubs
+ * globalThis.fetch per test gets the wrapper re-applied to each fresh stub.
+ * Outside tests the flag exists precisely to prevent double-wrapping.
+ */
 export function resetFirebaseProxyForTests(): void {
   configuredOrigin = null;
   activeProxyOrigin = null;
-  autoConfigurePromise = null;
-  forcedByCaller = false;
+  detectionPromise = null;
+  wrapperInstalled = false;
 }
