@@ -288,6 +288,8 @@ All platform-specific packages (react-native, AsyncStorage, Firebase, Notifee, N
 4. **Strict TypeScript** -- Full strict mode with `exactOptionalPropertyTypes`, `noUncheckedIndexedAccess`, `noImplicitOverride`
 5. **ESM only** -- No CommonJS output
 6. **95% test coverage threshold** -- Enforced globally on statements, branches, functions, and lines
+7. **No defaults, no env reads** -- `di` must never embed a proxy origin or read `process.env`/`import.meta.env`. Configuration arrives as a function argument (e.g. `setFirebaseProxy(origin)`), and a blank value means the feature is off
+8. **Firebase proxy is JS-only** -- `setFirebaseProxy()` wraps `globalThis.fetch` and `navigator.sendBeacon`, covering the Firebase JS SDK on both platforms but NOT `@react-native-firebase` native modules. Never claim full RN coverage
 
 ## Common Tasks
 

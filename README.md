@@ -278,6 +278,39 @@ const mockNetwork = new MockNetworkClient();
 // Configure mock responses...
 ```
 
+## Firebase China proxy
+
+Firebase Auth, Remote Config, Installations and Analytics are unreachable from
+mainland China. `di` can route that traffic through a reverse proxy
+(see the `firebase-china-proxy` project).
+
+The library holds no default and reads no environment variable. The app
+supplies the origin:
+
+```ts
+import { setFirebaseProxy } from '@sudobility/di';
+
+// web
+setFirebaseProxy(import.meta.env.VITE_FIREBASE_PROXY_ORIGIN);
+// react native
+setFirebaseProxy(process.env.EXPO_PUBLIC_FIREBASE_PROXY_ORIGIN);
+```
+
+Call it once, as early as possible in the entry module, before
+`initializeApp()`. A blank value means standard Firebase — no routing, and no
+reachability probe.
+
+With an origin set, routing is decided automatically per session: a cached
+verdict (24h) applies immediately, a mainland-China timezone pre-enables
+routing, and a probe against `googleapis.com/generate_204` then confirms or
+corrects it. Await `firebaseProxyReady()` if you need the settled decision.
+
+**React Native limitation:** the proxy is a JavaScript `fetch` wrapper, so it
+covers the Firebase **JS** SDK only. `@react-native-firebase` native modules
+do not route through JS `fetch` and will still reach Google directly. RN apps
+using the native SDKs are not fully covered by this mechanism.
+
+
 ## License
 
 MIT

@@ -31,3 +31,19 @@ export {
   resetAnalyticsService,
   type AnalyticsEventParams,
 } from './firebase-analytics.js';
+
+// Export the China reverse-proxy configuration
+export {
+  setFirebaseProxy,
+  getFirebaseProxyOrigin,
+  isFirebaseProxyActive,
+  firebaseProxyReady,
+  forceFirebaseProxy,
+  disableFirebaseProxy,
+  installFirebaseProxy,
+  rewriteFirebaseProxyUrl,
+  isFirebaseReachable,
+  isLikelyChinaRegion,
+  isTestEnvironment,
+  resetFirebaseProxyForTests,
+} from './firebase-proxy.js';
