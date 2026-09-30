@@ -39,7 +39,10 @@ import {
   FCMMessage,
   FCMPermissionState,
 } from './firebase.interface.js';
-import { hashUserIdForAnalytics } from './firebase-utils.js';
+import {
+  hashUserIdForAnalytics,
+  toAnalyticsEventName,
+} from './firebase-utils.js';
 
 // Default configuration
 const DEFAULT_OPTIONS: FirebaseInitOptions = {
@@ -55,7 +58,7 @@ class WebAnalyticsService implements AnalyticsService {
   logEvent(eventName: string, parameters?: Record<string, unknown>): void {
     if (this.analytics && this.isSupported()) {
       try {
-        logEvent(this.analytics, eventName, parameters);
+        logEvent(this.analytics, toAnalyticsEventName(eventName), parameters);
       } catch (error) {
         console.error('Error logging analytics event:', error);
       }
@@ -309,21 +312,27 @@ export class WebFirebaseService implements FirebaseService {
 
   private initializeFirebase(): void {
     try {
-      // Validate configuration
-      const requiredFields = [
-        'apiKey',
-        'authDomain',
-        'projectId',
-        'storageBucket',
-        'messagingSenderId',
-        'appId',
-      ];
+      // Validate configuration. Only what initializeApp and Analytics need:
+      // authDomain belongs to Auth and storageBucket to Storage, and neither
+      // is initialized here. Requiring them turned Analytics off for apps
+      // that do not use Auth.
+      const requiredFields = ['apiKey', 'projectId', 'appId'] as const;
       const missingFields = requiredFields.filter(
-        (field) => !this.config[field as keyof FirebaseConfig]
+        (field) => !this.config[field]
       );
+      if (this.options.enableMessaging && !this.config.messagingSenderId) {
+        // Messaging alone needs the sender id; keep Analytics running.
+        this.options = { ...this.options, enableMessaging: false };
+      }
 
       if (missingFields.length > 0) {
         this.configured = false;
+        // Previously silent: a typo in one env var disabled Analytics with
+        // no trace. Say which fields are missing.
+        console.warn(
+          `[di] Firebase is not configured (missing ${missingFields.join(', ')}); ` +
+            'analytics, remote config and messaging are disabled.'
+        );
         return;
       }
 

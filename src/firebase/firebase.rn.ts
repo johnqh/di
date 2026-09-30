@@ -13,7 +13,10 @@ import type {
   FCMMessage,
   FCMPermissionState,
 } from './firebase.interface.js';
-import { hashUserIdForAnalytics } from './firebase-utils.js';
+import {
+  hashUserIdForAnalytics,
+  toAnalyticsEventName,
+} from './firebase-utils.js';
 
 // Lazy load Firebase modules to avoid crashes if native modules are not linked
 type FirebaseAnalyticsModule =
@@ -75,7 +78,10 @@ class RNAnalyticsService implements AnalyticsService {
     if (!analytics) return;
 
     analytics
-      .logEvent(eventName, parameters as Record<string, string | number>)
+      .logEvent(
+        toAnalyticsEventName(eventName),
+        parameters as Record<string, string | number>
+      )
       .catch(() => {
         // Silently handle analytics errors
       });

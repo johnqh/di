@@ -120,3 +120,35 @@ describe('WebFirebaseService consent mode', () => {
     expect(window.dataLayer!.length).toBeGreaterThan(1);
   });
 });
+
+describe('WebFirebaseService required config', () => {
+  it('initializes analytics without authDomain or storageBucket', async () => {
+    const { WebFirebaseService } = await import('../../src/firebase/firebase.web');
+    const { authDomain: _a, storageBucket: _s, ...analyticsOnly } = TEST_CONFIG;
+    const service = new WebFirebaseService(analyticsOnly as typeof TEST_CONFIG);
+    expect(service.isConfigured()).toBe(true);
+    expect(service.analytics.isSupported()).toBe(true);
+  });
+
+  it('warns with the missing fields instead of disabling silently', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const { WebFirebaseService } = await import('../../src/firebase/firebase.web');
+    const { appId: _app, ...noAppId } = TEST_CONFIG;
+    const service = new WebFirebaseService(noAppId as typeof TEST_CONFIG);
+    expect(service.isConfigured()).toBe(false);
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('missing appId'));
+    warn.mockRestore();
+  });
+
+  it('logs events under a valid GA4 name', async () => {
+    const analyticsModule = await import('firebase/analytics');
+    const { WebFirebaseService } = await import('../../src/firebase/firebase.web');
+    const service = new WebFirebaseService(TEST_CONFIG);
+    service.analytics.logEvent('page_view_mcps_api.example.com');
+    expect(analyticsModule.logEvent).toHaveBeenLastCalledWith(
+      expect.anything(),
+      'page_view_mcps_api_example_com',
+      undefined
+    );
+  });
+});

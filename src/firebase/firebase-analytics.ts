@@ -4,6 +4,7 @@
  */
 
 import type { AnalyticsService } from './firebase.interface.js';
+import { toAnalyticsEventName } from './firebase-utils.js';
 
 export interface AnalyticsEventParams {
   [key: string]: unknown;
@@ -48,7 +49,7 @@ export class FirebaseAnalyticsService {
   trackEvent(eventName: string, params?: AnalyticsEventParams): void {
     const analytics = this.getAnalytics();
     if (analytics?.isSupported()) {
-      analytics.logEvent(eventName, {
+      analytics.logEvent(toAnalyticsEventName(eventName), {
         ...params,
         timestamp: Date.now(),
       });

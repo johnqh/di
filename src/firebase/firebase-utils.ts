@@ -24,3 +24,21 @@ export function hashUserIdForAnalytics(userId: string): string {
   const hex2 = Math.abs(hash2).toString(16).padStart(8, '0');
   return (hex1 + hex2).slice(0, 16);
 }
+
+/** GA4 / Firebase Analytics limit on event name length. */
+export const MAX_ANALYTICS_EVENT_NAME_LENGTH = 40;
+
+/**
+ * Make a string a valid Analytics event name: letters, digits and
+ * underscores, starting with a letter, at most 40 characters.
+ *
+ * Names built from paths or labels (`page_view_mcps_api.example.com`,
+ * `button_click_sign-in`) break these rules. GA4 on the web silently drops
+ * such events and @react-native-firebase/analytics throws. Names that are
+ * already valid come back unchanged.
+ */
+export function toAnalyticsEventName(name: string): string {
+  let out = name.replace(/[^A-Za-z0-9_]/g, '_');
+  if (!/^[A-Za-z]/.test(out)) out = `e_${out}`;
+  return out.slice(0, MAX_ANALYTICS_EVENT_NAME_LENGTH);
+}

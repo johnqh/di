@@ -21,7 +21,11 @@ export type {
 } from './firebase.interface.js';
 
 // Export shared utilities
-export { hashUserIdForAnalytics } from './firebase-utils.js';
+export {
+  hashUserIdForAnalytics,
+  toAnalyticsEventName,
+  MAX_ANALYTICS_EVENT_NAME_LENGTH,
+} from './firebase-utils.js';
 
 // Export the unified analytics wrapper
 export {
