@@ -52,6 +52,17 @@ export {
   type AnalyticsEventParams,
 } from '../firebase/firebase-analytics.js';
 
+// Firebase - GA4 Measurement Protocol analytics, for the desktops (macOS,
+// Windows), where the JS SDK's analytics cannot run
+export {
+  MeasurementProtocolAnalyticsService,
+  MEASUREMENT_PROTOCOL_CLIENT_ID_KEY,
+  MEASUREMENT_PROTOCOL_ENDPOINT,
+  MEASUREMENT_PROTOCOL_DEBUG_ENDPOINT,
+  type MeasurementProtocolConfig,
+  type MeasurementProtocolStorage,
+} from '../firebase/firebase.measurement-protocol.js';
+
 // Firebase - China reverse proxy
 export {
   setFirebaseProxy,
