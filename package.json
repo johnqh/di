@@ -1,6 +1,6 @@
 {
   "name": "@sudobility/di",
-  "version": "1.5.68",
+  "version": "1.5.69",
   "description": "Platform-agnostic dependency injection interfaces for React and React Native projects with platform-specific implementations",
   "type": "module",
   "main": "dist/web/index.js",
@@ -93,6 +93,11 @@
       "types": "./dist/info/index.d.ts",
       "import": "./dist/info/index.js",
       "default": "./dist/info/index.js"
+    },
+    "./alert": {
+      "types": "./dist/alert/index.d.ts",
+      "import": "./dist/alert/index.js",
+      "default": "./dist/alert/index.js"
     },
     "./firebase": {
       "types": "./dist/firebase/index.d.ts",

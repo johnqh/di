@@ -31,6 +31,9 @@ export * from './storage/storage.js';
 // Info interfaces
 export * from './info/index.js';
 
+// Alert interfaces
+export * from './alert/index.js';
+
 // Theme interfaces
 export * from './theme/platform-theme.js';
 
