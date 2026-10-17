@@ -27,7 +27,7 @@ src/
 │   ├── analytics.ts                 # AnalyticsClient, AnalyticsContextProvider, AnalyticsEventData
 │   └── platform-analytics.ts        # PlatformAnalytics interface
 ├── firebase/
-│   ├── firebase.interface.ts        # AnalyticsService, RemoteConfigService, FCMService, FirebaseService, FirebaseConfig, FirebaseInitOptions
+│   ├── firebase.interface.ts        # AnalyticsService, FCMService, FirebaseService, FirebaseConfig, FirebaseInitOptions
 │   ├── firebase-analytics.ts        # FirebaseAnalyticsService class (unified wrapper + singleton)
 │   ├── firebase.web.ts              # WebFirebaseService implementation
 │   ├── firebase.rn.ts               # RNFirebaseService implementation
@@ -136,10 +136,9 @@ tests/
 | Interface | Purpose |
 |---|---|
 | `AnalyticsService` | Firebase analytics: logEvent, setUserProperties, setUserId, isSupported |
-| `RemoteConfigService` | Firebase Remote Config: fetchAndActivate, getValue, getAll, isSupported |
 | `FCMService` | Firebase Cloud Messaging: requestPermission, getToken, onMessage, isSupported |
-| `FirebaseService` | Composite Firebase service (analytics + remoteConfig + messaging) |
-| `FirebaseInitOptions` | Firebase initialization flags (enableAnalytics, enableRemoteConfig, etc.) |
+| `FirebaseService` | Composite Firebase service (analytics + messaging) |
+| `FirebaseInitOptions` | Firebase initialization flags (enableAnalytics, enableMessaging, etc.) |
 
 ### Navigation (`src/navigation/`)
 | Interface | Purpose |
@@ -347,7 +346,6 @@ If a new native module dependency is needed, add `declare module` stubs in:
 | `@react-native-firebase/app` | >=18.0.0 |
 | `@react-native-firebase/analytics` | >=18.0.0 |
 | `@react-native-firebase/messaging` | >=18.0.0 |
-| `@react-native-firebase/remote-config` | >=18.0.0 |
 
 ### Optional Peers (Web)
 | Package | Version |

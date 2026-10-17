@@ -143,27 +143,6 @@ declare module '@react-native-firebase/analytics' {
   export default analytics;
 }
 
-declare module '@react-native-firebase/remote-config' {
-  interface RemoteConfigValue {
-    asBoolean(): boolean;
-    asString(): string;
-    asNumber(): number;
-    getSource(): string;
-  }
-
-  interface FirebaseRemoteConfig {
-    setConfigSettings(settings: {
-      minimumFetchIntervalMillis?: number;
-    }): Promise<void>;
-    fetchAndActivate(): Promise<boolean>;
-    getValue(key: string): RemoteConfigValue;
-    getAll(): Record<string, RemoteConfigValue>;
-  }
-
-  function remoteConfig(): FirebaseRemoteConfig;
-  export default remoteConfig;
-}
-
 declare module '@react-native-firebase/messaging' {
   interface RemoteMessage {
     messageId?: string;

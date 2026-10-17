@@ -33,7 +33,7 @@ npm install firebase
 npm install @react-native-async-storage/async-storage
 npm install @react-native-community/netinfo
 npm install @react-native-firebase/app @react-native-firebase/analytics
-npm install @react-native-firebase/remote-config @react-native-firebase/messaging
+npm install @react-native-firebase/messaging
 npm install @notifee/react-native
 ```
 
@@ -158,12 +158,6 @@ firebase.analytics.logEvent('purchase', { item: 'premium', price: 9.99 });
 firebase.analytics.setUserId('user123');
 firebase.analytics.setUserProperties({ plan: 'pro' });
 
-// Remote Config
-await firebase.remoteConfig.fetchAndActivate();
-const showFeature = firebase.remoteConfig.getValue('new_feature').asBoolean();
-const apiUrl = firebase.remoteConfig.getValue('api_url').asString();
-const maxItems = firebase.remoteConfig.getValue('max_items').asNumber();
-
 // Messaging (FCM)
 const granted = await firebase.messaging.requestPermission();
 if (granted) {
@@ -280,7 +274,7 @@ const mockNetwork = new MockNetworkClient();
 
 ## Firebase China proxy
 
-Firebase Auth, Remote Config, Installations and Analytics are unreachable from
+Firebase Auth, Installations and Analytics are unreachable from
 mainland China. `di` can route that traffic through a reverse proxy
 (see the `firebase-china-proxy` project).
 

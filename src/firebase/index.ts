@@ -7,8 +7,6 @@
 export type {
   AnalyticsEvent,
   AnalyticsService,
-  RemoteConfigValue,
-  RemoteConfigService,
   FCMNotificationPayload,
   FCMDataPayload,
   FCMMessage,

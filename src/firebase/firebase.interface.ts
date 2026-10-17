@@ -21,30 +21,6 @@ export interface AnalyticsService {
   isSupported(): boolean;
 }
 
-/** A single Remote Config value that can be read as multiple types */
-export interface RemoteConfigValue {
-  /** Read the value as a boolean */
-  asBoolean(): boolean;
-  /** Read the value as a string */
-  asString(): string;
-  /** Read the value as a number */
-  asNumber(): number;
-  /** Where this value came from: static default, developer default, or fetched remote */
-  getSource(): 'static' | 'default' | 'remote';
-}
-
-/** Service for fetching and reading Firebase Remote Config values */
-export interface RemoteConfigService {
-  /** Fetch remote values and activate them for use */
-  fetchAndActivate(): Promise<boolean>;
-  /** Get a single config value by key */
-  getValue(key: string): RemoteConfigValue;
-  /** Get all config values as a key-value map */
-  getAll(): Record<string, RemoteConfigValue>;
-  /** Whether Remote Config is available on this platform */
-  isSupported(): boolean;
-}
-
 /** Push notification payload from Firebase Cloud Messaging */
 export interface FCMNotificationPayload {
   title?: string;
@@ -98,10 +74,9 @@ export interface FCMService {
   getPermissionStatus(): FCMPermissionState;
 }
 
-/** Composite Firebase service exposing analytics, remote config, and messaging */
+/** Composite Firebase service exposing analytics and messaging */
 export interface FirebaseService {
   analytics: AnalyticsService;
-  remoteConfig: RemoteConfigService;
   messaging: FCMService;
   /** Whether the Firebase app was successfully initialized */
   isConfigured(): boolean;
@@ -125,7 +100,6 @@ export interface FirebaseConfig {
 /** Options controlling which Firebase services to enable */
 export interface FirebaseInitOptions {
   enableAnalytics?: boolean;
-  enableRemoteConfig?: boolean;
   enableMessaging?: boolean;
   enableDevelopmentMode?: boolean;
 }

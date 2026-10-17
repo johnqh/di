@@ -12,14 +12,6 @@ import {
   setUserId,
 } from 'firebase/analytics';
 import {
-  getRemoteConfig,
-  RemoteConfig,
-  fetchAndActivate,
-  getValue,
-  getAll,
-  Value,
-} from 'firebase/remote-config';
-import {
   getMessaging,
   Messaging,
   getToken,
@@ -31,11 +23,9 @@ import {
 import {
   FirebaseService,
   AnalyticsService,
-  RemoteConfigService,
   FCMService,
   FirebaseConfig,
   FirebaseInitOptions,
-  RemoteConfigValue,
   FCMMessage,
   FCMPermissionState,
 } from './firebase.interface.js';
@@ -47,7 +37,6 @@ import {
 // Default configuration
 const DEFAULT_OPTIONS: FirebaseInitOptions = {
   enableAnalytics: true,
-  enableRemoteConfig: true,
   enableMessaging: true,
   enableDevelopmentMode: false,
 };
@@ -91,83 +80,6 @@ class WebAnalyticsService implements AnalyticsService {
 
   isSupported(): boolean {
     return typeof window !== 'undefined' && this.analytics !== null;
-  }
-}
-
-class WebRemoteConfigValue implements RemoteConfigValue {
-  constructor(private value: Value) {}
-
-  asBoolean(): boolean {
-    return this.value.asBoolean();
-  }
-
-  asString(): string {
-    return this.value.asString();
-  }
-
-  asNumber(): number {
-    return this.value.asNumber();
-  }
-
-  getSource(): 'static' | 'default' | 'remote' {
-    return this.value.getSource() as 'static' | 'default' | 'remote';
-  }
-}
-
-class WebRemoteConfigService implements RemoteConfigService {
-  constructor(private remoteConfig: RemoteConfig | null) {}
-
-  async fetchAndActivate(): Promise<boolean> {
-    if (this.remoteConfig && this.isSupported()) {
-      try {
-        return await fetchAndActivate(this.remoteConfig);
-      } catch (error) {
-        console.error('Error fetching and activating remote config:', error);
-        return false;
-      }
-    }
-    return false;
-  }
-
-  getValue(key: string): RemoteConfigValue {
-    if (this.remoteConfig && this.isSupported()) {
-      try {
-        const value = getValue(this.remoteConfig, key);
-        return new WebRemoteConfigValue(value);
-      } catch (error) {
-        console.error('Error getting remote config value:', error);
-      }
-    }
-
-    // Return default value if not available
-    return new WebRemoteConfigValue({
-      asBoolean: () => false,
-      asString: () => '',
-      asNumber: () => 0,
-      getSource: () => 'default',
-    } as Value);
-  }
-
-  getAll(): Record<string, RemoteConfigValue> {
-    if (this.remoteConfig && this.isSupported()) {
-      try {
-        const allValues = getAll(this.remoteConfig);
-        const result: Record<string, RemoteConfigValue> = {};
-
-        for (const [key, value] of Object.entries(allValues)) {
-          result[key] = new WebRemoteConfigValue(value);
-        }
-
-        return result;
-      } catch (error) {
-        console.error('Error getting all remote config values:', error);
-      }
-    }
-    return {};
-  }
-
-  isSupported(): boolean {
-    return this.remoteConfig !== null;
   }
 }
 
@@ -280,7 +192,6 @@ class WebFCMService implements FCMService {
 
 export class WebFirebaseService implements FirebaseService {
   public analytics: AnalyticsService;
-  public remoteConfig: RemoteConfigService;
   public messaging: FCMService;
 
   private app: FirebaseApp | null = null;
@@ -297,9 +208,6 @@ export class WebFirebaseService implements FirebaseService {
 
     // Initialize services
     this.analytics = new WebAnalyticsService(this.initializeAnalytics());
-    this.remoteConfig = new WebRemoteConfigService(
-      this.initializeRemoteConfig()
-    );
     this.messaging = new WebFCMService(null, config.vapidKey || '');
     this.initializeMessaging()
       .then((messaging) => {
@@ -331,7 +239,7 @@ export class WebFirebaseService implements FirebaseService {
         // no trace. Say which fields are missing.
         console.warn(
           `[di] Firebase is not configured (missing ${missingFields.join(', ')}); ` +
-            'analytics, remote config and messaging are disabled.'
+            'analytics and messaging are disabled.'
         );
         return;
       }
@@ -377,19 +285,6 @@ export class WebFirebaseService implements FirebaseService {
       return getAnalytics(this.app);
     } catch (error) {
       console.error('Error initializing Analytics:', error);
-      return null;
-    }
-  }
-
-  private initializeRemoteConfig(): RemoteConfig | null {
-    if (!this.app || !this.options.enableRemoteConfig) {
-      return null;
-    }
-
-    try {
-      return getRemoteConfig(this.app);
-    } catch (error) {
-      console.error('Error initializing Remote Config:', error);
       return null;
     }
   }

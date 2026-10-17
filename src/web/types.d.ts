@@ -34,26 +34,6 @@ declare module 'firebase/analytics' {
   export function setUserId(analytics: Analytics, userId: string): void;
 }
 
-declare module 'firebase/remote-config' {
-  import { FirebaseApp } from 'firebase/app';
-
-  export interface Value {
-    asBoolean(): boolean;
-    asString(): string;
-    asNumber(): number;
-    getSource(): string;
-  }
-
-  export interface RemoteConfig {
-    app: FirebaseApp;
-  }
-
-  export function getRemoteConfig(app: FirebaseApp): RemoteConfig;
-  export function fetchAndActivate(config: RemoteConfig): Promise<boolean>;
-  export function getValue(config: RemoteConfig, key: string): Value;
-  export function getAll(config: RemoteConfig): Record<string, Value>;
-}
-
 declare module 'firebase/messaging' {
   import { FirebaseApp } from 'firebase/app';
 

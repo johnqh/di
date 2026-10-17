@@ -6,10 +6,8 @@
 import type {
   FirebaseService,
   AnalyticsService,
-  RemoteConfigService,
   FCMService,
   FirebaseInitOptions,
-  RemoteConfigValue,
   FCMMessage,
   FCMPermissionState,
 } from './firebase.interface.js';
@@ -21,13 +19,10 @@ import {
 // Lazy load Firebase modules to avoid crashes if native modules are not linked
 type FirebaseAnalyticsModule =
   typeof import('@react-native-firebase/analytics');
-type FirebaseRemoteConfigModule =
-  typeof import('@react-native-firebase/remote-config');
 type FirebaseMessagingModule =
   typeof import('@react-native-firebase/messaging');
 
 let analyticsModule: FirebaseAnalyticsModule | null = null;
-let remoteConfigModule: FirebaseRemoteConfigModule | null = null;
 let messagingModule: FirebaseMessagingModule | null = null;
 
 function getAnalytics() {
@@ -41,19 +36,6 @@ function getAnalytics() {
   }
   const analytics = analyticsModule?.default ?? analyticsModule;
   return typeof analytics === 'function' ? analytics() : null;
-}
-
-function getRemoteConfig() {
-  if (!remoteConfigModule) {
-    try {
-      const mod = require('@react-native-firebase/remote-config');
-      remoteConfigModule = mod;
-    } catch (e) {
-      console.warn('Firebase remote config not available:', e);
-    }
-  }
-  const remoteConfig = remoteConfigModule?.default ?? remoteConfigModule;
-  return typeof remoteConfig === 'function' ? remoteConfig() : null;
 }
 
 function getMessaging() {
@@ -142,103 +124,6 @@ class RNAnalyticsService implements AnalyticsService {
       .catch(() => {
         // Silently handle analytics errors
       });
-  }
-}
-
-class RNRemoteConfigValue implements RemoteConfigValue {
-  constructor(
-    private value: {
-      asBoolean: () => boolean;
-      asString: () => string;
-      asNumber: () => number;
-      getSource: () => string;
-    }
-  ) {}
-
-  asBoolean(): boolean {
-    return this.value.asBoolean();
-  }
-
-  asString(): string {
-    return this.value.asString();
-  }
-
-  asNumber(): number {
-    return this.value.asNumber();
-  }
-
-  getSource(): 'static' | 'default' | 'remote' {
-    return this.value.getSource() as 'static' | 'default' | 'remote';
-  }
-}
-
-class RNRemoteConfigService implements RemoteConfigService {
-  async fetchAndActivate(): Promise<boolean> {
-    const remoteConfig = getRemoteConfig();
-    if (!remoteConfig) return false;
-
-    try {
-      await remoteConfig.fetchAndActivate();
-      return true;
-    } catch (error) {
-      console.error('Error fetching and activating remote config:', error);
-      return false;
-    }
-  }
-
-  getValue(key: string): RemoteConfigValue {
-    const remoteConfig = getRemoteConfig();
-    if (!remoteConfig) {
-      return {
-        asBoolean: () => false,
-        asString: () => '',
-        asNumber: () => 0,
-        getSource: () => 'default',
-      };
-    }
-
-    try {
-      const value = remoteConfig.getValue(key);
-      return new RNRemoteConfigValue(value);
-    } catch (error) {
-      console.error('Error getting remote config value:', error);
-      return {
-        asBoolean: () => false,
-        asString: () => '',
-        asNumber: () => 0,
-        getSource: () => 'default',
-      };
-    }
-  }
-
-  getAll(): Record<string, RemoteConfigValue> {
-    const remoteConfig = getRemoteConfig();
-    if (!remoteConfig) return {};
-
-    try {
-      const allValues = remoteConfig.getAll();
-      const result: Record<string, RemoteConfigValue> = {};
-
-      for (const [key, value] of Object.entries(allValues)) {
-        result[key] = new RNRemoteConfigValue(
-          value as {
-            asBoolean: () => boolean;
-            asString: () => string;
-            asNumber: () => number;
-            getSource: () => string;
-          }
-        );
-      }
-
-      return result;
-    } catch (error) {
-      console.error('Error getting all remote config values:', error);
-      return {};
-    }
-  }
-
-  isSupported(): boolean {
-    return getRemoteConfig() !== null;
   }
 }
 
@@ -343,14 +228,12 @@ class RNFCMService implements FCMService {
 
 export class RNFirebaseService implements FirebaseService {
   public analytics: AnalyticsService;
-  public remoteConfig: RemoteConfigService;
   public messaging: FCMService;
   private options: FirebaseInitOptions;
 
   constructor(options: FirebaseInitOptions = {}) {
     this.options = options;
     this.analytics = new RNAnalyticsService();
-    this.remoteConfig = new RNRemoteConfigService();
     this.messaging = new RNFCMService();
   }
 

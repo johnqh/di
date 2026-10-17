@@ -9,7 +9,6 @@
  *
  *   /identitytoolkit -> identitytoolkit.googleapis.com        (Auth)
  *   /securetoken     -> securetoken.googleapis.com            (token refresh)
- *   /remoteconfig    -> firebaseremoteconfig.googleapis.com   (Remote Config)
  *   /installations   -> firebaseinstallations.googleapis.com  (FIS)
  *   /gtm             -> www.googletagmanager.com              (gtag.js)
  *   /ga              -> region1.google-analytics.com          (Analytics collect)
@@ -43,7 +42,6 @@
 const HOST_TO_PREFIX: Record<string, string> = {
   'identitytoolkit.googleapis.com': 'identitytoolkit',
   'securetoken.googleapis.com': 'securetoken',
-  'firebaseremoteconfig.googleapis.com': 'remoteconfig',
   'firebaseinstallations.googleapis.com': 'installations',
   'www.googletagmanager.com': 'gtm',
   'www.google-analytics.com': 'ga',

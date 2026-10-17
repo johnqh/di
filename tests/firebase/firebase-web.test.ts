@@ -20,14 +20,6 @@ vi.mock('@firebase/analytics', () => ({
   setConsent: vi.fn(),
 }));
 
-// Mock firebase/remote-config
-vi.mock('firebase/remote-config', () => ({
-  getRemoteConfig: vi.fn(() => ({ app: { name: '[DEFAULT]' } })),
-  fetchAndActivate: vi.fn(),
-  getValue: vi.fn(),
-  getAll: vi.fn(() => ({})),
-}));
-
 // Mock firebase/messaging
 vi.mock('firebase/messaging', () => ({
   getMessaging: vi.fn(() => ({ app: { name: '[DEFAULT]' } })),
