@@ -1,6 +1,6 @@
 {
   "name": "@sudobility/di",
-  "version": "1.5.70",
+  "version": "1.5.71",
   "description": "Platform-agnostic dependency injection interfaces for React and React Native projects with platform-specific implementations",
   "type": "module",
   "main": "dist/web/index.js",
@@ -193,7 +193,7 @@
     "url": "https://github.com/johnqh/di.git"
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "license": "BUSL-1.1"
 }
